@@ -230,6 +230,10 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     sixthKick.setToggleState(audioProcessor.sixthKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(sixthKick);
     
+    
+    
+    
+    
     //Seventh Kick Setup
     seventhKick.setClickingTogglesState(true);
     seventhKick.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
