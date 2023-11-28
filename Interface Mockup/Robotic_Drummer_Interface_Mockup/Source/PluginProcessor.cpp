@@ -22,6 +22,47 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
                        )
 #endif
 {
+    //Initialize Variables
+    
+    //Hi Hat Variables
+    firstHiHatHit = false;
+    secondHiHatHit = false;
+    thirdHiHatHit = false;
+    fourthHiHatHit = false;
+    fifthHiHatHit = false;
+    sixthHiHatHit = false;
+    seventhHiHatHit = false;
+    eighthHiHatHit = false;
+    
+    //Snare Variables
+    firstSnareHit = false;
+    secondSnareHit = false;
+    thirdSnareHit = false;
+    fourthSnareHit = false;
+    fifthSnareHit = false;
+    sixthSnareHit = false;
+    seventhSnareHit = false;
+    eighthSnareHit = false;
+    
+    //Tom Variables
+    firstTomHit = false;
+    secondTomHit = false;
+    thirdTomHit = false;
+    fourthTomHit = false;
+    fifthTomHit = false;
+    sixthTomHit = false;
+    seventhTomHit = false;
+    eighthTomHit = false;
+    
+    //Kick Variables
+    firstKickHit = false;
+    secondKickHit = false;
+    thirdKickHit = false;
+    fourthKickHit = false;
+    fifthKickHit = false;
+    sixthKickHit = false;
+    seventhKickHit = false;
+    eighthKickHit = false;
 }
 
 Robotic_Drummer_Interface_MockupAudioProcessor::~Robotic_Drummer_Interface_MockupAudioProcessor()
