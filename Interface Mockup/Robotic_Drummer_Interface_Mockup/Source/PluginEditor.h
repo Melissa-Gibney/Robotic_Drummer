@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::TextButton::Listener
+class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::TextButton::Listener, private juce::Slider::Listener
 {
 public:
     Robotic_Drummer_Interface_MockupAudioProcessorEditor (Robotic_Drummer_Interface_MockupAudioProcessor&);
@@ -31,6 +31,18 @@ private:
     
     //Look and Feel
     juce::LookAndFeel_V4 otherLookAndFeel;
+    
+    //Row Labels
+    juce::Label firstLabel;
+    juce::Label secondLabel;
+    juce::Label thirdLabel;
+    juce::Label fourthLabel;
+    
+    //Universal Knob
+    juce::Slider universalKnob;
+    
+    //Universal Button
+    juce::TextButton universalButton;
     
     //Hi hat buttons
     juce::TextButton firstHiHat;
@@ -73,6 +85,9 @@ private:
     juce::TextButton eighthKick;
 
     void buttonClicked (juce::Button*) override;
+    void sliderValueChanged (juce::Slider* slider) override;
+    
+    juce::Rectangle<int> getButtonArea(juce::Rectangle<int> column, float columnWidth, float rowHeight, float border);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Robotic_Drummer_Interface_MockupAudioProcessorEditor)
 };
