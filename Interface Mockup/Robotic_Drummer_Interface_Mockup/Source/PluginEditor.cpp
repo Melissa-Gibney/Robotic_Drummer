@@ -53,6 +53,7 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
         if(tempoShown)
         {
             audioProcessor.tempo = universalKnob.getValue();
+            startTimer(60000/audioProcessor.tempo);
             guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
         }
         else
@@ -1300,17 +1301,6 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::paint (juce::Graphics
         }
         g.fillEllipse(beatAreas.getRectangle(i));
     }
-    
-//    g.setColour(juce::Colours::red);
-//    g.fillEllipse(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
-//    g.setColour(juce::Colours::darkgrey);
-//    g.fillEllipse(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
-//    g.fillEllipse(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
-//    g.fillEllipse(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
-//    g.fillEllipse(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
-//    g.fillEllipse(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
-//    g.fillEllipse(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
-//    g.fillEllipse(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
 }
 
 void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
@@ -1559,6 +1549,29 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
 
 void Robotic_Drummer_Interface_MockupAudioProcessorEditor::timerCallback()
 {
+    //Shift the beat to the next LED
+    int curLEDPosition = -1;
+    for(int i = 0; i < 8; i++)
+    {
+        if(audioProcessor.beats[i])
+        {
+            curLEDPosition = (i+1)%8;
+            break;
+        }
+    }
+    
+    for(int i = 0; i < 8; i++)
+    {
+        if(i == curLEDPosition)
+        {
+            audioProcessor.beats[i] = true;
+        }
+        else
+        {
+            audioProcessor.beats[i] = false;
+        }
+    }
+    
     repaint();
 }
 
