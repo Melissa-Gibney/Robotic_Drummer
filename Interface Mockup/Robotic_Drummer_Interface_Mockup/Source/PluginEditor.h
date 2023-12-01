@@ -89,6 +89,7 @@ private:
     juce::TextButton eighthKick;
     
     juce::RectangleList<float> beatAreas;
+    bool tempoShown = false;
 
     void buttonClicked (juce::Button*) override;
     void sliderValueChanged (juce::Slider* slider) override;

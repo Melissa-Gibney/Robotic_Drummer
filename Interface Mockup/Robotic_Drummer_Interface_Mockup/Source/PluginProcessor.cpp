@@ -34,6 +34,15 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
     seventhHiHatHit = false;
     eighthHiHatHit = false;
     
+    firstHiHatVelocity = 255;
+    secondHiHatVelocity = 255;
+    thirdHiHatVelocity = 255;
+    fourthHiHatVelocity = 255;
+    fifthHiHatVelocity = 255;
+    sixthHiHatVelocity = 255;
+    seventhHiHatVelocity = 255;
+    eighthHiHatVelocity = 255;
+    
     //Snare Variables
     firstSnareHit = false;
     secondSnareHit = false;
@@ -43,6 +52,15 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
     sixthSnareHit = false;
     seventhSnareHit = false;
     eighthSnareHit = false;
+    
+    firstSnareVelocity = 255;
+    secondSnareVelocity = 255;
+    thirdSnareVelocity = 255;
+    fourthSnareVelocity = 255;
+    fifthSnareVelocity = 255;
+    sixthSnareVelocity = 255;
+    seventhSnareVelocity = 255;
+    eighthSnareVelocity = 255;
     
     //Tom Variables
     firstTomHit = false;
@@ -54,6 +72,15 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
     seventhTomHit = false;
     eighthTomHit = false;
     
+    firstTomVelocity = 255;
+    secondTomVelocity = 255;
+    thirdTomVelocity = 255;
+    fourthTomVelocity = 255;
+    fifthTomVelocity = 255;
+    sixthTomVelocity = 255;
+    seventhTomVelocity = 255;
+    eighthTomVelocity = 255;
+    
     //Kick Variables
     firstKickHit = false;
     secondKickHit = false;
@@ -63,6 +90,18 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
     sixthKickHit = false;
     seventhKickHit = false;
     eighthKickHit = false;
+    
+    firstKickVelocity = 255;
+    secondKickVelocity = 255;
+    thirdKickVelocity = 255;
+    fourthKickVelocity = 255;
+    fifthKickVelocity = 255;
+    sixthKickVelocity = 255;
+    seventhKickVelocity = 255;
+    eighthKickVelocity = 255;
+    
+    //Initialize Tempo
+    tempo = 120; //bpm
 }
 
 Robotic_Drummer_Interface_MockupAudioProcessor::~Robotic_Drummer_Interface_MockupAudioProcessor()
@@ -172,7 +211,6 @@ bool Robotic_Drummer_Interface_MockupAudioProcessor::isBusesLayoutSupported (con
 
 void Robotic_Drummer_Interface_MockupAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    //For every sample, do this
     
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();

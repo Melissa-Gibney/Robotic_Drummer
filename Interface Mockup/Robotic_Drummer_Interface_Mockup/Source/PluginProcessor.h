@@ -77,6 +77,15 @@ public:
     bool seventhHiHatHit;
     bool eighthHiHatHit;
     
+    int firstHiHatVelocity;
+    int secondHiHatVelocity;
+    int thirdHiHatVelocity;
+    int fourthHiHatVelocity;
+    int fifthHiHatVelocity;
+    int sixthHiHatVelocity;
+    int seventhHiHatVelocity;
+    int eighthHiHatVelocity;
+    
     //Snare Variables
     bool firstSnareHit;
     bool secondSnareHit;
@@ -86,6 +95,15 @@ public:
     bool sixthSnareHit;
     bool seventhSnareHit;
     bool eighthSnareHit;
+    
+    int firstSnareVelocity;
+    int secondSnareVelocity;
+    int thirdSnareVelocity;
+    int fourthSnareVelocity;
+    int fifthSnareVelocity;
+    int sixthSnareVelocity;
+    int seventhSnareVelocity;
+    int eighthSnareVelocity;
     
     //Tom Variables
     bool firstTomHit;
@@ -97,6 +115,15 @@ public:
     bool seventhTomHit;
     bool eighthTomHit;
     
+    int firstTomVelocity;
+    int secondTomVelocity;
+    int thirdTomVelocity;
+    int fourthTomVelocity;
+    int fifthTomVelocity;
+    int sixthTomVelocity;
+    int seventhTomVelocity;
+    int eighthTomVelocity;
+    
     //Kick Variables
     bool firstKickHit;
     bool secondKickHit;
@@ -106,6 +133,15 @@ public:
     bool sixthKickHit;
     bool seventhKickHit;
     bool eighthKickHit;
+    
+    int firstKickVelocity;
+    int secondKickVelocity;
+    int thirdKickVelocity;
+    int fourthKickVelocity;
+    int fifthKickVelocity;
+    int sixthKickVelocity;
+    int seventhKickVelocity;
+    int eighthKickVelocity;
 
 private:
     //==============================================================================

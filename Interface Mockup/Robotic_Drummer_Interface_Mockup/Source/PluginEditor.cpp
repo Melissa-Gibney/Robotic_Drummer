@@ -22,26 +22,29 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     juce::Colour buttonPressedColor(0xFF818599);
     
     //Set up the colors of the buttons
-    otherLookAndFeel.setColour(juce::Slider::thumbColourId, buttonPressedColor);
+    otherLookAndFeel.setColour(juce::Slider::thumbColourId, buttonOnColor);
     
     //GUI Label Setup
     addAndMakeVisible(guiLabel);
-    firstLabel.setText("Tempo", juce::dontSendNotification);
-    firstLabel.setFont(juce::Font(16.0f, juce::Font::plain));
-    firstLabel.setJustificationType(juce::Justification::centred);
+    guiLabel.setText("Tempo", juce::dontSendNotification);
+    guiLabel.setFont(juce::Font(16.0f, juce::Font::plain));
+    guiLabel.setJustificationType(juce::Justification::centred);
     
     //GUI Content Label Setup
     addAndMakeVisible(guiContent);
-    firstLabel.setText("120", juce::dontSendNotification);
-    firstLabel.setFont(juce::Font(16.0f, juce::Font::plain));
-    firstLabel.setJustificationType(juce::Justification::centred);
+    guiContent.setText("120", juce::dontSendNotification);
+    guiContent.setFont(juce::Font(16.0f, juce::Font::plain));
+    guiContent.setJustificationType(juce::Justification::centred);
     
     //Universal Knob Setup
     addAndMakeVisible(universalKnob);
-    universalKnob.setSliderStyle(juce::Slider::LinearHorizontal);
+    universalKnob.setSliderStyle(juce::Slider::Rotary);
     universalKnob.setNumDecimalPlacesToDisplay(2);
-    universalKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    universalKnob.setRange(0, 500);
+    universalKnob.setValue(120);
     universalKnob.setTextValueSuffix("");
+    universalKnob.setTextBoxStyle(universalKnob.NoTextBox, true, 0, 0);
+    universalKnob.setColour(0x1001300, buttonOffColor);
     
     //Universal Button Setup
     universalButton.setClickingTogglesState(false);
@@ -330,8 +333,7 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::paint (juce::Graphics
     //Get drum row height
     auto rowHeight = drumsArea.getHeight()/numRows;
     
-    //Set up row labels
-    auto drumLabels = drumsArea.removeFromLeft(border*10);
+    drumsArea.removeFromLeft(border*10);
 
     //Get column width
     auto columnWidth = drumsArea.getWidth()/numCols;
@@ -405,15 +407,31 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     auto numCols = 8;
     auto numRows = 5;
     auto area = getLocalBounds().reduced(border * 4);
-    auto screenArea = area.removeFromTop(area.getHeight()/3).removeFromLeft(area.getWidth()/4);
+    auto controlsArea = area.removeFromTop(area.getHeight()/4);
+    auto screenArea = controlsArea.removeFromLeft(area.getWidth()/4);
     auto drumsArea = area.removeFromBottom(area.getHeight()-20);
+    
+    //Set up universal knob and button
+    auto universalKnobArea = controlsArea.removeFromRight(controlsArea.getWidth()/3);
+    auto buttonArea = controlsArea.removeFromRight(controlsArea.getWidth()/2);
+    auto universalButtonArea = buttonArea.removeFromRight(buttonArea.getWidth()-buttonArea.getHeight()).reduced(border*2);
+    
+    universalKnob.setBounds(universalKnobArea);
+    universalButton.setBounds(universalButtonArea);
+    
+    //Set up LCD Screen and Labels
+    guiContent.setBounds(screenArea);
+    
+    auto guiLabelArea = screenArea.removeFromLeft(screenArea.getWidth()/4).removeFromTop(screenArea.getHeight()/4);
+    
+    guiLabel.setBounds(guiLabelArea);
     
     //Get drum row height
     auto rowHeight = drumsArea.getHeight()/numRows;
     
     //Set up row labels
     auto drumLabels = drumsArea.removeFromLeft(border*10);
-    drumLabels.removeFromTop(rowHeight/2);
+    drumLabels.removeFromTop(rowHeight);
     auto firstLabelArea = drumLabels.removeFromTop(rowHeight);
     auto secondLabelArea = drumLabels.removeFromTop(rowHeight);
     auto thirdLabelArea = drumLabels.removeFromTop(rowHeight);
@@ -441,35 +459,35 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     auto eighthColumn = drumsArea.removeFromLeft(columnWidth);
     
     //Set up beats
-    auto firstBeatArea = firstColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto firstBeatArea = firstColumn.removeFromTop(rowHeight).reduced(border);
     firstBeatArea.removeFromLeft(reduceButtonWidth);
     firstBeatArea.removeFromRight(reduceButtonWidth);
     firstBeatArea.reduce(10, 10);
-    auto secondBeatArea = secondColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto secondBeatArea = secondColumn.removeFromTop(rowHeight).reduced(border);
     secondBeatArea.removeFromLeft(reduceButtonWidth);
     secondBeatArea.removeFromRight(reduceButtonWidth);
     secondBeatArea.reduce(10, 10);
-    auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
     thirdBeatArea.removeFromLeft(reduceButtonWidth);
     thirdBeatArea.removeFromRight(reduceButtonWidth);
     thirdBeatArea.reduce(10, 10);
-    auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
     fourthBeatArea.removeFromLeft(reduceButtonWidth);
     fourthBeatArea.removeFromRight(reduceButtonWidth);
     fourthBeatArea.reduce(10, 10);
-    auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
     fifthBeatArea.removeFromLeft(reduceButtonWidth);
     fifthBeatArea.removeFromRight(reduceButtonWidth);
     fifthBeatArea.reduce(10, 10);
-    auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
     sixthBeatArea.removeFromLeft(reduceButtonWidth);
     sixthBeatArea.removeFromRight(reduceButtonWidth);
     sixthBeatArea.reduce(10, 10);
-    auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
     seventhBeatArea.removeFromLeft(reduceButtonWidth);
     seventhBeatArea.removeFromRight(reduceButtonWidth);
     seventhBeatArea.reduce(10, 10);
-    auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight/2).reduced(border);
+    auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
     eighthBeatArea.removeFromLeft(reduceButtonWidth);
     eighthBeatArea.removeFromRight(reduceButtonWidth);
     eighthBeatArea.reduce(10, 10);
@@ -484,28 +502,28 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     beatAreas.add(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
     
     //Set up hi hat
-    auto firstHiHatArea = firstColumn.removeFromTop(rowHeight).reduced(border);
+    auto firstHiHatArea = firstColumn.removeFromTop(rowHeight).reduced(border*2);
     firstHiHatArea.removeFromLeft(reduceButtonWidth);
     firstHiHatArea.removeFromRight(reduceButtonWidth);
-    auto secondHiHatArea = secondColumn.removeFromTop(rowHeight).reduced(border);
+    auto secondHiHatArea = secondColumn.removeFromTop(rowHeight).reduced(border*2);
     secondHiHatArea.removeFromLeft(reduceButtonWidth);
     secondHiHatArea.removeFromRight(reduceButtonWidth);
-    auto thirdHiHatArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
+    auto thirdHiHatArea = thirdColumn.removeFromTop(rowHeight).reduced(border*2);
     thirdHiHatArea.removeFromLeft(reduceButtonWidth);
     thirdHiHatArea.removeFromRight(reduceButtonWidth);
-    auto fourthHiHatArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fourthHiHatArea = fourthColumn.removeFromTop(rowHeight).reduced(border*2);
     fourthHiHatArea.removeFromLeft(reduceButtonWidth);
     fourthHiHatArea.removeFromRight(reduceButtonWidth);
-    auto fifthHiHatArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fifthHiHatArea = fifthColumn.removeFromTop(rowHeight).reduced(border*2);
     fifthHiHatArea.removeFromLeft(reduceButtonWidth);
     fifthHiHatArea.removeFromRight(reduceButtonWidth);
-    auto sixthHiHatArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
+    auto sixthHiHatArea = sixthColumn.removeFromTop(rowHeight).reduced(border*2);
     sixthHiHatArea.removeFromLeft(reduceButtonWidth);
     sixthHiHatArea.removeFromRight(reduceButtonWidth);
-    auto seventhHiHatArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
+    auto seventhHiHatArea = seventhColumn.removeFromTop(rowHeight).reduced(border*2);
     seventhHiHatArea.removeFromLeft(reduceButtonWidth);
     seventhHiHatArea.removeFromRight(reduceButtonWidth);
-    auto eighthHiHatArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
+    auto eighthHiHatArea = eighthColumn.removeFromTop(rowHeight).reduced(border*2);
     eighthHiHatArea.removeFromLeft(reduceButtonWidth);
     eighthHiHatArea.removeFromRight(reduceButtonWidth);
     
@@ -519,28 +537,28 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     eighthHiHat.setBounds(eighthHiHatArea);
     
     //Set up snare
-    auto firstSnareArea = firstColumn.removeFromTop(rowHeight).reduced(border);
+    auto firstSnareArea = firstColumn.removeFromTop(rowHeight).reduced(border*2);
     firstSnareArea.removeFromLeft(reduceButtonWidth);
     firstSnareArea.removeFromRight(reduceButtonWidth);
-    auto secondSnareArea = secondColumn.removeFromTop(rowHeight).reduced(border);
+    auto secondSnareArea = secondColumn.removeFromTop(rowHeight).reduced(border*2);
     secondSnareArea.removeFromLeft(reduceButtonWidth);
     secondSnareArea.removeFromRight(reduceButtonWidth);
-    auto thirdSnareArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
+    auto thirdSnareArea = thirdColumn.removeFromTop(rowHeight).reduced(border*2);
     thirdSnareArea.removeFromLeft(reduceButtonWidth);
     thirdSnareArea.removeFromRight(reduceButtonWidth);
-    auto fourthSnareArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fourthSnareArea = fourthColumn.removeFromTop(rowHeight).reduced(border*2);
     fourthSnareArea.removeFromLeft(reduceButtonWidth);
     fourthSnareArea.removeFromRight(reduceButtonWidth);
-    auto fifthSnareArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fifthSnareArea = fifthColumn.removeFromTop(rowHeight).reduced(border*2);
     fifthSnareArea.removeFromLeft(reduceButtonWidth);
     fifthSnareArea.removeFromRight(reduceButtonWidth);
-    auto sixthSnareArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
+    auto sixthSnareArea = sixthColumn.removeFromTop(rowHeight).reduced(border*2);
     sixthSnareArea.removeFromLeft(reduceButtonWidth);
     sixthSnareArea.removeFromRight(reduceButtonWidth);
-    auto seventhSnareArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
+    auto seventhSnareArea = seventhColumn.removeFromTop(rowHeight).reduced(border*2);
     seventhSnareArea.removeFromLeft(reduceButtonWidth);
     seventhSnareArea.removeFromRight(reduceButtonWidth);
-    auto eighthSnareArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
+    auto eighthSnareArea = eighthColumn.removeFromTop(rowHeight).reduced(border*2);
     eighthSnareArea.removeFromLeft(reduceButtonWidth);
     eighthSnareArea.removeFromRight(reduceButtonWidth);
     
@@ -554,28 +572,28 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     eighthSnare.setBounds(eighthSnareArea);
     
     //Set up tom
-    auto firstTomArea = firstColumn.removeFromTop(rowHeight).reduced(border);
+    auto firstTomArea = firstColumn.removeFromTop(rowHeight).reduced(border*2);
     firstTomArea.removeFromLeft(reduceButtonWidth);
     firstTomArea.removeFromRight(reduceButtonWidth);
-    auto secondTomArea = secondColumn.removeFromTop(rowHeight).reduced(border);
+    auto secondTomArea = secondColumn.removeFromTop(rowHeight).reduced(border*2);
     secondTomArea.removeFromLeft(reduceButtonWidth);
     secondTomArea.removeFromRight(reduceButtonWidth);
-    auto thirdTomArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
+    auto thirdTomArea = thirdColumn.removeFromTop(rowHeight).reduced(border*2);
     thirdTomArea.removeFromLeft(reduceButtonWidth);
     thirdTomArea.removeFromRight(reduceButtonWidth);
-    auto fourthTomArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fourthTomArea = fourthColumn.removeFromTop(rowHeight).reduced(border*2);
     fourthTomArea.removeFromLeft(reduceButtonWidth);
     fourthTomArea.removeFromRight(reduceButtonWidth);
-    auto fifthTomArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fifthTomArea = fifthColumn.removeFromTop(rowHeight).reduced(border*2);
     fifthTomArea.removeFromLeft(reduceButtonWidth);
     fifthTomArea.removeFromRight(reduceButtonWidth);
-    auto sixthTomArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
+    auto sixthTomArea = sixthColumn.removeFromTop(rowHeight).reduced(border*2);
     sixthTomArea.removeFromLeft(reduceButtonWidth);
     sixthTomArea.removeFromRight(reduceButtonWidth);
-    auto seventhTomArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
+    auto seventhTomArea = seventhColumn.removeFromTop(rowHeight).reduced(border*2);
     seventhTomArea.removeFromLeft(reduceButtonWidth);
     seventhTomArea.removeFromRight(reduceButtonWidth);
-    auto eighthTomArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
+    auto eighthTomArea = eighthColumn.removeFromTop(rowHeight).reduced(border*2);
     eighthTomArea.removeFromLeft(reduceButtonWidth);
     eighthTomArea.removeFromRight(reduceButtonWidth);
     
@@ -589,28 +607,28 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     eighthTom.setBounds(eighthTomArea);
     
     //Set up kick
-    auto firstKickArea = firstColumn.removeFromTop(rowHeight).reduced(border);
+    auto firstKickArea = firstColumn.removeFromTop(rowHeight).reduced(border*2);
     firstKickArea.removeFromLeft(reduceButtonWidth);
     firstKickArea.removeFromRight(reduceButtonWidth);
-    auto secondKickArea = secondColumn.removeFromTop(rowHeight).reduced(border);
+    auto secondKickArea = secondColumn.removeFromTop(rowHeight).reduced(border*2);
     secondKickArea.removeFromLeft(reduceButtonWidth);
     secondKickArea.removeFromRight(reduceButtonWidth);
-    auto thirdKickArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
+    auto thirdKickArea = thirdColumn.removeFromTop(rowHeight).reduced(border*2);
     thirdKickArea.removeFromLeft(reduceButtonWidth);
     thirdKickArea.removeFromRight(reduceButtonWidth);
-    auto fourthKickArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fourthKickArea = fourthColumn.removeFromTop(rowHeight).reduced(border*2);
     fourthKickArea.removeFromLeft(reduceButtonWidth);
     fourthKickArea.removeFromRight(reduceButtonWidth);
-    auto fifthKickArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
+    auto fifthKickArea = fifthColumn.removeFromTop(rowHeight).reduced(border*2);
     fifthKickArea.removeFromLeft(reduceButtonWidth);
     fifthKickArea.removeFromRight(reduceButtonWidth);
-    auto sixthKickArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
+    auto sixthKickArea = sixthColumn.removeFromTop(rowHeight).reduced(border*2);
     sixthKickArea.removeFromLeft(reduceButtonWidth);
     sixthKickArea.removeFromRight(reduceButtonWidth);
-    auto seventhKickArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
+    auto seventhKickArea = seventhColumn.removeFromTop(rowHeight).reduced(border*2);
     seventhKickArea.removeFromLeft(reduceButtonWidth);
     seventhKickArea.removeFromRight(reduceButtonWidth);
-    auto eighthKickArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
+    auto eighthKickArea = eighthColumn.removeFromTop(rowHeight).reduced(border*2);
     eighthKickArea.removeFromLeft(reduceButtonWidth);
     eighthKickArea.removeFromRight(reduceButtonWidth);
     
@@ -630,6 +648,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(firstHiHat.getToggleState() == true){
             audioProcessor.firstHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.firstHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.firstHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("first hihat on");
         }
         else{
@@ -641,7 +663,11 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(secondHiHat.getToggleState() == true){
             audioProcessor.secondHiHatHit = true;
-            DBG("secon hihat on");
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.secondHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.secondHiHatVelocity), juce::NotificationType::dontSendNotification);
+            DBG("second hihat on");
         }
         else{
             audioProcessor.secondHiHatHit = false;
@@ -651,6 +677,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     else if(button == &thirdHiHat)
     {
         if(thirdHiHat.getToggleState() == true){
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.thirdHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.thirdHiHatVelocity), juce::NotificationType::dontSendNotification);
             audioProcessor.thirdHiHatHit = true;
             DBG("third hihat on");
         }
@@ -663,6 +693,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fourthHiHat.getToggleState() == true){
             audioProcessor.fourthHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fourthHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fourthHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("fourth hihat on");
         }
         else{
@@ -674,6 +708,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fifthHiHat.getToggleState() == true){
             audioProcessor.fifthHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fifthHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fifthHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("fifth hihat on");
         }
         else{
@@ -685,6 +723,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(sixthHiHat.getToggleState() == true){
             audioProcessor.sixthHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.sixthHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.sixthHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("sixth hihat on");
         }
         else{
@@ -696,6 +738,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(seventhHiHat.getToggleState() == true){
             audioProcessor.seventhHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.seventhHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.seventhHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("seventh hihat on");
         }
         else{
@@ -707,6 +753,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(eighthHiHat.getToggleState() == true){
             audioProcessor.eighthHiHatHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.eighthHiHatVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.eighthHiHatVelocity), juce::NotificationType::dontSendNotification);
             DBG("eighth hihat on");
         }
         else{
@@ -718,6 +768,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(firstSnare.getToggleState() == true){
             audioProcessor.firstSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.firstSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.firstSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("first snare on");
         }
         else{
@@ -729,6 +783,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(secondSnare.getToggleState() == true){
             audioProcessor.secondSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.secondSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.secondSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("secon snare on");
         }
         else{
@@ -740,6 +798,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(thirdSnare.getToggleState() == true){
             audioProcessor.thirdSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.thirdSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.thirdSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("third snare on");
         }
         else{
@@ -751,6 +813,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fourthSnare.getToggleState() == true){
             audioProcessor.fourthSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fourthSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fourthSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("fourth snare on");
         }
         else{
@@ -762,6 +828,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fifthSnare.getToggleState() == true){
             audioProcessor.fifthSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fifthSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fifthSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("fifth snare on");
         }
         else{
@@ -773,6 +843,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(sixthSnare.getToggleState() == true){
             audioProcessor.sixthSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.sixthSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.sixthSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("sixth snare on");
         }
         else{
@@ -784,6 +858,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(seventhSnare.getToggleState() == true){
             audioProcessor.seventhSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.seventhSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.seventhSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("seventh snare on");
         }
         else{
@@ -795,6 +873,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(eighthSnare.getToggleState() == true){
             audioProcessor.eighthSnareHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.eighthSnareVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.eighthSnareVelocity), juce::NotificationType::dontSendNotification);
             DBG("eighth snare on");
         }
         else{
@@ -806,6 +888,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(firstTom.getToggleState() == true){
             audioProcessor.firstTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.firstTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.firstTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("first tom on");
         }
         else{
@@ -817,7 +903,11 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(secondTom.getToggleState() == true){
             audioProcessor.secondTomHit = true;
-            DBG("secon tom on");
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.secondTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.secondTomVelocity), juce::NotificationType::dontSendNotification);
+            DBG("second tom on");
         }
         else{
             audioProcessor.secondTomHit = false;
@@ -828,6 +918,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(thirdTom.getToggleState() == true){
             audioProcessor.thirdTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.thirdTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.thirdTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("third tom on");
         }
         else{
@@ -839,6 +933,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fourthTom.getToggleState() == true){
             audioProcessor.fourthTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fourthTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fourthTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("fourth tom on");
         }
         else{
@@ -850,6 +948,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fifthTom.getToggleState() == true){
             audioProcessor.fifthTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fifthTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fifthTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("fifth tom on");
         }
         else{
@@ -861,6 +963,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(sixthTom.getToggleState() == true){
             audioProcessor.sixthTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.sixthTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.sixthTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("sixth tom on");
         }
         else{
@@ -872,6 +978,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(seventhTom.getToggleState() == true){
             audioProcessor.seventhTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.seventhTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.seventhTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("seventh tom on");
         }
         else{
@@ -883,6 +993,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(eighthTom.getToggleState() == true){
             audioProcessor.eighthTomHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.eighthTomVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.eighthTomVelocity), juce::NotificationType::dontSendNotification);
             DBG("eighth tom on");
         }
         else{
@@ -894,6 +1008,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(firstKick.getToggleState() == true){
             audioProcessor.firstKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.firstKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.firstKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("first kick on");
         }
         else{
@@ -905,7 +1023,11 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(secondKick.getToggleState() == true){
             audioProcessor.secondKickHit = true;
-            DBG("secon kick on");
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.secondKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.secondKickVelocity), juce::NotificationType::dontSendNotification);
+            DBG("second kick on");
         }
         else{
             audioProcessor.secondKickHit = false;
@@ -916,6 +1038,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(thirdKick.getToggleState() == true){
             audioProcessor.thirdKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.firstKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.thirdKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("third kick on");
         }
         else{
@@ -927,6 +1053,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fourthKick.getToggleState() == true){
             audioProcessor.fourthKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fourthKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fourthKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("fourth kick on");
         }
         else{
@@ -938,6 +1068,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(fifthKick.getToggleState() == true){
             audioProcessor.fifthKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.fifthKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.fifthKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("fifth kick on");
         }
         else{
@@ -949,6 +1083,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(sixthKick.getToggleState() == true){
             audioProcessor.sixthKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.sixthKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.sixthKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("sixth kick on");
         }
         else{
@@ -960,6 +1098,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(seventhKick.getToggleState() == true){
             audioProcessor.seventhKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.seventhKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.seventhKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("seventh kick on");
         }
         else{
@@ -971,11 +1113,26 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(eighthKick.getToggleState() == true){
             audioProcessor.eighthKickHit = true;
+            universalKnob.setRange(0, 255);
+            universalKnob.setValue(audioProcessor.eighthKickVelocity);
+            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.eighthKickVelocity), juce::NotificationType::dontSendNotification);
             DBG("eighth kick on");
         }
         else{
             audioProcessor.eighthKickHit = false;
             DBG("eighth kick off");
+        }
+    }
+    else if(button == &universalButton)
+    {
+        tempoShown = !tempoShown;
+        if(tempoShown)
+        {
+            universalKnob.setRange(0, 500);
+            universalKnob.setValue(audioProcessor.tempo);
+            guiLabel.setText("Tempo", juce::NotificationType::dontSendNotification);
+            guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
         }
     }
 }
@@ -984,7 +1141,10 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::sliderValueChanged (j
 {
     if(slider == &universalKnob)
     {
-        
+        if(tempoShown)
+        {
+            guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
+        }
     }
 }
 
