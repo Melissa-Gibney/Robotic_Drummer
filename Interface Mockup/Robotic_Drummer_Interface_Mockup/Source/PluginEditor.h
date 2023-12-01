@@ -32,6 +32,10 @@ private:
     //Look and Feel
     juce::LookAndFeel_V4 otherLookAndFeel;
     
+    //GUI Label
+    juce::Label guiLabel;
+    juce::Label guiContent;
+    
     //Row Labels
     juce::Label firstLabel;
     juce::Label secondLabel;
@@ -83,6 +87,8 @@ private:
     juce::TextButton sixthKick;
     juce::TextButton seventhKick;
     juce::TextButton eighthKick;
+    
+    juce::RectangleList<float> beatAreas;
 
     void buttonClicked (juce::Button*) override;
     void sliderValueChanged (juce::Slider* slider) override;

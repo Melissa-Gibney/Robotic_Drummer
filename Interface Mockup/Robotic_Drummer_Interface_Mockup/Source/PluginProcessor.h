@@ -58,6 +58,15 @@ public:
     
     //Declare Variables
     
+    //Edited Parameters
+    int parameters[2] = {0, 1}; //0 == Tempo, 1 == velocity
+    
+    //Tempo
+    int tempo = 120;
+    
+    //Beat Variables
+    bool beats[8] = {true, false, false, false, false, false, false, false};
+    
     //Hi Hat Variables
     bool firstHiHatHit;
     bool secondHiHatHit;

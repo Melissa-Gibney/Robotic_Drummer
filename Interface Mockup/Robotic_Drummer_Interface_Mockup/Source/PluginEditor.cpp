@@ -24,6 +24,18 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     //Set up the colors of the buttons
     otherLookAndFeel.setColour(juce::Slider::thumbColourId, buttonPressedColor);
     
+    //GUI Label Setup
+    addAndMakeVisible(guiLabel);
+    firstLabel.setText("Tempo", juce::dontSendNotification);
+    firstLabel.setFont(juce::Font(16.0f, juce::Font::plain));
+    firstLabel.setJustificationType(juce::Justification::centred);
+    
+    //GUI Content Label Setup
+    addAndMakeVisible(guiContent);
+    firstLabel.setText("120", juce::dontSendNotification);
+    firstLabel.setFont(juce::Font(16.0f, juce::Font::plain));
+    firstLabel.setJustificationType(juce::Justification::centred);
+    
     //Universal Knob Setup
     addAndMakeVisible(universalKnob);
     universalKnob.setSliderStyle(juce::Slider::LinearHorizontal);
@@ -79,210 +91,210 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     //Third Hi Hat Setup
     thirdHiHat.setClickingTogglesState(true);
     thirdHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    thirdHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    thirdHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     thirdHiHat.setToggleState(audioProcessor.thirdHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(thirdHiHat);
     
     //Fourth Hi Hat Setup
     fourthHiHat.setClickingTogglesState(true);
     fourthHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fourthHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fourthHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fourthHiHat.setToggleState(audioProcessor.fourthHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fourthHiHat);
     
     //Fifth Hi Hat Setup
     fifthHiHat.setClickingTogglesState(true);
     fifthHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fifthHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fifthHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fifthHiHat.setToggleState(audioProcessor.fifthHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fifthHiHat);
     
     //Sixth Hi Hat Setup
     sixthHiHat.setClickingTogglesState(true);
     sixthHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    sixthHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    sixthHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     sixthHiHat.setToggleState(audioProcessor.sixthHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(sixthHiHat);
     
     //Seventh Hi Hat Setup
     seventhHiHat.setClickingTogglesState(true);
     seventhHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    seventhHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    seventhHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     seventhHiHat.setToggleState(audioProcessor.seventhHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(seventhHiHat);
     
     //Eighth Hi Hat Setup
     eighthHiHat.setClickingTogglesState(true);
     eighthHiHat.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    eighthHiHat.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    eighthHiHat.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     eighthHiHat.setToggleState(audioProcessor.eighthHiHatHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(eighthHiHat);
     
     //First Snare Setup
     firstSnare.setClickingTogglesState(true);
     firstSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    firstSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    firstSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     firstSnare.setToggleState(audioProcessor.firstSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(firstSnare);
     
     //Second Snare Setup
     secondSnare.setClickingTogglesState(true);
     secondSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    secondSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    secondSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     secondSnare.setToggleState(audioProcessor.secondSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(secondSnare);
     
     //Third Snare Setup
     thirdSnare.setClickingTogglesState(true);
     thirdSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    thirdSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    thirdSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     thirdSnare.setToggleState(audioProcessor.thirdSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(thirdSnare);
     
     //Fourth Snare Setup
     fourthSnare.setClickingTogglesState(true);
     fourthSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fourthSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fourthSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fourthSnare.setToggleState(audioProcessor.fourthSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fourthSnare);
     
     //Fifth Snare Setup
     fifthSnare.setClickingTogglesState(true);
     fifthSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fifthSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fifthSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fifthSnare.setToggleState(audioProcessor.fifthSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fifthSnare);
     
     //Sixth Snare Setup
     sixthSnare.setClickingTogglesState(true);
     sixthSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    sixthSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    sixthSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     sixthSnare.setToggleState(audioProcessor.sixthSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(sixthSnare);
     
     //Seventh Snare Setup
     seventhSnare.setClickingTogglesState(true);
     seventhSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    seventhSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    seventhSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     seventhSnare.setToggleState(audioProcessor.seventhSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(seventhSnare);
     
     //Eighth Snare Setup
     eighthSnare.setClickingTogglesState(true);
     eighthSnare.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    eighthSnare.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    eighthSnare.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     eighthSnare.setToggleState(audioProcessor.eighthSnareHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(eighthSnare);
     
     //First Tom Setup
     firstTom.setClickingTogglesState(true);
     firstTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    firstTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    firstTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     firstTom.setToggleState(audioProcessor.firstTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(firstTom);
     
     //Second Tom Setup
     secondTom.setClickingTogglesState(true);
     secondTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    secondTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    secondTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     secondTom.setToggleState(audioProcessor.secondTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(secondTom);
     
     //Third Tom Setup
     thirdTom.setClickingTogglesState(true);
     thirdTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    thirdTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    thirdTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     thirdTom.setToggleState(audioProcessor.thirdTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(thirdTom);
     
     //Fourth Tom Setup
     fourthTom.setClickingTogglesState(true);
     fourthTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fourthTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fourthTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fourthTom.setToggleState(audioProcessor.fourthTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fourthTom);
     
     //Fifth Tom Setup
     fifthTom.setClickingTogglesState(true);
     fifthTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fifthTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fifthTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fifthTom.setToggleState(audioProcessor.fifthTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fifthTom);
     
     //Sixth Tom Setup
     sixthTom.setClickingTogglesState(true);
     sixthTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    sixthTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    sixthTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     sixthTom.setToggleState(audioProcessor.sixthTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(sixthTom);
     
     //Seventh Tom Setup
     seventhTom.setClickingTogglesState(true);
     seventhTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    seventhTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    seventhTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     seventhTom.setToggleState(audioProcessor.seventhTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(seventhTom);
     
     //Eighth Tom Setup
     eighthTom.setClickingTogglesState(true);
     eighthTom.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    eighthTom.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    eighthTom.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     eighthTom.setToggleState(audioProcessor.eighthTomHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(eighthTom);
     
     //First Kick Setup
     firstKick.setClickingTogglesState(true);
     firstKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    firstKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    firstKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     firstKick.setToggleState(audioProcessor.firstKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(firstKick);
     
     //Second Kick Setup
     secondKick.setClickingTogglesState(true);
     secondKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    secondKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    secondKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     secondKick.setToggleState(audioProcessor.secondKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(secondKick);
     
     //Third Kick Setup
     thirdKick.setClickingTogglesState(true);
     thirdKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    thirdKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    thirdKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     thirdKick.setToggleState(audioProcessor.thirdKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(thirdKick);
     
     //Fourth Kick Setup
     fourthKick.setClickingTogglesState(true);
     fourthKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fourthKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fourthKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fourthKick.setToggleState(audioProcessor.fourthKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fourthKick);
     
     //Fifth Kick Setup
     fifthKick.setClickingTogglesState(true);
     fifthKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    fifthKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    fifthKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     fifthKick.setToggleState(audioProcessor.fifthKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(fifthKick);
     
     //Sixth Kick Setup
     sixthKick.setClickingTogglesState(true);
     sixthKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    sixthKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    sixthKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     sixthKick.setToggleState(audioProcessor.sixthKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(sixthKick);
     
     //Seventh Kick Setup
     seventhKick.setClickingTogglesState(true);
     seventhKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    seventhKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    seventhKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     seventhKick.setToggleState(audioProcessor.seventhKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(seventhKick);
     
     //Eighth Kick Setup
     eighthKick.setClickingTogglesState(true);
     eighthKick.setColour(juce::TextButton::buttonColourId, buttonOffColor);
-    eighthKick.setColour(juce::TextButton::buttonOnColourId, juce::Colours::seagreen);
+    eighthKick.setColour(juce::TextButton::buttonOnColourId, buttonOnColor);
     eighthKick.setToggleState(audioProcessor.eighthKickHit, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(eighthKick);
 }
@@ -319,13 +331,8 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::paint (juce::Graphics
     auto rowHeight = drumsArea.getHeight()/numRows;
     
     //Set up row labels
-    auto drumLabels = drumsArea.removeFromLeft(border*8);
-    drumLabels.removeFromTop(rowHeight);
-    auto firstLabel = drumLabels.removeFromTop(rowHeight);
-    auto secondLabel = drumLabels.removeFromTop(rowHeight);
-    auto thirdLabel = drumLabels.removeFromTop(rowHeight);
-    auto fourthLabel = drumLabels.removeFromTop(rowHeight);
-    
+    auto drumLabels = drumsArea.removeFromLeft(border*10);
+
     //Get column width
     auto columnWidth = drumsArea.getWidth()/numCols;
     
@@ -340,15 +347,53 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::paint (juce::Graphics
     auto seventhColumn = drumsArea.removeFromLeft(columnWidth);
     auto eighthColumn = drumsArea.removeFromLeft(columnWidth);
     
-    //Set up beats
-    auto firstBeat = firstColumn.removeFromTop(rowHeight);
-    auto secondBeat = secondColumn.removeFromTop(rowHeight);
-    auto thirdBeat = thirdColumn.removeFromTop(rowHeight);
-    auto fourthBeat = fourthColumn.removeFromTop(rowHeight);
-    auto fifthBeat = fifthColumn.removeFromTop(rowHeight);
-    auto sixthBeat = sixthColumn.removeFromTop(rowHeight);
-    auto seventhBeat = seventhColumn.removeFromTop(rowHeight);
-    auto eighthBeat = eighthColumn.removeFromTop(rowHeight);
+    float reduceButtonWidth = (columnWidth - rowHeight)/2;
+    
+    //Set up initial colors of beats
+    auto firstBeatArea = firstColumn.removeFromTop(rowHeight).reduced(border);
+    firstBeatArea.removeFromLeft(reduceButtonWidth);
+    firstBeatArea.removeFromRight(reduceButtonWidth);
+    firstBeatArea.reduce(10, 10);
+    auto secondBeatArea = secondColumn.removeFromTop(rowHeight).reduced(border);
+    secondBeatArea.removeFromLeft(reduceButtonWidth);
+    secondBeatArea.removeFromRight(reduceButtonWidth);
+    secondBeatArea.reduce(10, 10);
+    auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
+    thirdBeatArea.removeFromLeft(reduceButtonWidth);
+    thirdBeatArea.removeFromRight(reduceButtonWidth);
+    thirdBeatArea.reduce(10, 10);
+    auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
+    fourthBeatArea.removeFromLeft(reduceButtonWidth);
+    fourthBeatArea.removeFromRight(reduceButtonWidth);
+    fourthBeatArea.reduce(10, 10);
+    auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
+    fifthBeatArea.removeFromLeft(reduceButtonWidth);
+    fifthBeatArea.removeFromRight(reduceButtonWidth);
+    fifthBeatArea.reduce(10, 10);
+    auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
+    sixthBeatArea.removeFromLeft(reduceButtonWidth);
+    sixthBeatArea.removeFromRight(reduceButtonWidth);
+    sixthBeatArea.reduce(10, 10);
+    auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
+    seventhBeatArea.removeFromLeft(reduceButtonWidth);
+    seventhBeatArea.removeFromRight(reduceButtonWidth);
+    seventhBeatArea.reduce(10, 10);
+    auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
+    eighthBeatArea.removeFromLeft(reduceButtonWidth);
+    eighthBeatArea.removeFromRight(reduceButtonWidth);
+    eighthBeatArea.reduce(10, 10);
+    
+    
+    g.setColour(juce::Colours::red);
+    g.fillEllipse(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
+    g.setColour(juce::Colours::grey);
+    g.fillEllipse(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
+    g.fillEllipse(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
+    g.fillEllipse(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
+    g.fillEllipse(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
+    g.fillEllipse(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
+    g.fillEllipse(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
+    g.fillEllipse(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
 }
 
 void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
@@ -368,7 +413,7 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     
     //Set up row labels
     auto drumLabels = drumsArea.removeFromLeft(border*10);
-    drumLabels.removeFromTop(rowHeight);
+    drumLabels.removeFromTop(rowHeight/2);
     auto firstLabelArea = drumLabels.removeFromTop(rowHeight);
     auto secondLabelArea = drumLabels.removeFromTop(rowHeight);
     auto thirdLabelArea = drumLabels.removeFromTop(rowHeight);
@@ -382,6 +427,8 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     //Get column width
     auto columnWidth = drumsArea.getWidth()/numCols;
     
+    float reduceButtonWidth = (columnWidth - rowHeight)/2.0;
+    
     //Set up columns
     drumsArea.removeFromLeft(border);
     auto firstColumn = drumsArea.removeFromLeft(columnWidth);
@@ -394,18 +441,49 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     auto eighthColumn = drumsArea.removeFromLeft(columnWidth);
     
     //Set up beats
-    auto firstBeatArea = firstColumn.removeFromTop(rowHeight);
-    auto secondBeatArea = secondColumn.removeFromTop(rowHeight);
-    auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight);
-    auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight);
-    auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight);
-    auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight);
-    auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight);
-    auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight);
+    auto firstBeatArea = firstColumn.removeFromTop(rowHeight/2).reduced(border);
+    firstBeatArea.removeFromLeft(reduceButtonWidth);
+    firstBeatArea.removeFromRight(reduceButtonWidth);
+    firstBeatArea.reduce(10, 10);
+    auto secondBeatArea = secondColumn.removeFromTop(rowHeight/2).reduced(border);
+    secondBeatArea.removeFromLeft(reduceButtonWidth);
+    secondBeatArea.removeFromRight(reduceButtonWidth);
+    secondBeatArea.reduce(10, 10);
+    auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight/2).reduced(border);
+    thirdBeatArea.removeFromLeft(reduceButtonWidth);
+    thirdBeatArea.removeFromRight(reduceButtonWidth);
+    thirdBeatArea.reduce(10, 10);
+    auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight/2).reduced(border);
+    fourthBeatArea.removeFromLeft(reduceButtonWidth);
+    fourthBeatArea.removeFromRight(reduceButtonWidth);
+    fourthBeatArea.reduce(10, 10);
+    auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight/2).reduced(border);
+    fifthBeatArea.removeFromLeft(reduceButtonWidth);
+    fifthBeatArea.removeFromRight(reduceButtonWidth);
+    fifthBeatArea.reduce(10, 10);
+    auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight/2).reduced(border);
+    sixthBeatArea.removeFromLeft(reduceButtonWidth);
+    sixthBeatArea.removeFromRight(reduceButtonWidth);
+    sixthBeatArea.reduce(10, 10);
+    auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight/2).reduced(border);
+    seventhBeatArea.removeFromLeft(reduceButtonWidth);
+    seventhBeatArea.removeFromRight(reduceButtonWidth);
+    seventhBeatArea.reduce(10, 10);
+    auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight/2).reduced(border);
+    eighthBeatArea.removeFromLeft(reduceButtonWidth);
+    eighthBeatArea.removeFromRight(reduceButtonWidth);
+    eighthBeatArea.reduce(10, 10);
+    
+    beatAreas.add(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
+    beatAreas.add(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
+    beatAreas.add(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
+    beatAreas.add(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
+    beatAreas.add(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
+    beatAreas.add(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
+    beatAreas.add(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
+    beatAreas.add(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
     
     //Set up hi hat
-    float reduceButtonWidth = (columnWidth - rowHeight)/2.0;
-    
     auto firstHiHatArea = firstColumn.removeFromTop(rowHeight).reduced(border);
     firstHiHatArea.removeFromLeft(reduceButtonWidth);
     firstHiHatArea.removeFromRight(reduceButtonWidth);
@@ -552,88 +630,352 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::
     {
         if(firstHiHat.getToggleState() == true){
             audioProcessor.firstHiHatHit = true;
-            DBG("mute");
+            DBG("first hihat on");
         }
         else{
             audioProcessor.firstHiHatHit = false;
-            DBG("unmute");
+            DBG("first hihat off");
         }
     }
     else if(button == &secondHiHat)
     {
         if(secondHiHat.getToggleState() == true){
             audioProcessor.secondHiHatHit = true;
-            DBG("bypass on");
+            DBG("secon hihat on");
         }
         else{
             audioProcessor.secondHiHatHit = false;
-            DBG("bypass off");
+            DBG("second hihat off");
         }
     }
     else if(button == &thirdHiHat)
     {
         if(thirdHiHat.getToggleState() == true){
             audioProcessor.thirdHiHatHit = true;
-            DBG("bypass on");
+            DBG("third hihat on");
         }
         else{
             audioProcessor.thirdHiHatHit = false;
-            DBG("bypass off");
+            DBG("third hihat off");
         }
     }
     else if(button == &fourthHiHat)
     {
         if(fourthHiHat.getToggleState() == true){
             audioProcessor.fourthHiHatHit = true;
-            DBG("bypass on");
+            DBG("fourth hihat on");
         }
         else{
             audioProcessor.fourthHiHatHit = false;
-            DBG("bypass off");
+            DBG("fourth hihat off");
         }
     }
     else if(button == &fifthHiHat)
     {
         if(fifthHiHat.getToggleState() == true){
             audioProcessor.fifthHiHatHit = true;
-            DBG("bypass on");
+            DBG("fifth hihat on");
         }
         else{
             audioProcessor.fifthHiHatHit = false;
-            DBG("bypass off");
+            DBG("fifth hihat off");
         }
     }
     else if(button == &sixthHiHat)
     {
         if(sixthHiHat.getToggleState() == true){
             audioProcessor.sixthHiHatHit = true;
-            DBG("bypass on");
+            DBG("sixth hihat on");
         }
         else{
             audioProcessor.sixthHiHatHit = false;
-            DBG("bypass off");
+            DBG("sixth hihat off");
         }
     }
     else if(button == &seventhHiHat)
     {
         if(seventhHiHat.getToggleState() == true){
             audioProcessor.seventhHiHatHit = true;
-            DBG("bypass on");
+            DBG("seventh hihat on");
         }
         else{
             audioProcessor.seventhHiHatHit = false;
-            DBG("bypass off");
+            DBG("seventh hihat off");
         }
     }
     else if(button == &eighthHiHat)
     {
         if(eighthHiHat.getToggleState() == true){
             audioProcessor.eighthHiHatHit = true;
-            DBG("bypass on");
+            DBG("eighth hihat on");
         }
         else{
             audioProcessor.eighthHiHatHit = false;
-            DBG("bypass off");
+            DBG("eighth hihat off");
+        }
+    }
+    else if(button == &firstSnare)
+    {
+        if(firstSnare.getToggleState() == true){
+            audioProcessor.firstSnareHit = true;
+            DBG("first snare on");
+        }
+        else{
+            audioProcessor.firstSnareHit = false;
+            DBG("first snare off");
+        }
+    }
+    else if(button == &secondSnare)
+    {
+        if(secondSnare.getToggleState() == true){
+            audioProcessor.secondSnareHit = true;
+            DBG("secon snare on");
+        }
+        else{
+            audioProcessor.secondSnareHit = false;
+            DBG("second snare off");
+        }
+    }
+    else if(button == &thirdSnare)
+    {
+        if(thirdSnare.getToggleState() == true){
+            audioProcessor.thirdSnareHit = true;
+            DBG("third snare on");
+        }
+        else{
+            audioProcessor.thirdSnareHit = false;
+            DBG("third snare off");
+        }
+    }
+    else if(button == &fourthSnare)
+    {
+        if(fourthSnare.getToggleState() == true){
+            audioProcessor.fourthSnareHit = true;
+            DBG("fourth snare on");
+        }
+        else{
+            audioProcessor.fourthSnareHit = false;
+            DBG("fourth snare off");
+        }
+    }
+    else if(button == &fifthSnare)
+    {
+        if(fifthSnare.getToggleState() == true){
+            audioProcessor.fifthSnareHit = true;
+            DBG("fifth snare on");
+        }
+        else{
+            audioProcessor.fifthSnareHit = false;
+            DBG("fifth snare off");
+        }
+    }
+    else if(button == &sixthSnare)
+    {
+        if(sixthSnare.getToggleState() == true){
+            audioProcessor.sixthSnareHit = true;
+            DBG("sixth snare on");
+        }
+        else{
+            audioProcessor.sixthSnareHit = false;
+            DBG("sixth snare off");
+        }
+    }
+    else if(button == &seventhSnare)
+    {
+        if(seventhSnare.getToggleState() == true){
+            audioProcessor.seventhSnareHit = true;
+            DBG("seventh snare on");
+        }
+        else{
+            audioProcessor.seventhSnareHit = false;
+            DBG("seventh snare off");
+        }
+    }
+    else if(button == &eighthSnare)
+    {
+        if(eighthSnare.getToggleState() == true){
+            audioProcessor.eighthSnareHit = true;
+            DBG("eighth snare on");
+        }
+        else{
+            audioProcessor.eighthSnareHit = false;
+            DBG("eighth snare off");
+        }
+    }
+    else if(button == &firstTom)
+    {
+        if(firstTom.getToggleState() == true){
+            audioProcessor.firstTomHit = true;
+            DBG("first tom on");
+        }
+        else{
+            audioProcessor.firstTomHit = false;
+            DBG("first tom off");
+        }
+    }
+    else if(button == &secondTom)
+    {
+        if(secondTom.getToggleState() == true){
+            audioProcessor.secondTomHit = true;
+            DBG("secon tom on");
+        }
+        else{
+            audioProcessor.secondTomHit = false;
+            DBG("second tom off");
+        }
+    }
+    else if(button == &thirdTom)
+    {
+        if(thirdTom.getToggleState() == true){
+            audioProcessor.thirdTomHit = true;
+            DBG("third tom on");
+        }
+        else{
+            audioProcessor.thirdTomHit = false;
+            DBG("third tom off");
+        }
+    }
+    else if(button == &fourthTom)
+    {
+        if(fourthTom.getToggleState() == true){
+            audioProcessor.fourthTomHit = true;
+            DBG("fourth tom on");
+        }
+        else{
+            audioProcessor.fourthTomHit = false;
+            DBG("fourth tom off");
+        }
+    }
+    else if(button == &fifthTom)
+    {
+        if(fifthTom.getToggleState() == true){
+            audioProcessor.fifthTomHit = true;
+            DBG("fifth tom on");
+        }
+        else{
+            audioProcessor.fifthTomHit = false;
+            DBG("fifth tom off");
+        }
+    }
+    else if(button == &sixthTom)
+    {
+        if(sixthTom.getToggleState() == true){
+            audioProcessor.sixthTomHit = true;
+            DBG("sixth tom on");
+        }
+        else{
+            audioProcessor.sixthTomHit = false;
+            DBG("sixth tom off");
+        }
+    }
+    else if(button == &seventhTom)
+    {
+        if(seventhTom.getToggleState() == true){
+            audioProcessor.seventhTomHit = true;
+            DBG("seventh tom on");
+        }
+        else{
+            audioProcessor.seventhTomHit = false;
+            DBG("seventh tom off");
+        }
+    }
+    else if(button == &eighthTom)
+    {
+        if(eighthTom.getToggleState() == true){
+            audioProcessor.eighthTomHit = true;
+            DBG("eighth tom on");
+        }
+        else{
+            audioProcessor.eighthTomHit = false;
+            DBG("eighth tom off");
+        }
+    }
+    else if(button == &firstKick)
+    {
+        if(firstKick.getToggleState() == true){
+            audioProcessor.firstKickHit = true;
+            DBG("first kick on");
+        }
+        else{
+            audioProcessor.firstKickHit = false;
+            DBG("first kick off");
+        }
+    }
+    else if(button == &secondKick)
+    {
+        if(secondKick.getToggleState() == true){
+            audioProcessor.secondKickHit = true;
+            DBG("secon kick on");
+        }
+        else{
+            audioProcessor.secondKickHit = false;
+            DBG("second kick off");
+        }
+    }
+    else if(button == &thirdKick)
+    {
+        if(thirdKick.getToggleState() == true){
+            audioProcessor.thirdKickHit = true;
+            DBG("third kick on");
+        }
+        else{
+            audioProcessor.thirdKickHit = false;
+            DBG("third kick off");
+        }
+    }
+    else if(button == &fourthKick)
+    {
+        if(fourthKick.getToggleState() == true){
+            audioProcessor.fourthKickHit = true;
+            DBG("fourth kick on");
+        }
+        else{
+            audioProcessor.fourthKickHit = false;
+            DBG("fourth kick off");
+        }
+    }
+    else if(button == &fifthKick)
+    {
+        if(fifthKick.getToggleState() == true){
+            audioProcessor.fifthKickHit = true;
+            DBG("fifth kick on");
+        }
+        else{
+            audioProcessor.fifthKickHit = false;
+            DBG("fifth kick off");
+        }
+    }
+    else if(button == &sixthKick)
+    {
+        if(sixthKick.getToggleState() == true){
+            audioProcessor.sixthKickHit = true;
+            DBG("sixth kick on");
+        }
+        else{
+            audioProcessor.sixthKickHit = false;
+            DBG("sixth kick off");
+        }
+    }
+    else if(button == &seventhKick)
+    {
+        if(seventhKick.getToggleState() == true){
+            audioProcessor.seventhKickHit = true;
+            DBG("seventh kick on");
+        }
+        else{
+            audioProcessor.seventhKickHit = false;
+            DBG("seventh kick off");
+        }
+    }
+    else if(button == &eighthKick)
+    {
+        if(eighthKick.getToggleState() == true){
+            audioProcessor.eighthKickHit = true;
+            DBG("eighth kick on");
+        }
+        else{
+            audioProcessor.eighthKickHit = false;
+            DBG("eighth kick off");
         }
     }
 }
