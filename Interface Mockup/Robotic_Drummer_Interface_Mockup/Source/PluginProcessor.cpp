@@ -212,6 +212,7 @@ bool Robotic_Drummer_Interface_MockupAudioProcessor::isBusesLayoutSupported (con
 void Robotic_Drummer_Interface_MockupAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     
+    
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();

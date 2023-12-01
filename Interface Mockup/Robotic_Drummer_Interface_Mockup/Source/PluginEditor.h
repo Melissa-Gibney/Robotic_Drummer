@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::TextButton::Listener, private juce::Slider::Listener
+class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer, private juce::TextButton::Listener, private juce::Slider::Listener
 {
 public:
     Robotic_Drummer_Interface_MockupAudioProcessorEditor (Robotic_Drummer_Interface_MockupAudioProcessor&);
@@ -23,6 +23,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
 private:
     // This reference is provided as a quick way for your editor to

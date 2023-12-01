@@ -36,6 +36,9 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     guiContent.setFont(juce::Font(16.0f, juce::Font::plain));
     guiContent.setJustificationType(juce::Justification::centred);
     
+    //Timer Code
+    startTimer(60000/audioProcessor.tempo);
+    
     //Universal Knob Setup
     addAndMakeVisible(universalKnob);
     universalKnob.setSliderStyle(juce::Slider::Rotary);
@@ -1248,46 +1251,66 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::paint (juce::Graphics
     firstBeatArea.removeFromLeft(reduceButtonWidth);
     firstBeatArea.removeFromRight(reduceButtonWidth);
     firstBeatArea.reduce(10, 10);
+    beatAreas.add(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
     auto secondBeatArea = secondColumn.removeFromTop(rowHeight).reduced(border);
     secondBeatArea.removeFromLeft(reduceButtonWidth);
     secondBeatArea.removeFromRight(reduceButtonWidth);
     secondBeatArea.reduce(10, 10);
+    beatAreas.add(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
     auto thirdBeatArea = thirdColumn.removeFromTop(rowHeight).reduced(border);
     thirdBeatArea.removeFromLeft(reduceButtonWidth);
     thirdBeatArea.removeFromRight(reduceButtonWidth);
     thirdBeatArea.reduce(10, 10);
+    beatAreas.add(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
     auto fourthBeatArea = fourthColumn.removeFromTop(rowHeight).reduced(border);
     fourthBeatArea.removeFromLeft(reduceButtonWidth);
     fourthBeatArea.removeFromRight(reduceButtonWidth);
     fourthBeatArea.reduce(10, 10);
+    beatAreas.add(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
     auto fifthBeatArea = fifthColumn.removeFromTop(rowHeight).reduced(border);
     fifthBeatArea.removeFromLeft(reduceButtonWidth);
     fifthBeatArea.removeFromRight(reduceButtonWidth);
     fifthBeatArea.reduce(10, 10);
+    beatAreas.add(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
     auto sixthBeatArea = sixthColumn.removeFromTop(rowHeight).reduced(border);
     sixthBeatArea.removeFromLeft(reduceButtonWidth);
     sixthBeatArea.removeFromRight(reduceButtonWidth);
     sixthBeatArea.reduce(10, 10);
+    beatAreas.add(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
     auto seventhBeatArea = seventhColumn.removeFromTop(rowHeight).reduced(border);
     seventhBeatArea.removeFromLeft(reduceButtonWidth);
     seventhBeatArea.removeFromRight(reduceButtonWidth);
     seventhBeatArea.reduce(10, 10);
+    beatAreas.add(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
     auto eighthBeatArea = eighthColumn.removeFromTop(rowHeight).reduced(border);
     eighthBeatArea.removeFromLeft(reduceButtonWidth);
     eighthBeatArea.removeFromRight(reduceButtonWidth);
     eighthBeatArea.reduce(10, 10);
+    beatAreas.add(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
     
+    for(int i = 0; i < 8; i++)
+    {
+        if(audioProcessor.beats[i])
+        {
+            g.setColour(juce::Colours::red);
+        }
+        else
+        {
+            g.setColour(juce::Colours::darkgrey);
+        }
+        g.fillEllipse(beatAreas.getRectangle(i));
+    }
     
-    g.setColour(juce::Colours::red);
-    g.fillEllipse(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
-    g.setColour(juce::Colours::darkgrey);
-    g.fillEllipse(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
-    g.fillEllipse(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
-    g.fillEllipse(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
-    g.fillEllipse(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
-    g.fillEllipse(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
-    g.fillEllipse(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
-    g.fillEllipse(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
+//    g.setColour(juce::Colours::red);
+//    g.fillEllipse(firstBeatArea.getX(), firstBeatArea.getY(), firstBeatArea.getWidth(), firstBeatArea.getHeight());
+//    g.setColour(juce::Colours::darkgrey);
+//    g.fillEllipse(secondBeatArea.getX(), secondBeatArea.getY(), secondBeatArea.getWidth(), secondBeatArea.getHeight());
+//    g.fillEllipse(thirdBeatArea.getX(), thirdBeatArea.getY(), thirdBeatArea.getWidth(), thirdBeatArea.getHeight());
+//    g.fillEllipse(fourthBeatArea.getX(), fourthBeatArea.getY(), fourthBeatArea.getWidth(), fourthBeatArea.getHeight());
+//    g.fillEllipse(fifthBeatArea.getX(), fifthBeatArea.getY(), fifthBeatArea.getWidth(), fifthBeatArea.getHeight());
+//    g.fillEllipse(sixthBeatArea.getX(), sixthBeatArea.getY(), sixthBeatArea.getWidth(), sixthBeatArea.getHeight());
+//    g.fillEllipse(seventhBeatArea.getX(), seventhBeatArea.getY(), seventhBeatArea.getWidth(), seventhBeatArea.getHeight());
+//    g.fillEllipse(eighthBeatArea.getX(), eighthBeatArea.getY(), eighthBeatArea.getWidth(), eighthBeatArea.getHeight());
 }
 
 void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
@@ -1534,511 +1557,14 @@ void Robotic_Drummer_Interface_MockupAudioProcessorEditor::resized()
     eighthKick.setBounds(eighthKickArea);
 }
 
-void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::Button * button)
+void Robotic_Drummer_Interface_MockupAudioProcessorEditor::timerCallback()
 {
-//    if(button == &firstHiHat)
-//    {
-//        if(firstHiHat.getToggleState() == true){
-//            audioProcessor.firstHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.firstHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.firstHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("first hihat on");
-//        }
-//        else{
-//            audioProcessor.firstHiHatHit = false;
-//            DBG("first hihat off");
-//        }
-//    }
-//    else if(button == &secondHiHat)
-//    {
-//        if(secondHiHat.getToggleState() == true){
-//            audioProcessor.secondHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.secondHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.secondHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("second hihat on");
-//        }
-//        else{
-//            audioProcessor.secondHiHatHit = false;
-//            DBG("second hihat off");
-//        }
-//    }
-//    else if(button == &thirdHiHat)
-//    {
-//        if(thirdHiHat.getToggleState() == true){
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.thirdHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.thirdHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            audioProcessor.thirdHiHatHit = true;
-//            DBG("third hihat on");
-//        }
-//        else{
-//            audioProcessor.thirdHiHatHit = false;
-//            DBG("third hihat off");
-//        }
-//    }
-//    else if(button == &fourthHiHat)
-//    {
-//        if(fourthHiHat.getToggleState() == true){
-//            audioProcessor.fourthHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fourthHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fourthHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fourth hihat on");
-//        }
-//        else{
-//            audioProcessor.fourthHiHatHit = false;
-//            DBG("fourth hihat off");
-//        }
-//    }
-//    else if(button == &fifthHiHat)
-//    {
-//        if(fifthHiHat.getToggleState() == true){
-//            audioProcessor.fifthHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fifthHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fifthHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fifth hihat on");
-//        }
-//        else{
-//            audioProcessor.fifthHiHatHit = false;
-//            DBG("fifth hihat off");
-//        }
-//    }
-//    else if(button == &sixthHiHat)
-//    {
-//        if(sixthHiHat.getToggleState() == true){
-//            audioProcessor.sixthHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.sixthHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.sixthHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("sixth hihat on");
-//        }
-//        else{
-//            audioProcessor.sixthHiHatHit = false;
-//            DBG("sixth hihat off");
-//        }
-//    }
-//    else if(button == &seventhHiHat)
-//    {
-//        if(seventhHiHat.getToggleState() == true){
-//            audioProcessor.seventhHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.seventhHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.seventhHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("seventh hihat on");
-//        }
-//        else{
-//            audioProcessor.seventhHiHatHit = false;
-//            DBG("seventh hihat off");
-//        }
-//    }
-//    else if(button == &eighthHiHat)
-//    {
-//        if(eighthHiHat.getToggleState() == true){
-//            audioProcessor.eighthHiHatHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.eighthHiHatVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.eighthHiHatVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("eighth hihat on");
-//        }
-//        else{
-//            audioProcessor.eighthHiHatHit = false;
-//            DBG("eighth hihat off");
-//        }
-//    }
-//    else if(button == &firstSnare)
-//    {
-//        if(firstSnare.getToggleState() == true){
-//            audioProcessor.firstSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.firstSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.firstSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("first snare on");
-//        }
-//        else{
-//            audioProcessor.firstSnareHit = false;
-//            DBG("first snare off");
-//        }
-//    }
-//    else if(button == &secondSnare)
-//    {
-//        if(secondSnare.getToggleState() == true){
-//            audioProcessor.secondSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.secondSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.secondSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("second snare on");
-//        }
-//        else{
-//            audioProcessor.secondSnareHit = false;
-//            DBG("second snare off");
-//        }
-//    }
-//    else if(button == &thirdSnare)
-//    {
-//        if(thirdSnare.getToggleState() == true){
-//            audioProcessor.thirdSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.thirdSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.thirdSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("third snare on");
-//        }
-//        else{
-//            audioProcessor.thirdSnareHit = false;
-//            DBG("third snare off");
-//        }
-//    }
-//    else if(button == &fourthSnare)
-//    {
-//        if(fourthSnare.getToggleState() == true){
-//            audioProcessor.fourthSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fourthSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fourthSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fourth snare on");
-//        }
-//        else{
-//            audioProcessor.fourthSnareHit = false;
-//            DBG("fourth snare off");
-//        }
-//    }
-//    else if(button == &fifthSnare)
-//    {
-//        if(fifthSnare.getToggleState() == true){
-//            audioProcessor.fifthSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fifthSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fifthSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fifth snare on");
-//        }
-//        else{
-//            audioProcessor.fifthSnareHit = false;
-//            DBG("fifth snare off");
-//        }
-//    }
-//    else if(button == &sixthSnare)
-//    {
-//        if(sixthSnare.getToggleState() == true){
-//            audioProcessor.sixthSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.sixthSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.sixthSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("sixth snare on");
-//        }
-//        else{
-//            audioProcessor.sixthSnareHit = false;
-//            DBG("sixth snare off");
-//        }
-//    }
-//    else if(button == &seventhSnare)
-//    {
-//        if(seventhSnare.getToggleState() == true){
-//            audioProcessor.seventhSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.seventhSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.seventhSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("seventh snare on");
-//        }
-//        else{
-//            audioProcessor.seventhSnareHit = false;
-//            DBG("seventh snare off");
-//        }
-//    }
-//    else if(button == &eighthSnare)
-//    {
-//        if(eighthSnare.getToggleState() == true){
-//            audioProcessor.eighthSnareHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.eighthSnareVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.eighthSnareVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("eighth snare on");
-//        }
-//        else{
-//            audioProcessor.eighthSnareHit = false;
-//            DBG("eighth snare off");
-//        }
-//    }
-//    else if(button == &firstTom)
-//    {
-//        if(firstTom.getToggleState() == true){
-//            audioProcessor.firstTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.firstTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.firstTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("first tom on");
-//        }
-//        else{
-//            audioProcessor.firstTomHit = false;
-//            DBG("first tom off");
-//        }
-//    }
-//    else if(button == &secondTom)
-//    {
-//        if(secondTom.getToggleState() == true){
-//            audioProcessor.secondTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.secondTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.secondTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("second tom on");
-//        }
-//        else{
-//            audioProcessor.secondTomHit = false;
-//            DBG("second tom off");
-//        }
-//    }
-//    else if(button == &thirdTom)
-//    {
-//        if(thirdTom.getToggleState() == true){
-//            audioProcessor.thirdTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.thirdTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.thirdTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("third tom on");
-//        }
-//        else{
-//            audioProcessor.thirdTomHit = false;
-//            DBG("third tom off");
-//        }
-//    }
-//    else if(button == &fourthTom)
-//    {
-//        if(fourthTom.getToggleState() == true){
-//            audioProcessor.fourthTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fourthTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fourthTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fourth tom on");
-//        }
-//        else{
-//            audioProcessor.fourthTomHit = false;
-//            DBG("fourth tom off");
-//        }
-//    }
-//    else if(button == &fifthTom)
-//    {
-//        if(fifthTom.getToggleState() == true){
-//            audioProcessor.fifthTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fifthTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fifthTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fifth tom on");
-//        }
-//        else{
-//            audioProcessor.fifthTomHit = false;
-//            DBG("fifth tom off");
-//        }
-//    }
-//    else if(button == &sixthTom)
-//    {
-//        if(sixthTom.getToggleState() == true){
-//            audioProcessor.sixthTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.sixthTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.sixthTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("sixth tom on");
-//        }
-//        else{
-//            audioProcessor.sixthTomHit = false;
-//            DBG("sixth tom off");
-//        }
-//    }
-//    else if(button == &seventhTom)
-//    {
-//        if(seventhTom.getToggleState() == true){
-//            audioProcessor.seventhTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.seventhTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.seventhTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("seventh tom on");
-//        }
-//        else{
-//            audioProcessor.seventhTomHit = false;
-//            DBG("seventh tom off");
-//        }
-//    }
-//    else if(button == &eighthTom)
-//    {
-//        if(eighthTom.getToggleState() == true){
-//            audioProcessor.eighthTomHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.eighthTomVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.eighthTomVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("eighth tom on");
-//        }
-//        else{
-//            audioProcessor.eighthTomHit = false;
-//            DBG("eighth tom off");
-//        }
-//    }
-//    else if(button == &firstKick)
-//    {
-//        if(firstKick.getToggleState() == true){
-//            audioProcessor.firstKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.firstKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.firstKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("first kick on");
-//        }
-//        else{
-//            audioProcessor.firstKickHit = false;
-//            DBG("first kick off");
-//        }
-//    }
-//    else if(button == &secondKick)
-//    {
-//        if(secondKick.getToggleState() == true){
-//            audioProcessor.secondKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.secondKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.secondKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("second kick on");
-//        }
-//        else{
-//            audioProcessor.secondKickHit = false;
-//            DBG("second kick off");
-//        }
-//    }
-//    else if(button == &thirdKick)
-//    {
-//        if(thirdKick.getToggleState() == true){
-//            audioProcessor.thirdKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.firstKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.thirdKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("third kick on");
-//        }
-//        else{
-//            audioProcessor.thirdKickHit = false;
-//            DBG("third kick off");
-//        }
-//    }
-//    else if(button == &fourthKick)
-//    {
-//        if(fourthKick.getToggleState() == true){
-//            audioProcessor.fourthKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fourthKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fourthKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fourth kick on");
-//        }
-//        else{
-//            audioProcessor.fourthKickHit = false;
-//            DBG("fourth kick off");
-//        }
-//    }
-//    else if(button == &fifthKick)
-//    {
-//        if(fifthKick.getToggleState() == true){
-//            audioProcessor.fifthKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.fifthKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.fifthKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("fifth kick on");
-//        }
-//        else{
-//            audioProcessor.fifthKickHit = false;
-//            DBG("fifth kick off");
-//        }
-//    }
-//    else if(button == &sixthKick)
-//    {
-//        if(sixthKick.getToggleState() == true){
-//            audioProcessor.sixthKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.sixthKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.sixthKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("sixth kick on");
-//        }
-//        else{
-//            audioProcessor.sixthKickHit = false;
-//            DBG("sixth kick off");
-//        }
-//    }
-//    else if(button == &seventhKick)
-//    {
-//        if(seventhKick.getToggleState() == true){
-//            audioProcessor.seventhKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.seventhKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.seventhKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("seventh kick on");
-//        }
-//        else{
-//            audioProcessor.seventhKickHit = false;
-//            DBG("seventh kick off");
-//        }
-//    }
-//    else if(button == &eighthKick)
-//    {
-//        if(eighthKick.getToggleState() == true){
-//            audioProcessor.eighthKickHit = true;
-//            universalKnob.setRange(0, 255);
-//            universalKnob.setValue(audioProcessor.eighthKickVelocity);
-//            guiLabel.setText("Velocity", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.eighthKickVelocity), juce::NotificationType::dontSendNotification);
-//            DBG("eighth kick on");
-//        }
-//        else{
-//            audioProcessor.eighthKickHit = false;
-//            DBG("eighth kick off");
-//        }
-//    }
-//    else if(button == &universalButton)
-//    {
-//        tempoShown = !tempoShown;
-//        if(tempoShown)
-//        {
-//            universalKnob.setRange(0, 500);
-//            universalKnob.setValue(audioProcessor.tempo);
-//            guiLabel.setText("Tempo", juce::NotificationType::dontSendNotification);
-//            guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
-//        }
-//    }
+    repaint();
 }
 
-void Robotic_Drummer_Interface_MockupAudioProcessorEditor::sliderValueChanged (juce::Slider* slider)
-{
-//    if(slider == &universalKnob)
-//    {
-//        if(tempoShown)
-//        {
-//            guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
-//        }
-//    }
-}
+void Robotic_Drummer_Interface_MockupAudioProcessorEditor::buttonClicked (juce::Button * button){}
+
+void Robotic_Drummer_Interface_MockupAudioProcessorEditor::sliderValueChanged (juce::Slider* slider){}
 
 juce::Rectangle<int> getButtonArea(juce::Rectangle<int> column, float columnWidth, float rowHeight, float border)
 {
