@@ -32,7 +32,7 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
     
     //GUI Content Label Setup
     addAndMakeVisible(guiContent);
-    guiContent.setText("120", juce::dontSendNotification);
+    guiContent.setText(juce::String(audioProcessor.tempo), juce::dontSendNotification);
     guiContent.setFont(juce::Font(16.0f, juce::Font::plain));
     guiContent.setJustificationType(juce::Justification::centred);
     
@@ -59,7 +59,7 @@ Robotic_Drummer_Interface_MockupAudioProcessorEditor::Robotic_Drummer_Interface_
                 case 1:
                 {
                     audioProcessor.firstHiHatVelocity = universalKnob.getValue();
-                    guiContent.setText(juce::String(audioProcessor.tempo), juce::NotificationType::dontSendNotification);
+                    guiContent.setText(juce::String(audioProcessor.firstHiHatVelocity), juce::NotificationType::dontSendNotification);
                     break;
                 }
                 case 2:
