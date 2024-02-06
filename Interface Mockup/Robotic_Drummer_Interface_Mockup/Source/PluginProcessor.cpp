@@ -24,84 +24,26 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
 {
     //Initialize Variables
     
-    //Hi Hat Variables
-    firstHiHatHit = false;
-    secondHiHatHit = false;
-    thirdHiHatHit = false;
-    fourthHiHatHit = false;
-    fifthHiHatHit = false;
-    sixthHiHatHit = false;
-    seventhHiHatHit = false;
-    eighthHiHatHit = false;
+    //Sequencer Hits
+    for(int i = 0; i < 32; i++)
+    {
+        sequencerHits[i] = false;
+    }
     
-    firstHiHatVelocity = 255;
-    secondHiHatVelocity = 255;
-    thirdHiHatVelocity = 255;
-    fourthHiHatVelocity = 255;
-    fifthHiHatVelocity = 255;
-    sixthHiHatVelocity = 255;
-    seventhHiHatVelocity = 255;
-    eighthHiHatVelocity = 255;
-    
-    //Snare Variables
-    firstSnareHit = false;
-    secondSnareHit = false;
-    thirdSnareHit = false;
-    fourthSnareHit = false;
-    fifthSnareHit = false;
-    sixthSnareHit = false;
-    seventhSnareHit = false;
-    eighthSnareHit = false;
-    
-    firstSnareVelocity = 255;
-    secondSnareVelocity = 255;
-    thirdSnareVelocity = 255;
-    fourthSnareVelocity = 255;
-    fifthSnareVelocity = 255;
-    sixthSnareVelocity = 255;
-    seventhSnareVelocity = 255;
-    eighthSnareVelocity = 255;
-    
-    //Tom Variables
-    firstTomHit = false;
-    secondTomHit = false;
-    thirdTomHit = false;
-    fourthTomHit = false;
-    fifthTomHit = false;
-    sixthTomHit = false;
-    seventhTomHit = false;
-    eighthTomHit = false;
-    
-    firstTomVelocity = 255;
-    secondTomVelocity = 255;
-    thirdTomVelocity = 255;
-    fourthTomVelocity = 255;
-    fifthTomVelocity = 255;
-    sixthTomVelocity = 255;
-    seventhTomVelocity = 255;
-    eighthTomVelocity = 255;
-    
-    //Kick Variables
-    firstKickHit = false;
-    secondKickHit = false;
-    thirdKickHit = false;
-    fourthKickHit = false;
-    fifthKickHit = false;
-    sixthKickHit = false;
-    seventhKickHit = false;
-    eighthKickHit = false;
-    
-    firstKickVelocity = 255;
-    secondKickVelocity = 255;
-    thirdKickVelocity = 255;
-    fourthKickVelocity = 255;
-    fifthKickVelocity = 255;
-    sixthKickVelocity = 255;
-    seventhKickVelocity = 255;
-    eighthKickVelocity = 255;
+    //Sequencer Velocities
+    for(int i = 0; i < 32; i++)
+    {
+        sequencerVelocities[i] = 127;
+    }
     
     //Initialize Tempo
     tempo = 120; //bpm
+    
+    //Initialize isPlaying
+    isPlaying = false;
+    
+    //Initialize Button Being Held
+    buttonHeld = -1;
 }
 
 Robotic_Drummer_Interface_MockupAudioProcessor::~Robotic_Drummer_Interface_MockupAudioProcessor()

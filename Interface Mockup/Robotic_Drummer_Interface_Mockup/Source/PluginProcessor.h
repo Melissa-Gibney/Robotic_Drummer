@@ -64,84 +64,29 @@ public:
     //Tempo
     int tempo = 120;
     
+    //Is Playing
+    bool isPlaying = false;
+    
+    //Use Velocity Mode
+    bool velocityMode = false;
+    
     //Beat Variables
     bool beats[8] = {true, false, false, false, false, false, false, false};
     
-    //Hi Hat Variables
-    bool firstHiHatHit;
-    bool secondHiHatHit;
-    bool thirdHiHatHit;
-    bool fourthHiHatHit;
-    bool fifthHiHatHit;
-    bool sixthHiHatHit;
-    bool seventhHiHatHit;
-    bool eighthHiHatHit;
+    //Beat Variables
+    bool mutes[4] = {false, false, false, false};
     
-    int firstHiHatVelocity;
-    int secondHiHatVelocity;
-    int thirdHiHatVelocity;
-    int fourthHiHatVelocity;
-    int fifthHiHatVelocity;
-    int sixthHiHatVelocity;
-    int seventhHiHatVelocity;
-    int eighthHiHatVelocity;
+    //Button Being Held Down
+    int buttonHeld;
     
-    //Snare Variables
-    bool firstSnareHit;
-    bool secondSnareHit;
-    bool thirdSnareHit;
-    bool fourthSnareHit;
-    bool fifthSnareHit;
-    bool sixthSnareHit;
-    bool seventhSnareHit;
-    bool eighthSnareHit;
+    //Hit Variables
+    bool sequencerHits[32];
     
-    int firstSnareVelocity;
-    int secondSnareVelocity;
-    int thirdSnareVelocity;
-    int fourthSnareVelocity;
-    int fifthSnareVelocity;
-    int sixthSnareVelocity;
-    int seventhSnareVelocity;
-    int eighthSnareVelocity;
+    //Flashing Buttons
+    bool flashingButtons[32];
     
-    //Tom Variables
-    bool firstTomHit;
-    bool secondTomHit;
-    bool thirdTomHit;
-    bool fourthTomHit;
-    bool fifthTomHit;
-    bool sixthTomHit;
-    bool seventhTomHit;
-    bool eighthTomHit;
-    
-    int firstTomVelocity;
-    int secondTomVelocity;
-    int thirdTomVelocity;
-    int fourthTomVelocity;
-    int fifthTomVelocity;
-    int sixthTomVelocity;
-    int seventhTomVelocity;
-    int eighthTomVelocity;
-    
-    //Kick Variables
-    bool firstKickHit;
-    bool secondKickHit;
-    bool thirdKickHit;
-    bool fourthKickHit;
-    bool fifthKickHit;
-    bool sixthKickHit;
-    bool seventhKickHit;
-    bool eighthKickHit;
-    
-    int firstKickVelocity;
-    int secondKickVelocity;
-    int thirdKickVelocity;
-    int fourthKickVelocity;
-    int fifthKickVelocity;
-    int sixthKickVelocity;
-    int seventhKickVelocity;
-    int eighthKickVelocity;
+    //Velocity Variables
+    int sequencerVelocities[32];
 
 private:
     //==============================================================================
