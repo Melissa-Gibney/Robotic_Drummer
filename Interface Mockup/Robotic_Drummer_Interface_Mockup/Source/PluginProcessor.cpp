@@ -22,6 +22,28 @@ Robotic_Drummer_Interface_MockupAudioProcessor::Robotic_Drummer_Interface_Mockup
                        )
 #endif
 {
+    //Initialize Variables
+    
+    //Sequencer Hits
+    for(int i = 0; i < 32; i++)
+    {
+        sequencerHits[i] = false;
+    }
+    
+    //Sequencer Velocities
+    for(int i = 0; i < 32; i++)
+    {
+        sequencerVelocities[i] = 127;
+    }
+    
+    //Initialize Tempo
+    tempo = 120; //bpm
+    
+    //Initialize isPlaying
+    isPlaying = false;
+    
+    //Initialize Button Being Held
+    buttonHeld = -1;
 }
 
 Robotic_Drummer_Interface_MockupAudioProcessor::~Robotic_Drummer_Interface_MockupAudioProcessor()
@@ -131,6 +153,8 @@ bool Robotic_Drummer_Interface_MockupAudioProcessor::isBusesLayoutSupported (con
 
 void Robotic_Drummer_Interface_MockupAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    
+    
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();

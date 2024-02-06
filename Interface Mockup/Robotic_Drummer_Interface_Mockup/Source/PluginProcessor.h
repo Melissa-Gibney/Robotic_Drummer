@@ -58,45 +58,35 @@ public:
     
     //Declare Variables
     
-    //Hi Hat Variables
-    bool firstHiHatHit;
-    bool secondHiHatHit;
-    bool thirdHiHatHit;
-    bool fourthHiHatHit;
-    bool fifthHiHatHit;
-    bool sixthHiHatHit;
-    bool seventhHiHatHit;
-    bool eighthHiHatHit;
+    //Edited Parameters
+    int parameters[2] = {0, 1}; //0 == Tempo, 1 == velocity
     
-    //Snare Variables
-    bool firstSnareHit;
-    bool secondSnareHit;
-    bool thirdSnareHit;
-    bool fourthSnareHit;
-    bool fifthSnareHit;
-    bool sixthSnareHit;
-    bool seventhSnareHit;
-    bool eighthSnareHit;
+    //Tempo
+    int tempo = 120;
     
-    //Tom Variables
-    bool firstTomHit;
-    bool secondTomHit;
-    bool thirdTomHit;
-    bool fourthTomHit;
-    bool fifthTomHit;
-    bool sixthTomHit;
-    bool seventhTomHit;
-    bool eighthTomHit;
+    //Is Playing
+    bool isPlaying = false;
     
-    //Kick Variables
-    bool firstKickHit;
-    bool secondKickHit;
-    bool thirdKickHit;
-    bool fourthKickHit;
-    bool fifthKickHit;
-    bool sixthKickHit;
-    bool seventhKickHit;
-    bool eighthKickHit;
+    //Use Velocity Mode
+    bool velocityMode = false;
+    
+    //Beat Variables
+    bool beats[8] = {true, false, false, false, false, false, false, false};
+    
+    //Beat Variables
+    bool mutes[4] = {false, false, false, false};
+    
+    //Button Being Held Down
+    int buttonHeld;
+    
+    //Hit Variables
+    bool sequencerHits[32];
+    
+    //Flashing Buttons
+    bool flashingButtons[32];
+    
+    //Velocity Variables
+    int sequencerVelocities[32];
 
 private:
     //==============================================================================

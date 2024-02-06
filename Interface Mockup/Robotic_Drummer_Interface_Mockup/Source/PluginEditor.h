@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::TextButton::Listener
+class Robotic_Drummer_Interface_MockupAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::MultiTimer, private juce::TextButton::Listener, private juce::Slider::Listener
 {
 public:
     Robotic_Drummer_Interface_MockupAudioProcessorEditor (Robotic_Drummer_Interface_MockupAudioProcessor&);
@@ -23,6 +23,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void timerCallback(int timerID) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -31,6 +32,55 @@ private:
     
     //Look and Feel
     juce::LookAndFeel_V4 otherLookAndFeel;
+    
+    //Button and Knob Labels
+    juce::Label playButtonLabel;
+    juce::Label restartButtonLabel;
+    juce::Label tempoButtonLabel;
+    juce::Label tempoKnobLabel;
+    juce::Label velocityKnobLabel;
+    juce::Label velocityModeLabel;
+    
+    //GUI Labels
+    juce::Label guiLabel;
+    juce::Label guiContent;
+    
+    //Arrow Keys
+    juce::TextButton leftArrowButton;
+    juce::TextButton rightArrowButton;
+    
+    //Sequencer Label
+    juce::Label sequencerLabel;
+    
+    //Row Labels
+    juce::Label firstLabel;
+    juce::Label secondLabel;
+    juce::Label thirdLabel;
+    juce::Label fourthLabel;
+    
+    //Mute/Clear Labels
+    juce::Label muteLabel;
+    juce::Label clearLabel;
+    
+    //Universal Knobs
+    juce::Slider tempoKnob;
+    juce::Slider velocityKnob;
+    juce::Slider guiKnob;
+    
+    //Universal Buttons
+    juce::TextButton playButton;
+    juce::TextButton restartButton;
+    juce::TextButton tempoButton;
+    juce::TextButton velocityModeButton;
+    
+    //Mute Buttons
+    juce::TextButton muteButtons[4];
+    
+    //Clear Buttons
+    juce::TextButton clearButtons[4];
+    
+    //Sequencer Buttons
+    juce::TextButton sequencerButtons[32];
     
     //Hi hat buttons
     juce::TextButton firstHiHat;
@@ -71,8 +121,16 @@ private:
     juce::TextButton sixthKick;
     juce::TextButton seventhKick;
     juce::TextButton eighthKick;
+    
+    juce::RectangleList<float> beatAreas;
+    
+    bool tempoShown = true;
+    int lastButtonPressed = -1;
 
     void buttonClicked (juce::Button*) override;
+    void sliderValueChanged (juce::Slider* slider) override;
+    
+    juce::Rectangle<int> getButtonArea(juce::Rectangle<int> column, float columnWidth, float rowHeight, float border);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Robotic_Drummer_Interface_MockupAudioProcessorEditor)
 };
