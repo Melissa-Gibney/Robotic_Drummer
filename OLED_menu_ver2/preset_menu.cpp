@@ -1,6 +1,6 @@
 // Preset Menu CPP File
 // author: Hanna Berger
-// modified: 2/26/24
+// modified: 2/28/24
 
 #include "preset_menu.h"
 #include <Arduino.h>
@@ -28,20 +28,57 @@ void preset_menu::initialize_menu()
   display.println(F("PRESETS!!!\n"));
 
   display.setTextSize(1);
+  display.drawLine(10, 24, 69, 24, SSD1306_WHITE); // pad row of pixels above inverted text
+  display.drawLine(10, 24, int16_t x1, int16_t y1, uint16_t color)
   display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-  display.setCursor(5,25);
+  display.setCursor(11,25);
   display.println(F("Preset 1"));
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(5,35);
+  display.setCursor(11,35);
   display.println(F("Preset 2"));
-  display.setCursor(5,45);
+  display.setCursor(11,45);
   display.println(F("Preset 3"));
-  display.setCursor(5,55);
+  display.setCursor(11,55);
   display.println(F("Preset 4"));
+
+  if (selected_preset > 0) // If a preset is selected
+  {
+    if (selected_preset == 1)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_WHITE);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else if (selected_preset == 2)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_WHITE);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else if (selected_preset == 3)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_WHITE);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_WHITE);
+    }
+
+  }
+
   display.display();
+
 }
 
-void preset_menu::highlight_preset()
+void preset_menu::highlight_preset() // highlights preset based off preset counter
 {
   if (preset_counter == 0){
 
@@ -53,17 +90,18 @@ void preset_menu::highlight_preset()
     display.println(F("PRESETS!!!\n"));
 
     display.setTextSize(1);
+    display.drawLine(10, 24, 69, 24, SSD1306_WHITE); // pad row of pixels above inverted text
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-    display.setCursor(5,25);
+    display.setCursor(11,25);
     display.println(F("Preset 1"));
     display.setTextColor(SSD1306_WHITE);
-    display.setCursor(5,35);
+    display.setCursor(11,35);
     display.println(F("Preset 2"));
-    display.setCursor(5,45);
+    display.setCursor(11,45);
     display.println(F("Preset 3"));
-    display.setCursor(5,55);
+    display.setCursor(11,55);
     display.println(F("Preset 4"));
-    display.display();
+
 
   }
 
@@ -77,17 +115,17 @@ void preset_menu::highlight_preset()
     display.println(F("PRESETS!!!\n"));
 
     display.setTextSize(1);
-    display.setCursor(5,25);
+    display.setCursor(11,25);
     display.println(F("Preset 1"));
+    display.drawLine(10, 34, 69, 34, SSD1306_WHITE); // pad row of pixels above inverted text
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text;
-    display.setCursor(5,35);
+    display.setCursor(11,35);
     display.println(F("Preset 2"));
     display.setTextColor(SSD1306_WHITE);
-    display.setCursor(5,45);
+    display.setCursor(11,45);
     display.println(F("Preset 3"));
-    display.setCursor(5,55);
+    display.setCursor(11,55);
     display.println(F("Preset 4"));
-    display.display();
     
   }
   if (preset_counter == 2){
@@ -99,17 +137,17 @@ void preset_menu::highlight_preset()
     display.println(F("PRESETS!!!\n"));
 
     display.setTextSize(1);
-    display.setCursor(5,25);
+    display.setCursor(11,25);
     display.println(F("Preset 1"));
-    display.setCursor(5,35);
+    display.setCursor(11,35);
     display.println(F("Preset 2"));
+    display.drawLine(10, 44, 69, 44, SSD1306_WHITE); // pad row of pixels above inverted text
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-    display.setCursor(5,45);
+    display.setCursor(11,45);
     display.println(F("Preset 3"));
     display.setTextColor(SSD1306_WHITE);
-    display.setCursor(5,55);
-    display.println(F("Preset 4"));
-    display.display();
+    display.setCursor(11,55);
+    display.println(F(" Preset 4 "));
 
   }
   if (preset_counter == 3){
@@ -121,17 +159,142 @@ void preset_menu::highlight_preset()
     display.println(F("PRESETS!!!\n"));
 
     display.setTextSize(1);
-    display.setCursor(5,25);
+    display.setCursor(11,25);
     display.println(F("Preset 1"));
-    display.setCursor(5,35);
+    display.setCursor(11,35);
     display.println(F("Preset 2"));
-    display.setCursor(5,45);
+    display.setCursor(11,45);
     display.println(F("Preset 3"));
+    display.drawLine(10, 54, 69, 54, SSD1306_WHITE); // pad row of pixels above inverted text
     display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
-    display.setCursor(5,55);
+    display.setCursor(11,55);
     display.println(F("Preset 4"));
-    display.display();
     
   }
+
+  if (selected_preset > 0) // If a preset is selected
+  {
+    if (selected_preset == 1)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_WHITE);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else if (selected_preset == 2)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_WHITE);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else if (selected_preset == 3)
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_WHITE);
+      display.fillCircle(5, 58, 2, SSD1306_BLACK);
+    }
+    else
+    {
+      display.fillCircle(5, 28, 2, SSD1306_BLACK);
+      display.fillCircle(5, 38, 2, SSD1306_BLACK);
+      display.fillCircle(5, 48, 2, SSD1306_BLACK);
+      display.fillCircle(5, 58, 2, SSD1306_WHITE);
+    }
+
+  }
+
+  display.display();
+
+}
+
+void preset_menu::select_preset() // Flashes the highlighted preset!
+{
+  if (preset_counter == 0)
+  {
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Draw regular text
+    display.setCursor(11,25);
+    display.println(F("Preset 1"));
+    display.display();
+    delay(15);
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+    display.setCursor(11,25);
+    display.println(F("Preset 1"));
+    
+    display.fillCircle(5, 28, 2, SSD1306_WHITE);
+    display.fillCircle(5, 38, 2, SSD1306_BLACK);
+    display.fillCircle(5, 48, 2, SSD1306_BLACK);
+    display.fillCircle(5, 58, 2, SSD1306_BLACK);
+
+    selected_preset = 1;
+
+  }
+  else if (preset_counter == 1)
+  {
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Draw regular text
+    display.setCursor(11,35);
+    display.println(F("Preset 2"));
+    display.display();
+    delay(15);
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+    display.setCursor(11,35);
+    display.println(F("Preset 2"));
+
+    display.fillCircle(5, 28, 2, SSD1306_BLACK);
+    display.fillCircle(5, 38, 2, SSD1306_WHITE);
+    display.fillCircle(5, 48, 2, SSD1306_BLACK);
+    display.fillCircle(5, 58, 2, SSD1306_BLACK);
+
+    selected_preset = 2;
+  }
+  else if (preset_counter == 2)
+  {
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Draw regular text
+    display.setCursor(11,45);
+    display.println(F("Preset 3"));
+    display.display();
+    delay(15);
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+    display.setCursor(11,45);
+    display.println(F("Preset 3"));
+
+    display.fillCircle(5, 28, 2, SSD1306_BLACK);
+    display.fillCircle(5, 38, 2, SSD1306_BLACK);
+    display.fillCircle(5, 48, 2, SSD1306_WHITE);
+    display.fillCircle(5, 58, 2, SSD1306_BLACK);
+
+    selected_preset = 3;
+  }
+  else
+  {
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Draw regular text
+    display.setCursor(11,55);
+    display.println(F("Preset 4"));
+    display.display();
+    delay(15);
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_BLACK, SSD1306_WHITE); // Draw 'inverse' text
+    display.setCursor(11,55);
+    display.println(F("Preset 4"));
+
+    display.fillCircle(5, 28, 2, SSD1306_BLACK);
+    display.fillCircle(5, 38, 2, SSD1306_BLACK);
+    display.fillCircle(5, 48, 2, SSD1306_BLACK);
+    display.fillCircle(5, 58, 2, SSD1306_WHITE);
+
+
+    selected_preset = 4;
+  }
+
+  display.display();
+
 }
 

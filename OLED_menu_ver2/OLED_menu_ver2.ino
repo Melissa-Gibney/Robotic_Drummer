@@ -22,6 +22,8 @@
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+// Variable Declarations
+// Rotary Encoder
 int ROTARY_a = 30;
 int ROTARY_b = 29;
 int ROTARY_button = 28;
@@ -32,8 +34,11 @@ int ROTARY_state_button;
 int ROTARY_state_button_prev = 0;
 int pos = 0;
 
-// Declarations
 int page_counter = 0; // for moving between pages
+
+// LEDs (for Testing)
+int LED1 = 22;
+int LED2 = 23;
 
 // Buttons
 int BUTTON1 = 50;
@@ -63,6 +68,12 @@ void setup() {
   pinMode(ROTARY_a, INPUT);
   pinMode(ROTARY_b, INPUT);
   pinMode(ROTARY_button, INPUT_PULLUP);
+
+  // LED (for Testing)
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
@@ -113,6 +124,11 @@ void loop() {
     page_counter++;
     page_counter = page_counter % 3;
     print_page(page_counter);
+
+    // LED Flash (for testing)
+    digitalWrite(LED1, HIGH);
+    delay(10);
+    digitalWrite(LED1, LOW);
     
   }
 
@@ -125,6 +141,11 @@ void loop() {
     }
     page_counter = page_counter % 3;
     print_page(page_counter);
+
+    // LED Flash (for testing)
+    digitalWrite(LED2, HIGH);
+    delay(10);
+    digitalWrite(LED2, LOW);
   }
 
   // read rotary encoder states
@@ -135,16 +156,21 @@ void loop() {
   //Check for button press
   if(ROTARY_state_button && !ROTARY_state_button_prev){
     
-    if(page_counter == 1)
+    if(page_counter == 1) // tempo page
     {
       tempo_display.tempo = 120;
       tempo_display.update_tempo();
     }
     
-    else if(page_counter == 2)
+    else if(page_counter == 2) // velocity page
     {
       velocity_display.velocity = 60;
       velocity_display.update_velocity();
+    }
+
+    else // presets page
+    {
+      preset_display.select_preset();
     }
   }
 
