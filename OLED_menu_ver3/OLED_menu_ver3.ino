@@ -1,4 +1,4 @@
-// OLED Screen Basic Menu Version 2-- Using Classes for Each Page with a single rotary encoder
+// OLED Screen Basic Menu Version 3-- Using Classes for Each Page with separate rotary encoders
 // Author: Hanna Berger
 // Last Modified: 3/1/2024
 
@@ -23,7 +23,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);                                                
 
 // Variable Declarations
-// Rotary Encoder
+// Preset Rotary Encoder
 int ROTARY_a = 30;
 int ROTARY_b = 29;
 int ROTARY_button = 28;
@@ -32,13 +32,18 @@ int ROTARY_state_b = 1;
 int ROTARY_state_prev = 1;
 int ROTARY_state_button;
 int ROTARY_state_button_prev = 1;
-int pos = 0;
+
+// Tempo Rotary Encoder
+int ROT_tempo_a = 34;
+int ROT_tempo_b = 33;
+int ROT_tempo_button = 32;
+int ROT_tempo_state_a = 1;
+int ROT_tempo_state_b = 1;
+int ROT_tempo_state_prev = 1;
+int ROT_tempo_state_button;
+int ROT_tempo_state_button_prev = 1;
 
 int page_counter = 0; // for moving between pages
-
-// LEDs (for Testing)
-int LED1 = 22;
-int LED2 = 23;
 
 // Buttons
 int BUTTON1 = 50;
@@ -64,16 +69,14 @@ void setup() {
   pinMode(BUTTON1,INPUT);
   pinMode(BUTTON2,INPUT);
 
-  // pinmode for rotary encoder
+  // pinmodes for rotary encoders
   pinMode(ROTARY_a, INPUT);
   pinMode(ROTARY_b, INPUT);
   pinMode(ROTARY_button, INPUT_PULLUP);
 
-  // LED (for Testing)
-  pinMode(LED1, OUTPUT);
-  pinMode(LED2, OUTPUT);
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
+  pinMode(ROT_tempo_a, INPUT);
+  pinMode(ROT_tempo_b, INPUT);
+  pinMode(ROT_tempo_button, INPUT_PULLUP);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
@@ -81,30 +84,34 @@ void setup() {
     for(;;); // Don't proceed, loop forever
   }
 
-  // Welcome Screen displays for 3 seconds
   display.clearDisplay();
+  //display.drawPixel(10, 10, SSD1306_WHITE);
+  //display.drawCircle(64, 32, 35, SSD1306_WHITE);
   display.fillCircle(64, 32, 30, SSD1306_WHITE);
   display.setTextSize(1);
   display.setTextColor(SSD1306_BLACK);
   display.setCursor(35, 30);
   display.println(F("Welcome...\n"));
+
   display.fillCircle(5, 5, 5, SSD1306_WHITE);
   display.drawCircle(122, 5, 5, SSD1306_WHITE);
   display.fillCircle(122, 58, 5, SSD1306_WHITE);
   display.drawCircle(5, 58, 5, SSD1306_WHITE);
+
   display.display();
   delay(3000);
   display.clearDisplay();
 
-  // set menus to the OLED display and initialize them
+
   tempo_display.set_display(display);
   preset_display.set_display(display);
   velocity_display.set_display(display);
+
   tempo_display.tempo = 120;
   velocity_display.velocity = 60;
   preset_display.preset_counter = 0;
   
-  print_page(page_counter); // initialize screen to the first page
+  print_page(page_counter);
 
 }
 
@@ -119,12 +126,6 @@ void loop() {
     page_counter++;
     page_counter = page_counter % 3;
     print_page(page_counter);
-
-    // LED Flash (for testing)
-    digitalWrite(LED1, HIGH);
-    delay(10);
-    digitalWrite(LED1, LOW);
-    
   }
 
   if (b2state && !prevb2state){
@@ -135,52 +136,61 @@ void loop() {
     }
     page_counter = page_counter % 3;
     print_page(page_counter);
-
-    // LED Flash (for testing)
-    digitalWrite(LED2, HIGH);
-    delay(10);
-    digitalWrite(LED2, LOW);
   }
 
   // read rotary encoder states
   ROTARY_state_a = digitalRead(ROTARY_a);
   ROTARY_state_b = digitalRead(ROTARY_b);
   ROTARY_state_button = digitalRead(ROTARY_button);
+  ROT_tempo_state_a = digitalRead(ROT_tempo_a);
+  ROT_tempo_state_b = digitalRead(ROT_tempo_b);
+  ROT_tempo_state_button = digitalRead(ROT_tempo_button);
 
-  //Check for rotary encoder button press
+  
+  //Check for button press
   if(!ROTARY_state_button && ROTARY_state_button_prev){
     
-    if(page_counter == 1) // tempo page
-    {
-      tempo_display.tempo = 120;
-      tempo_display.update_tempo();
-    }
+    // if(page_counter == 1) // tempo page
+    // {
+    //   tempo_display.tempo = 120;
+    //   tempo_display.update_tempo();
+    // }
     
-    else if(page_counter == 2) // velocity page
+    if(page_counter == 2) // velocity page
     {
       velocity_display.velocity = 60;
       velocity_display.update_velocity();
     }
 
-    else // presets page
+    else if(page_counter == 0) // presets page
     {
       preset_display.select_preset(); // select preset
     }
+
   }
 
-  //Check for change in the rotary encoder
+  //Check for button press
+  if(!ROT_tempo_state_button && ROT_tempo_state_button_prev){
+    
+    tempo_display.tempo = 120;
+    tempo_display.update_tempo();
+  
+  }
+
+
+  //Check for clock change
   if(ROTARY_state_a != ROTARY_state_prev && ROTARY_state_a == 1){
 
     if(page_counter == 0) // Preset menu
     {
-      if(ROTARY_state_b == ROTARY_state_a)
-      {   // if rotated clockwise highlight next preset down
+      if(ROTARY_state_b == ROTARY_state_a) 
+      {   //clockwise
         preset_display.preset_counter++;
         preset_display.preset_counter %= 4;
         preset_display.highlight_preset();
       }
       else
-      { // if rotated counterclockwise highlight next preset up
+      { // counterclockwise
         preset_display.preset_counter--;
         if (preset_display.preset_counter == -1)
         {
@@ -191,32 +201,32 @@ void loop() {
       }
     }
 
-    else if(page_counter == 1) // tempo menu
-    {
-      if(ROTARY_state_b == ROTARY_state_a) 
-      {   //if clockwise increase tempo by 1
-        tempo_display.tempo++;
-        if(tempo_display.tempo > 150)
-        {
-          tempo_display.tempo = 150;
-        }
-        tempo_display.update_tempo();
-      }
-      else
-      { // if counterclockwise decrease tempo by 1
-        tempo_display.tempo--;
-        if(tempo_display.tempo < 90)
-        {
-          tempo_display.tempo = 90;
-        }
-        tempo_display.update_tempo();
-      }
-    }
+    // else if(page_counter == 1) // tempo menu
+    // {
+    //   if(ROTARY_state_b == ROTARY_state_a) 
+    //   {   //clockwise
+    //     tempo_display.tempo++;
+    //     if(tempo_display.tempo > 150)
+    //     {
+    //       tempo_display.tempo = 150;
+    //     }
+    //     tempo_display.update_tempo();
+    //   }
+    //   else
+    //   { // counterclockwise
+    //     tempo_display.tempo--;
+    //     if(tempo_display.tempo < 90)
+    //     {
+    //       tempo_display.tempo = 90;
+    //     }
+    //     tempo_display.update_tempo();
+    //   }
+    // }
 
-    else // velocity menu
+    else if (page_counter == 2)// velocity menu
     {
       if(ROTARY_state_b == ROTARY_state_a) 
-      {   //if clockwise increase velocity by 1
+      {   //clockwise
         velocity_display.velocity++;
         if(velocity_display.velocity > 127)
         {
@@ -225,7 +235,7 @@ void loop() {
         velocity_display.update_velocity();
       }
       else
-      { //if counterclockwise decrease velocity by 1
+      { // counterclockwise
         velocity_display.velocity--;
         if(velocity_display.velocity < 0)
         {
@@ -233,7 +243,31 @@ void loop() {
         }
         velocity_display.update_velocity();
       }
+
     }
+  }
+
+  if(ROT_tempo_state_a != ROT_tempo_state_prev && ROT_tempo_state_a == 1)
+  {
+    if(ROT_tempo_state_b == ROT_tempo_state_a) 
+      {   //clockwise
+        tempo_display.tempo++;
+        if(tempo_display.tempo > 150)
+        {
+          tempo_display.tempo = 150;
+        }
+        tempo_display.update_tempo();
+      }
+      else
+      { // counterclockwise
+        tempo_display.tempo--;
+        if(tempo_display.tempo < 90)
+        {
+          tempo_display.tempo = 90;
+        }
+        tempo_display.update_tempo();
+      }
+
   }
 
   // update previous button and encoder states
@@ -241,10 +275,11 @@ void loop() {
   prevb2state = b2state;
   ROTARY_state_prev = ROTARY_state_a;
   ROTARY_state_button_prev = ROTARY_state_button;
+  ROT_tempo_state_prev = ROT_tempo_state_a;
+  ROT_tempo_state_button_prev = ROT_tempo_state_button;
 
 }
 
-// Function for cycling through pages!
 void print_page(int counter){
   if (counter == 0)
   {
