@@ -1,4 +1,4 @@
-// Class to create a Drum Object
+// Drum Object Class Header File
 // author: Hanna Berger
 // modified: 3/4/24
 

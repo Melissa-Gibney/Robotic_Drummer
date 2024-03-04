@@ -13,6 +13,10 @@ Drum hihat;
 
 // Dummy Sequence
 int sequence[8] = {1,0,0,1,1,1,0,1};
+int sequence2[8] = {1,0,1,0,1,0,1,0};
+int sequence3[8] = {1,0,1,0,1,0,1,0};
+int sequence4[8] = {0,1,1,0,0,1,1,0};
+
 // Dummy Velocity
 int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
 
@@ -20,10 +24,13 @@ int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
 void setup() {
   // put your setup code here, to run once
   
+  kick.update_sequence(sequence);
+  snare.update_sequence(sequence2);
+  tom.update_sequence(sequence3);
+  hihat.update_sequence(sequence4);
   
-  
-  
-  // FOR TESTING-- Delete Later
+  /*
+  // FOR TESTING
   Serial.begin(9600);
 
   Serial.println("Intialized Sequence");
@@ -41,6 +48,7 @@ void setup() {
 
   Serial.println("Updated Velocity");
   kick.print_velocity();
+  */
 
 }
 
