@@ -5,10 +5,7 @@
 
 #ifndef drum_h
 #define drum_h
-
 #include <Arduino.h>
-#include <Wire.h>
-#include <vector>
 
 class Drum {
   private:
@@ -19,10 +16,14 @@ class Drum {
   public:
     Drum();
     void set_nsteps(int idx);
-    void initialize_sequence();
-    void initialize_velocity();
+    void reset_sequence();
+    void reset_velocity();
     void update_sequence(const int *new_sequence);
     void update_velocity(const int *new_velocity);
+    
+    // For testing!
+    void print_sequence();
+    void print_velocity();
 
 };
 
