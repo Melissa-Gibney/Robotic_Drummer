@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include "Drum.h"
+#include <Wire.h>
 
 class DrumManager
 {
@@ -18,15 +19,37 @@ class DrumManager
 
 
   public:
-    Drum();
-    void assignDrums(Drum kk, Drum sn, Drum tm, Drum hh);
+    DrumManager();
+    void assignDrums(Drum *kk, Drum *sn, Drum *tm, Drum *hh);
     void checkSequence();
-    void playKick();
-    void playSnare();
-    void playTom();
-    void playHiHat();
 
-    Drum drum;
+    // Print Sequence Functions
+    void printKickSequence(){
+      kick.print_sequence();
+    }
+    void printSnareSequence(){
+      snare.print_sequence();
+    }
+    void printTomSequence(){
+      tom.print_sequence();
+    }
+    void printHihatSequence(){
+      hihat.print_sequence();
+    }
+
+    // Play Drums
+    void playKick(){
+      kick.play();
+    }
+    void playSnare(){
+      snare.play();
+    }
+    void playTom(){
+      tom.play();
+    }
+    void playHiHat(){
+      hihat.play();
+    }
 
 };
 

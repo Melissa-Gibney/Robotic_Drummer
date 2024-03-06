@@ -18,8 +18,10 @@ class Drum {
     void set_nsteps(int idx); // set the number of steps in the sequence
     void reset_sequence(); // reset the sequence array to 0
     void reset_velocity(); // reset the velocity to the default (1 for now)
-    void update_sequence(const int *new_sequence);
-    void update_velocity(const int *new_velocity);
+    void update_sequence(int *new_sequence);
+    void update_velocity(int *new_velocity);
+
+    void play();
     
     // For testing!
     void print_sequence();

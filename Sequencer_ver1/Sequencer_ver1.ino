@@ -25,12 +25,16 @@ int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
 
 void setup() {
   // put your setup code here, to run once
-  manager.assignDrums(kick, snare, tom, hihat);
 
-  kick.update_sequence(sequence);
-  snare.update_sequence(sequence2);
-  tom.update_sequence(sequence3);
-  hihat.update_sequence(sequence4);
+  // Test
+  Serial.begin(9600);
+  //kick.update_sequence(sequence);
+  Serial.println("Intialized Sequence");
+  kick.print_sequence();
+  manager.assignDrums(&kick, &snare, &tom, &hihat);
+  manager.checkSequence();
+  Serial.println("Updated Sequence");
+  manager.printKickSequence();
 
   /*
   // FOR TESTING

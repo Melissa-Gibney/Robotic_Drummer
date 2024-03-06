@@ -31,18 +31,24 @@ void Drum::reset_velocity()
   }
 }
 
-void Drum::update_sequence(const int *new_sequence)
+void Drum::update_sequence(int *new_sequence)
 {
   for (int i = 0; i < 8; i++){
     sequence[i] = new_sequence[i];
   }
 }
 
-void Drum::update_velocity(const int *new_velocity)
+void Drum::update_velocity(int *new_velocity)
 {
   for (int i = 0; i < 8; i++){
     velocity[i] = new_velocity[i];
   }
+}
+
+void Drum::play()
+{
+
+
 }
 
 
