@@ -18,36 +18,32 @@ const int sequencerLength = 8;
 int sequenceLength = 8;
 
 // Initialize Kick Button Pins
-int kickPins[sequencerLength] = {11, 12, 13, 14, 15, 16, 17, 18};
+int kickButtonPins[sequencerLength] = {11, 12, 13, 14, 15, 16, 17, 18};
+int kickLEDPins[sequencerLength] = {21, 22, 23, 24, 25, 26, 27, 28};
 
 // Initialize Tom Button Pins
-int tomPins[sequencerLength] = {21, 22, 23, 24, 25, 26, 27, 28};
+int tomButtonPins[sequencerLength] = {31, 32, 33, 34, 35, 36, 37, 38};
+int tomLEDPins[sequencerLength] = {41, 42, 43, 44, 45, 46, 47, 48};
 
 // Initialize Snare Button Pins
-int snarePins[sequencerLength] = {31, 32, 33, 34, 35, 36, 37, 38};
+int snareButtonPins[sequencerLength] = {51, 52, 53, 54, 55, 56, 57, 58};
+int snareLEDPins[sequencerLength] = {61, 62, 63, 64, 65, 66, 67, 68};
 
 // Initialize Hi Hat Button Pins
-int hihatPins[sequencerLength] = {41, 42, 43, 44, 45, 46, 47, 48};
+int hihatButtonPins[sequencerLength] = {71, 72, 73, 74, 75, 76, 77, 78};
+int hihatLEDPins[sequencerLength] = {81, 82, 83, 84, 85, 86, 87, 88};
 
 // Declare Kick Buttons
-ezButton kickButtons[] = {kickPins[0], kickPins[1], kickPins[2], kickPins[3], kickPins[4], kickPins[5], kickPins[6], kickPins[7]};
-// ezButton kickButton1(kickButton1Pin);
-// ezButton kickButton2(kickButton2Pin);
-// ezButton kickButton3(kickButton3Pin);
-// ezButton kickButton4(kickButton4Pin);
-// ezButton kickButton5(kickButton5Pin);
-// ezButton kickButton6(kickButton6Pin);
-// ezButton kickButton7(kickButton7Pin);
-// ezButton kickButton8(kickButton8Pin);
+ezButton kickButtons[] = {kickButtonPins[0], kickButtonPins[1], kickButtonPins[2], kickButtonPins[3], kickButtonPins[4], kickButtonPins[5], kickButtonPins[6], kickButtonPins[7]};
 
 // Declare Tom Buttons
-ezButton tomButtons[] = {tomPins[0], tomPins[1], tomPins[2], tomPins[3], tomPins[4], tomPins[5], tomPins[6], tomPins[7]};
+ezButton tomButtons[] = {tomButtonPins[0], tomButtonPins[1], tomButtonPins[2], tomButtonPins[3], tomButtonPins[4], tomButtonPins[5], tomButtonPins[6], tomButtonPins[7]};
 
 // Declare Snare Buttons
-ezButton snareButtons[] = {snarePins[0], snarePins[1], snarePins[2], snarePins[3], snarePins[4], snarePins[5], snarePins[6], snarePins[7]};
+ezButton snareButtons[] = {snareButtonPins[0], snareButtonPins[1], snareButtonPins[2], snareButtonPins[3], snareButtonPins[4], snareButtonPins[5], snareButtonPins[6], snareButtonPins[7]};
 
 // Declare Hi Har Buttons
-ezButton hihatButtons[] = {hihatPins[0], hihatPins[1], hihatPins[2], hihatPins[3], hihatPins[4], hihatPins[5], hihatPins[6], hihatPins[7]};
+ezButton hihatButtons[] = {hihatButtonPins[0], hihatButtonPins[1], hihatButtonPins[2], hihatButtonPins[3], hihatButtonPins[4], hihatButtonPins[5], hihatButtonPins[6], hihatButtonPins[7]};
 
 // Dummy Sequence
 int sequence[8] = {1,0,0,1,1,1,0,1};
@@ -62,9 +58,22 @@ int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
 void setup() {
   // put your setup code here, to run once
 
-  //Initialize Buttons
+  //Initialize Buttons and Pins
   for(int i = 0; i < sequencerLength; i++)
   {
+    //Set LED pin modes
+    pinMode(kickLEDPins[i], INPUT_PULLUP);
+    pinMode(tomLEDPins[i], INPUT_PULLUP);
+    pinMode(snareLEDPins[i], INPUT_PULLUP);
+    pinMode(hihatLEDPins[i], INPUT_PULLUP);
+
+    //Set button pins
+    pinMode(kickButtonPins[i], OUTPUT);
+    pinMode(tomButtonPins[i], OUTPUT);
+    pinMode(snareButtonPins[i], OUTPUT);
+    pinMode(hihatButtonPins[i], OUTPUT);
+
+    //Set debounce on buttons
     kickButtons[i].setDebounceTime(50);
     tomButtons[i].setDebounceTime(50);
     snareButtons[i].setDebounceTime(50);
@@ -123,6 +132,14 @@ void loop() {
       // Change sequence
       manager.checkSingleSequence(sequenceToBitwise(sequence), 0);
       // Update button LEDs
+      if(sequence[i])
+      {
+        digitalWrite(kickLEDPins[i], LOW);
+      }
+      else
+      {
+        digitalWrite(kickLEDPins[i], HIGH);
+      }
     }
 
     if(tomButtons[i].isPressed())
@@ -131,6 +148,21 @@ void loop() {
       // Change sequence
       manager.checkSingleSequence(sequenceToBitwise(sequence2), 1);
       // Update button LEDs
+      if(tomButtons[i].isPressed())
+      {
+        sequence[i] = !sequence[i];
+        // Change sequence
+        manager.checkSingleSequence(sequenceToBitwise(sequence), 0);
+        // Update button LEDs
+        if(sequence[i])
+        {
+          digitalWrite(tomLEDPins[i], LOW);
+        }
+        else
+        {
+          digitalWrite(tomLEDPins[i], HIGH);
+        }
+      }
     }
 
     if(snareButtons[i].isPressed())
@@ -139,6 +171,21 @@ void loop() {
       // Change sequence
       manager.checkSingleSequence(sequenceToBitwise(sequence3), 2);
       // Update button LEDs
+      if(snareButtons[i].isPressed())
+      {
+        sequence[i] = !sequence[i];
+        // Change sequence
+        manager.checkSingleSequence(sequenceToBitwise(sequence), 0);
+        // Update button LEDs
+        if(sequence[i])
+        {
+          digitalWrite(snareLEDPins[i], LOW);
+        }
+        else
+        {
+          digitalWrite(snareLEDPins[i], HIGH);
+        }
+      }
     }
 
     if(hihatButtons[i].isPressed())
@@ -147,6 +194,14 @@ void loop() {
       // Change sequence
       manager.checkSingleSequence(sequenceToBitwise(sequence4), 3);
       // Update button LEDs
+      if(sequence[i])
+      {
+        digitalWrite(hihatLEDPins[i], LOW);
+      }
+      else
+      {
+        digitalWrite(hihatLEDPins[i], HIGH);
+      }
     }
   }
 }
