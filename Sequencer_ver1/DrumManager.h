@@ -1,6 +1,6 @@
 // Drum Manager Class Header File
 // author: Hanna Berger
-// modified: 3/5/24
+// modified: 3/18/24
 
 #ifndef drumManager_h
 #define drumManger_h
@@ -40,18 +40,10 @@ class DrumManager
     }
 
     // Play Drums
-    void playKick(){
-      kick.play();
-    }
-    void playSnare(){
-      snare.play();
-    }
-    void playTom(){
-      tom.play();
-    }
-    void playHiHat(){
-      hihat.play();
-    }
+    void playKick(int beat_idx);
+    void playSnare(int beat_idx);
+    void playTom(int beat_idx);
+    void playHiHat(int beat_idx);
 
 };
 

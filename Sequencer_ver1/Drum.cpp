@@ -1,9 +1,10 @@
 // Drum Object Class CPP FIle
 // author: Hanna Berger
-// modified: 3/4/24
+// modified: 3/18/24
 
 #include "Drum.h"
 #include <Arduino.h>
+#include <Wire.h>
 
 // constructor
 Drum::Drum()
@@ -45,9 +46,13 @@ void Drum::update_velocity(int *new_velocity)
   }
 }
 
-void Drum::play(int beatIndex)
+void Drum::play(int beat_idx)
 {
-  
+  if (sequence[beat_idx] == 1){
+    
+    // Write Pin high!
+
+  }
 }
 
 
@@ -61,4 +66,7 @@ void Drum::print_sequence()
 void Drum::print_velocity()
 {
   for (int i = 0; i < 8; i++){
-    Serial.println(velocit
+    Serial.println(velocity[i]);
+  }
+}
+
