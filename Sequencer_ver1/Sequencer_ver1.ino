@@ -1,6 +1,6 @@
 // Drum Sequencer for Demo on 3/19/24
-// authors: Hanna Berger
-// modified: 3/4/24
+// authors: Hanna Berger, Melissa Gibney
+// modified: 3/18/24
 
 #include "Drum.h"
 #include "DrumManager.h"
@@ -9,6 +9,8 @@
 #include <elapsedMillis.h>
 
 #define N_STEPS 8
+#include <Wire.h>
+#include <elapsedMillis.h>
 
 // Declare Drums
 Drum kick;
@@ -17,6 +19,10 @@ Drum tom;
 Drum hihat;
 DrumManager manager;
 
+int beat_idx = 0; // beat index
+
+const int sequencerLength = 8;
+int sequenceLength = 8;
 
 //Declare Tempo and Timing Vars
 elapsedMillis msBeatCount;
@@ -46,15 +52,15 @@ void setup() {
   //currentMillis = millis();
 
   // Test
+  Wire.begin();     
   Serial.begin(9600);
-  //kick.update_sequence(sequence);
   Serial.println("Intialized Sequence");
-  kick.print_sequence();
-  manager.assignDrums(&kick, &snare, &tom, &hihat);
+  manager.printSnareSequence();
+  
+  delay(50);
   manager.checkSequence();
   Serial.println("Updated Sequence");
-  manager.printKickSequence();
-
+  manager.printSnareSequence();
   /*
   // FOR TESTING
   Serial.begin(9600);
@@ -88,12 +94,20 @@ void loop() {
     msBeatCount -= msPerBeat;
     currBeatIndex = (currBeatIndex + 1) % N_STEPS;
 
+    // TO DO:
+    // Light up LED for that index
+    
     //Play drum at index
-    manager.playKick();
-    manager.playTom();
-    manager.playSnare();
-    manager.playHiHat();
+    manager.playKick(beat_idx);
+    manager.playTom(beat_idx);
+    manager.playSnare(beat_idx);
+    manager.playHiHat(beat_idx);
+
+    beat_idx = (beat_idx + 1) % 8; // add 1 to the beat index
   }
+
+
+
 }
 
 int sequenceToBitwise(int seqData[])
@@ -106,3 +120,13 @@ int sequenceToBitwise(int seqData[])
   }
   return bitwiseNum;
 }
+// int sequenceToBitwise(int seqData[])
+// {
+//   int bitwiseNum = 0b00000000;
+//   for(int i = 0; i < sequenceLength; i++)
+//   {
+//     bitwiseNum = bitwiseNum << 1;
+//     bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
+//   }
+//   return bitwiseNum;
+// }

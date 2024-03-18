@@ -1,11 +1,12 @@
 // Drum Object Class Header File
 // author: Hanna Berger
-// modified: 3/4/24
+// modified: 3/18/24
 
 
 #ifndef drum_h
 #define drum_h
 #include <Arduino.h>
+#include <Wire.h>
 
 class Drum {
   private:
@@ -21,7 +22,7 @@ class Drum {
     void update_sequence(int *new_sequence);
     void update_velocity(int *new_velocity);
 
-    void play(int beatIndex);
+    void play(int beat_idx);
     
     // For testing!
     void print_sequence();
