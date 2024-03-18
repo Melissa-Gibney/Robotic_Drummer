@@ -22,6 +22,8 @@ class DrumManager
     DrumManager();
     void assignDrums(Drum *kk, Drum *sn, Drum *tm, Drum *hh);
     void checkSequence();
+    void checkFullSequence(int kickData, int tomData, int snareData, int hihatData);
+    void checkSingleSequence(int newData, int drumIndex);
 
     // Print Sequence Functions
     void printKickSequence(){

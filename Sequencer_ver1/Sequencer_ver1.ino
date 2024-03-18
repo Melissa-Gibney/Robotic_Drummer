@@ -15,6 +15,7 @@ Drum hihat;
 DrumManager manager;
 
 const int sequencerLength = 8;
+int sequenceLength = 8;
 
 // Initialize Kick Button Pins
 int kickPins[sequencerLength] = {11, 12, 13, 14, 15, 16, 17, 18};
@@ -105,5 +106,58 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  //Go through all of the sequencer buttons
+
+  for(int i = 0; i < sequencerLength; i++)
+  {
+    //Set buttons to loop
+    kickButtons[i].loop();
+    tomButtons[i].loop();
+    snareButtons[i].loop();
+    hihatButtons[i].loop();
+
+    // Update Kick sequence on press
+    if(kickButtons[i].isPressed())
+    {
+      sequence[i] = !sequence[i];
+      // Change sequence
+      manager.checkSingleSequence(sequenceToBitwise(sequence), 0);
+      // Update button LEDs
+    }
+
+    if(tomButtons[i].isPressed())
+    {
+      sequence2[i] = !sequence2[i];
+      // Change sequence
+      manager.checkSingleSequence(sequenceToBitwise(sequence2), 1);
+      // Update button LEDs
+    }
+
+    if(snareButtons[i].isPressed())
+    {
+      sequence3[i] = !sequence3[i];
+      // Change sequence
+      manager.checkSingleSequence(sequenceToBitwise(sequence3), 2);
+      // Update button LEDs
+    }
+
+    if(hihatButtons[i].isPressed())
+    {
+      sequence4[i] = !sequence4[i];
+      // Change sequence
+      manager.checkSingleSequence(sequenceToBitwise(sequence4), 3);
+      // Update button LEDs
+    }
+  }
+}
+
+int sequenceToBitwise(int seqData[])
+{
+  int bitwiseNum = 0b00000000;
+  for(int i = 0; i < sequenceLength; i++)
+  {
+    bitwiseNum = bitwiseNum << 1;
+    bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
+  }
+  return bitwiseNum;
 }
