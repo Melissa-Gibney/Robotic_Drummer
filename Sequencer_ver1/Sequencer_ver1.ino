@@ -6,6 +6,9 @@
 #include "DrumManager.h"
 #include <Arduino.h>
 #include <ezButton.h>
+#include <elapsedMillis.h>
+
+#define N_STEPS 8
 
 // Declare Drums
 Drum kick;
@@ -14,30 +17,33 @@ Drum tom;
 Drum hihat;
 DrumManager manager;
 
-const int sequencerLength = 8;
-int sequenceLength = 8;
 
 //Declare Tempo and Timing Vars
-unsigned long startMillis;
-unsigned long currentMillis;
+elapsedMillis msBeatCount;
+
+//unsigned long startMillis;
+//unsigned long currentMillis;
+
 int tempo = 120; //The tempo in bpm
-unsigned long tempoInMillis = tempo/60*1000;
+//unsigned long tempoInMillis = tempo/60*1000;
+long unsigned int msPerBeat = 6000 / tempo;
+
 int curBeatIndex = 0;
 
 // Dummy Sequence
-int sequence[8] = {1,0,0,1,1,1,0,1};
-int sequence2[8] = {1,0,1,0,1,0,1,0};
-int sequence3[8] = {1,0,1,0,1,0,1,0};
-int sequence4[8] = {0,1,1,0,0,1,1,0};
+int sequence[N_STEPS] = {1,0,0,1,1,1,0,1};
+int sequence2[N_STEPS] = {1,0,1,0,1,0,1,0};
+int sequence3[N_STEPS] = {1,0,1,0,1,0,1,0};
+int sequence4[N_STEPS] = {0,1,1,0,0,1,1,0};
 
 // Dummy Velocity
-int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
+int velocity[N_STEPS] = {60, 75, 83, 75, 60, 52, 60, 60};
 
 void setup() {
   // put your setup code here, to run once
   // Initialize milliseconds
-  startMillis = millis();
-  currentMillis = millis();
+  //startMillis = millis();
+  //currentMillis = millis();
 
   // Test
   Serial.begin(9600);
@@ -75,9 +81,13 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //Keep track of elapsed milliseconds and update every set amount of milliseconds based on the tempo
-  currentMillis = millis();
-  if(currentMillis-startMillis >= tempoInMillis)
+  //currentMillis = millis();
+  if(msBeatCount >= msPerBeat)
   {
+    //Reset count
+    msBeatCount -= msPerBeat;
+    currBeatIndex = (currBeatIndex + 1) % N_STEPS;
+
     //Play drum at index
     manager.playKick();
     manager.playTom();
@@ -89,7 +99,7 @@ void loop() {
 int sequenceToBitwise(int seqData[])
 {
   int bitwiseNum = 0b00000000;
-  for(int i = 0; i < sequenceLength; i++)
+  for(int i = 0; i < N_STEPS; i++)
   {
     bitwiseNum = bitwiseNum << 1;
     bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
