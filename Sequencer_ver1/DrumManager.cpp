@@ -22,7 +22,14 @@ void DrumManager::assignDrums(Drum *kk, Drum *sn, Drum *tm, Drum *hh)
   snare = *sn;
   tom = *tm;
   hihat = *hh;
+}
 
+void DrumManager::assignSolenoids(int kickPin, int tomPin, int snarePin, int hihatPin)
+{
+  kick.set_solenoid_pin(kickPin);
+  tom.set_solenoid_pin(tomPin);
+  snare.set_solenoid_pin(snarePin);
+  hihat.set_solenoid_pin(hihatPin);
 }
 
 // Check for change in the sequence
@@ -241,18 +248,4 @@ void DrumManager::playHiHat(int beat_idx)
 //     }
 //     case 1:
 //     {
-//       tom.update_sequence(new_seq);
-//       break;
-//     }
-//     case 2:
-//     {
-//       snare.update_sequence(new_seq);
-//       break;
-//     }
-//     default:
-//     {
-//       hihat.update_sequence(new_seq);
-//       break;
-//     }
-//   }
-// }
+//       tom.update_sequenc

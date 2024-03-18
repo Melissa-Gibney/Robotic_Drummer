@@ -18,6 +18,11 @@ void Drum::set_nsteps(int n)
   nsteps = n;
 }
 
+void Drum::set_solenoid_pin(int n)
+{
+  solenoidPin = n;
+}
+
 void Drum::reset_sequence()
 {
   for (int i = 0; i < 8; i++){
@@ -46,12 +51,21 @@ void Drum::update_velocity(int *new_velocity)
   }
 }
 
-void Drum::play(int beat_idx)
+void Drum::play(int beat_idx, unsigned long holdTime, unsigned long beatTime)
 {
-  if (sequence[beat_idx] == 1){
+  if (sequence[beat_idx] == 1)
+  {
+    unsigned long timeBeforeBeat = beatTime - holdTime;
+    unsigned long timeAfterBeat = beatTime + holdTime;
+
+    /*
+    Set the drum timer for each drum in the main loop to equal the hold time whenever it reaches the hold time
+    In this method, actuate the drum when the timer equals the beatTime
+    Set solenoid to low when drumTimer = timeAfterBeat;
+    */
     
     // Write Pin high!
-
+    analogWrite(solenoidPin, 63);
   }
 }
 
