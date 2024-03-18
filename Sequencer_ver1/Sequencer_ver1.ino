@@ -5,6 +5,7 @@
 #include "Drum.h"
 #include "DrumManager.h"
 #include <Arduino.h>
+#include <ezButton.h>
 
 // Declare Drums
 Drum kick;
@@ -12,6 +13,40 @@ Drum snare;
 Drum tom;
 Drum hihat;
 DrumManager manager;
+
+const int sequencerLength = 8;
+
+// Initialize Kick Button Pins
+int kickPins[sequencerLength] = {11, 12, 13, 14, 15, 16, 17, 18};
+
+// Initialize Tom Button Pins
+int tomPins[sequencerLength] = {21, 22, 23, 24, 25, 26, 27, 28};
+
+// Initialize Snare Button Pins
+int snarePins[sequencerLength] = {31, 32, 33, 34, 35, 36, 37, 38};
+
+// Initialize Hi Hat Button Pins
+int hihatPins[sequencerLength] = {41, 42, 43, 44, 45, 46, 47, 48};
+
+// Declare Kick Buttons
+ezButton kickButtons[] = {kickPins[0], kickPins[1], kickPins[2], kickPins[3], kickPins[4], kickPins[5], kickPins[6], kickPins[7]};
+// ezButton kickButton1(kickButton1Pin);
+// ezButton kickButton2(kickButton2Pin);
+// ezButton kickButton3(kickButton3Pin);
+// ezButton kickButton4(kickButton4Pin);
+// ezButton kickButton5(kickButton5Pin);
+// ezButton kickButton6(kickButton6Pin);
+// ezButton kickButton7(kickButton7Pin);
+// ezButton kickButton8(kickButton8Pin);
+
+// Declare Tom Buttons
+ezButton tomButtons[] = {tomPins[0], tomPins[1], tomPins[2], tomPins[3], tomPins[4], tomPins[5], tomPins[6], tomPins[7]};
+
+// Declare Snare Buttons
+ezButton snareButtons[] = {snarePins[0], snarePins[1], snarePins[2], snarePins[3], snarePins[4], snarePins[5], snarePins[6], snarePins[7]};
+
+// Declare Hi Har Buttons
+ezButton hihatButtons[] = {hihatPins[0], hihatPins[1], hihatPins[2], hihatPins[3], hihatPins[4], hihatPins[5], hihatPins[6], hihatPins[7]};
 
 // Dummy Sequence
 int sequence[8] = {1,0,0,1,1,1,0,1};
@@ -25,6 +60,15 @@ int velocity[8] = {60, 75, 83, 75, 60, 52, 60, 60};
 
 void setup() {
   // put your setup code here, to run once
+
+  //Initialize Buttons
+  for(int i = 0; i < sequencerLength; i++)
+  {
+    kickButtons[i].setDebounceTime(50);
+    tomButtons[i].setDebounceTime(50);
+    snareButtons[i].setDebounceTime(50);
+    hihatButtons[i].setDebounceTime(50);
+  }
 
   // Test
   Serial.begin(9600);
@@ -61,5 +105,5 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  
 }
