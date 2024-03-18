@@ -45,10 +45,9 @@ void Drum::update_velocity(int *new_velocity)
   }
 }
 
-void Drum::play()
+void Drum::play(int beatIndex)
 {
-
-
+  
 }
 
 
@@ -62,7 +61,4 @@ void Drum::print_sequence()
 void Drum::print_velocity()
 {
   for (int i = 0; i < 8; i++){
-    Serial.println(velocity[i]);
-  }
-}
-
+    Serial.println(velocit

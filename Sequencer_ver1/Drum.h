@@ -21,12 +21,8 @@ class Drum {
     void update_sequence(int *new_sequence);
     void update_velocity(int *new_velocity);
 
-    void play();
+    void play(int beatIndex);
     
     // For testing!
     void print_sequence();
-    void print_velocity();
-
-};
-
-#endif
+    void print_velocity()

@@ -225,19 +225,16 @@ void DrumManager::checkSingleSequence(int newData, int drumIndex)
   }
 }
 
-// void DrumManager::playKick()
-// {
+void DrumManager::playKick(int beatIndex)
+{
+  kick.play(beatIndex);
+}
 
-// }
-// void DrumManager::playSnare()
-// {
+void DrumManager::playSnare()
+{
+  snare.play(beatIndex);
+}
 
-// }
-// void DrumManager::playTom()
-// {
-
-// }
-// void DrumManager::playHiHat()
-// {
-
-// }
+void DrumManager::playTom()
+{
+  tom.play(b
