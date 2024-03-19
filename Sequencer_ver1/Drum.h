@@ -36,3 +36,4 @@ class Drum
     void print_sequence();
     void print_velocity();
 }
+#endif

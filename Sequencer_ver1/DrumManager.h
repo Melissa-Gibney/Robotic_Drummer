@@ -53,3 +53,4 @@ class DrumManager
     void stopSnare();
     void stopHiHat();
 }
+#endif
