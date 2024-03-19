@@ -84,3 +84,12 @@ void Drum::stop()
 {
   analogWrite(solenoidPin, 0);
 }
+
+// For testing!
+void Drum::print_sequence()
+{
+  for (int i = 0; i < 8; i++){
+    Serial.println(sequence[i]);
+  }
+}
+

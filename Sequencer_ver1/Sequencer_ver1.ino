@@ -87,12 +87,12 @@ void setup() {
   Wire.begin();     
   Serial.begin(9600);
   Serial.println("Intialized Sequence");
-  // manager.printSnareSequence();
+  manager.printSnareSequence();
   
-  delay(50);
+  delay(10);
   manager.checkSequence();
   Serial.println("Updated Sequence");
-  // manager.printSnareSequence();
+  manager.printSnareSequence();
 
   /*
   // FOR TESTING
