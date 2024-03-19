@@ -23,6 +23,11 @@ void Drum::set_solenoid_pin(int n)
   solenoidPin = n;
 }
 
+void Drum::set_drum_timer(unsigned long n)
+{
+  drumTimer = n;
+}
+
 void Drum::reset_sequence()
 {
   for (int i = 0; i < 8; i++){
@@ -65,22 +70,12 @@ void Drum::play(int beat_idx, unsigned long holdTime, unsigned long beatTime)
     */
     
     // Write Pin high!
+
     analogWrite(solenoidPin, 63);
   }
 }
 
-
-// For testing!
-void Drum::print_sequence()
+void Drum::stop()
 {
-  for (int i = 0; i < 8; i++){
-    Serial.println(sequence[i]);
-  }
+  analogWrite(solenoidPin, 0);
 }
-void Drum::print_velocity()
-{
-  for (int i = 0; i < 8; i++){
-    Serial.println(velocity[i]);
-  }
-}
-

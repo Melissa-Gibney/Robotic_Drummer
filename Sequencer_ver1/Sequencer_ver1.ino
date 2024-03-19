@@ -45,6 +45,7 @@ long unsigned int msPullTimeTom = 6; // Time that the tom needs to actuate on th
 long unsigned int msPullTimeSnare = 6; // Time that the snare needs to actuate on the beat
 long unsigned int msPullTimeHiHat = 6; // Time that the hihat needs to actuate on the beat
 long unsigned int msHoldTime = 10; // Time to hold the solenoid after the articulation and before the release
+long unsigned int timeToRetractSolenoid = msHoldTime + msPerBeat; // Time to hold the solenoid after the articulation and before the release
 
 // Dummy Sequence
 int sequence[N_STEPS] = {1,0,0,1,1,1,0,1};
@@ -93,9 +94,97 @@ void setup() {
   manager.checkSequence();
   Serial.println("Updated Sequence");
   manager.printSnareSequence();
+
   /*
   // FOR TESTING
   Serial.begin(9600);
 
   Serial.println("Intialized Sequence");
-  kick.pmsH
+  kick.print_sequence();
+
+  kick.update_sequence(sequence);
+
+  Serial.println("Updated Sequence");
+  kick.print_sequence();
+
+  Serial.println("Intialized Velocity");
+  kick.print_velocity();
+
+  kick.update_velocity(velocity);
+
+  Serial.println("Updated Velocity");
+  kick.print_velocity();
+  */
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //Keep track of elapsed milliseconds and update every set amount of milliseconds based on the tempo
+  //currentMillis = millis();
+  if(msBeatCount >= msPullTimeKick && !drumsArePlaying)
+  {
+    //Set drum timers to current time
+    manager.setDrumTimers(msPullTimeKick, msPullTimeTom, msPullTimeSnare, msPullTimeHiHat);
+    //Play drum at index
+    manager.playKick(curBeatIndex);
+    manager.playTom(curBeatIndex);
+    manager.playSnare(curBeatIndex);
+    manager.playHiHat(curBeatIndex);
+    drumsArePlaying = true;
+
+    //Set the amount of time the solenoid should be extended
+    timeToRetractSolenoid = msHoldTime + msPerBeat;
+  }
+
+  //Check if there is a new beat
+  if(msBeatCount >= msPerBeat)
+  {
+    //Reset count
+    msBeatCount -= msPerBeat;
+    curBeatIndex = (curBeatIndex + 1) % N_STEPS;
+    drumsArePlaying = false;
+
+    // Light up LED for that index
+    for(int i = 0; i < 8; i++)
+    {
+      digitalWrite(LED_TEMPO_PINS[i], LOW);
+    }
+    digitalWrite(LED_TEMPO_PINS[i], HIGH);
+
+    curBeatIndex = (curBeatIndex + 1) % 8; // add 1 to the beat index
+  }
+
+  //Check if each drum timer has reached the retraction time
+  if(manager.kick.drumTimer >= timeToRetractSolenoid)
+  {
+    //Retract the kick
+    manager.stopKick();
+  }
+  if(manager.tom.drumTimer >= timeToRetractSolenoid)
+  {
+    //Retract the tom
+    manager.stopTom();
+  }
+  if(manager.snare.drumTimer >= timeToRetractSolenoid)
+  {
+    //Retract the snare
+    manager.stopSnare();
+  }
+  if(manager.hihat.drumTimer >= timeToRetractSolenoid)
+  {
+    //Retract the hihat
+    manager.stopHiHat();
+  }
+}
+
+int sequenceToBitwise(int seqData[])
+{
+  int bitwiseNum = 0b00000000;
+  for(int i = 0; i < N_STEPS; i++)
+  {
+    bitwiseNum = bitwiseNum << 1;
+    bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
+  }
+  return bitwiseNum;
+}

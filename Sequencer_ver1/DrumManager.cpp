@@ -140,6 +140,31 @@ void DrumManager::playHiHat(int beat_idx)
   hihat.play(beat_idx);
 }
 
+void DrumManager::stopKick()
+{
+  kick.stop();
+}
+void DrumManager::stopTom()
+{
+  tom.stop();
+}
+void DrumManager::stopSnare()
+{
+  snare.stop();
+}
+void DrumManager::stopHiHat()
+{
+  hihat.stop();
+}
+
+void DrumManager::setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime)
+{
+  kick.setDrumTimer(kickTime);
+  tom.setDrumTimer(tomTime);
+  snare.setDrumTimer(snareTime);
+  hihat.setDrumTimer(hihatTime);
+}
+
 // // Check for change in the sequence
 // void DrumManager::checkFullSequence(int kickData, int tomData, int snareData, int hihatData)
 // {
@@ -237,15 +262,4 @@ void DrumManager::playHiHat(int beat_idx)
 //     }
 //   }
 
-//   // Update the drum based on the index
-//   // Assign the parsed sequence
-//   switch(drumIndex)
-//   {
-//     case 0:
-//     {
-//       kick.update_sequence(new_seq);
-//       break;
-//     }
-//     case 1:
-//     {
-//       tom.update_sequenc
+/
