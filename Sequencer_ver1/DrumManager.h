@@ -27,7 +27,7 @@ class DrumManager
     Drum getSnare();
     Drum getHiHat();
     void setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime);
-    void checkSequence();
+    void checkSequence(int flag);
     void checkFullSequence(int kickData, int tomData, int snareData, int hihatData);
     void checkSingleSequence(int newData, int drumIndex);
 

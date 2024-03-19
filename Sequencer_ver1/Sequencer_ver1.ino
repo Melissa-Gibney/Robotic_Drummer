@@ -27,6 +27,8 @@ Drum tom;
 Drum hihat;
 DrumManager manager;
 
+int alternate = 3;
+
 bool drumsArePlaying = false; // Keep track of whether the drums are actuating/holding
 
 const int sequencerLength = 8; // Amount of buttons on one row of the sequencer
@@ -94,7 +96,8 @@ void setup() {
   // Serial.println("Updated Sequence");
   // manager.printHiHatSequence();
   
-  manager.checkSequence();
+  manager.checkSequence(alternate);
+  alternate = 1;
   // Serial.println("Kick Sequence");
   // manager.printKickSequence();
   // Serial.println("Snare Sequence");
@@ -138,12 +141,18 @@ void loop() {
   if(msBeatCount >= msPerBeat)
   {
     curBeatIndex = (curBeatIndex + 1) % N_STEPS;
-    manager.checkSequence();
+    manager.checkSequence(alternate);
+    if (alternate == 1){
+      alternate = 2;
+    } else {
+      alternate = 1;
+    }
+    
     //kick.print_sequence();
     manager.setDrumTimers(msPerBeat-msPullTimeKick, msPerBeat - msPullTimeTom, msPerBeat-msPullTimeSnare, msPerBeat - msPullTimeHiHat);
-    // manager.playKick(curBeatIndex);
-    // manager.playSnare(curBeatIndex);
-    //manager.playTom(curBeatIndex);
+    manager.playKick(curBeatIndex);
+    manager.playSnare(curBeatIndex);
+    manager.playTom(curBeatIndex);
     manager.playHiHat(curBeatIndex);
 
     //Serial.println("Kick Sequence");
