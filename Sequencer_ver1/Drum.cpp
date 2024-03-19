@@ -76,7 +76,7 @@ void Drum::play(int beat_idx/*, unsigned long holdTime, unsigned long beatTime*/
     
     // Write Pin high!
 
-    analogWrite(solenoidPin, 63);
+    analogWrite(solenoidPin, 255);
   }
 }
 

@@ -41,7 +41,7 @@ class DrumManager
     void printTomSequence(){
       tom.print_sequence();
     }
-    void printHihatSequence(){
+    void printHiHatSequence(){
       hihat.print_sequence();
     }
 
