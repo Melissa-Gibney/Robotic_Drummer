@@ -32,6 +32,26 @@ void DrumManager::assignSolenoids(int kickPin, int tomPin, int snarePin, int hih
   hihat.set_solenoid_pin(hihatPin);
 }
 
+Drum DrumManager::getKick()
+{
+  return kick;
+}
+
+Drum DrumManager::getTom()
+{
+  return tom;
+}
+
+Drum DrumManager::getSnare()
+{
+  return snare;
+}
+
+Drum DrumManager::getHiHat()
+{
+  return hihat;
+}
+
 // Check for change in the sequence
 void DrumManager::checkSequence()
 {
@@ -159,10 +179,10 @@ void DrumManager::stopHiHat()
 
 void DrumManager::setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime)
 {
-  kick.setDrumTimer(kickTime);
-  tom.setDrumTimer(tomTime);
-  snare.setDrumTimer(snareTime);
-  hihat.setDrumTimer(hihatTime);
+  kick.set_drum_timer(kickTime);
+  tom.set_drum_timer(tomTime);
+  snare.set_drum_timer(snareTime);
+  hihat.set_drum_timer(hihatTime);
 }
 
 // // Check for change in the sequence
@@ -262,4 +282,3 @@ void DrumManager::setDrumTimers(unsigned long kickTime, unsigned long tomTime, u
 //     }
 //   }
 
-/

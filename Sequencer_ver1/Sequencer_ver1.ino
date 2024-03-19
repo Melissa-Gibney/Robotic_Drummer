@@ -18,7 +18,7 @@
 #define SOL_PIN_HIHAT 57
 
 // Define LED Pins
-#define LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+#define const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Declare Drums
 Drum kick;
@@ -27,7 +27,6 @@ Drum tom;
 Drum hihat;
 DrumManager manager;
 
-int curBeatIndex = 0; // beat index
 bool drumsArePlaying = false; // Keep track of whether the drums are actuating/holding
 
 const int sequencerLength = 8; // Amount of buttons on one row of the sequencer
@@ -88,12 +87,12 @@ void setup() {
   Wire.begin();     
   Serial.begin(9600);
   Serial.println("Intialized Sequence");
-  manager.printSnareSequence();
+  // manager.printSnareSequence();
   
   delay(50);
   manager.checkSequence();
   Serial.println("Updated Sequence");
-  manager.printSnareSequence();
+  // manager.printSnareSequence();
 
   /*
   // FOR TESTING
@@ -150,28 +149,28 @@ void loop() {
     {
       digitalWrite(LED_TEMPO_PINS[i], LOW);
     }
-    digitalWrite(LED_TEMPO_PINS[i], HIGH);
+    digitalWrite(LED_TEMPO_PINS[curBeatIndex], HIGH);
 
     curBeatIndex = (curBeatIndex + 1) % 8; // add 1 to the beat index
   }
 
   //Check if each drum timer has reached the retraction time
-  if(manager.kick.drumTimer >= timeToRetractSolenoid)
+  if(manager.getKick().get_drum_timer() >= timeToRetractSolenoid)
   {
     //Retract the kick
     manager.stopKick();
   }
-  if(manager.tom.drumTimer >= timeToRetractSolenoid)
+  if(manager.getTom().get_drum_timer() >= timeToRetractSolenoid)
   {
     //Retract the tom
     manager.stopTom();
   }
-  if(manager.snare.drumTimer >= timeToRetractSolenoid)
+  if(manager.getSnare().get_drum_timer() >= timeToRetractSolenoid)
   {
     //Retract the snare
     manager.stopSnare();
   }
-  if(manager.hihat.drumTimer >= timeToRetractSolenoid)
+  if(manager.getHiHat().get_drum_timer() >= timeToRetractSolenoid)
   {
     //Retract the hihat
     manager.stopHiHat();

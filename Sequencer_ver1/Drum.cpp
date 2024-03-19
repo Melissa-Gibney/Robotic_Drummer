@@ -23,6 +23,11 @@ void Drum::set_solenoid_pin(int n)
   solenoidPin = n;
 }
 
+elapsedMillis Drum::get_drum_timer()
+{
+  return drumTimer;
+}
+
 void Drum::set_drum_timer(unsigned long n)
 {
   drumTimer = n;
@@ -56,12 +61,12 @@ void Drum::update_velocity(int *new_velocity)
   }
 }
 
-void Drum::play(int beat_idx, unsigned long holdTime, unsigned long beatTime)
+void Drum::play(int beat_idx/*, unsigned long holdTime, unsigned long beatTime*/)
 {
   if (sequence[beat_idx] == 1)
   {
-    unsigned long timeBeforeBeat = beatTime - holdTime;
-    unsigned long timeAfterBeat = beatTime + holdTime;
+    // unsigned long timeBeforeBeat = beatTime - holdTime;
+    // unsigned long timeAfterBeat = beatTime + holdTime;
 
     /*
     Set the drum timer for each drum in the main loop to equal the hold time whenever it reaches the hold time

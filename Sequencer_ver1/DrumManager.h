@@ -22,6 +22,10 @@ class DrumManager
     DrumManager();
     void assignDrums(Drum *kk, Drum *sn, Drum *tm, Drum *hh);
     void assignSolenoids(int kickPin, int tomPin, int snarePin, int hihatPin);
+    Drum getKick();
+    Drum getTom();
+    Drum getSnare();
+    Drum getHiHat();
     void setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime);
     void checkSequence();
     void checkFullSequence(int kickData, int tomData, int snareData, int hihatData);
@@ -52,5 +56,5 @@ class DrumManager
     void stopTom();
     void stopSnare();
     void stopHiHat();
-}
+};
 #endif
