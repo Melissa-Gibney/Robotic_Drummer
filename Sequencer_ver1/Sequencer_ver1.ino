@@ -64,7 +64,6 @@ void setup() {
   Wire.begin();     
   Serial.begin(9600);
 
-  //Serial.println("Hello World");
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
   {
@@ -87,6 +86,18 @@ void setup() {
 
   //Assign Solenoid Pins to Drums
   manager.assignSolenoids(SOL_PIN_KICK, SOL_PIN_TOM, SOL_PIN_SNARE, SOL_PIN_HIHAT);
+
+  for(int i = 0; i < N_STEPS; i++)
+  {
+    Serial.print(velocity[i] + " ");
+  }
+
+  // Scale the Velocity to go from 0 to 255 instead of 0 to 127
+  for(int i = 0; i < N_STEPS; i++)
+  {
+    velocity[i] = round((float)(velocity[i])/128.0*255.0);
+    Serial.print(velocity[i] + " ");
+  }
 
   // Serial.println("Intialized Sequence");
   // manager.printHiHatSequence();
@@ -154,17 +165,6 @@ void loop() {
     manager.playSnare(curBeatIndex);
     manager.playTom(curBeatIndex);
     manager.playHiHat(curBeatIndex);
-
-    //Serial.println("Kick Sequence");
-    //manager.printKickSequence();
-    //Serial.println("Snare Sequence");
-    // manager.printSnareSequence();
-    //Serial.println("Tom Sequence");
-    // manager.printTomSequence();
-    //Serial.println("Hi-Hat Sequence");
-    // manager.printHiHatSequence();
-    //Reset count
-    //msBeatCount -= msPerBeat;
     drumsArePlaying = false;
 
     // Light up LED for that index
