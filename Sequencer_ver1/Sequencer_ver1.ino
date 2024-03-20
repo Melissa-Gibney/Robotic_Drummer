@@ -1,6 +1,6 @@
 // Drum Sequencer for Demo on 3/19/24
 // authors: Hanna Berger, Melissa Gibney
-// modified: 3/18/24
+// modified: 3/19/24
 
 #include "Drum.h"
 #include "DrumManager.h"
@@ -18,7 +18,8 @@
 #define SOL_PIN_HIHAT 57
 
 // Define LED Pins
-#define const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+//#define const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Declare Drums
 Drum kick;

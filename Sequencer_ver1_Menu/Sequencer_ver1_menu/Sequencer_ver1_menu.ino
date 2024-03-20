@@ -1,6 +1,6 @@
 // Drum Sequencer for Demo on 3/19/24
 // authors: Hanna Berger, Melissa Gibney
-// modified: 3/18/24
+// modified: 3/20/24
 
 #include "Drum.h"
 #include "DrumManager.h"
@@ -25,7 +25,8 @@
 #define SOL_PIN_HIHAT 57
 
 // Define LED Pins
-#define const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+//#define LED_TEMPO_PINS (int[]){2, 3, 4, 5, 6, 7, 8, 9}
+const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Declare Drums
 Drum kick;
@@ -142,6 +143,8 @@ void setup() {
   
   manager.checkSequence(alternate);
   alternate = 1;
+
+  delay(1);
   // Serial.println("Kick Sequence");
   // manager.printKickSequence();
   // Serial.println("Snare Sequence");
@@ -150,6 +153,11 @@ void setup() {
   // manager.printTomSequence();
   // Serial.println("Hi-Hat Sequence");
   // manager.printHiHatSequence();
+
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
 
   // pinmode buttons
   pinMode(BUTTON1,INPUT);
