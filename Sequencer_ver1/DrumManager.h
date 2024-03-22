@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include "Drum.h"
 #include <Wire.h>
+#include <elapsedMillis.h>
 
 class DrumManager
 {
@@ -16,6 +17,9 @@ class DrumManager
     Drum snare;
     Drum tom;
     Drum hihat;
+
+    int holdTime = 10;  // ms
+    elapsedMillis timer;
 
 
   public:
@@ -27,7 +31,7 @@ class DrumManager
     Drum getSnare();
     Drum getHiHat();
     void setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime);
-    void checkSequence(int flag);
+    void checkSequence(int flag, int offset);
     void checkFullSequence(int kickData, int tomData, int snareData, int hihatData);
     void checkSingleSequence(int newData, int drumIndex);
 
@@ -46,12 +50,14 @@ class DrumManager
     }
 
     // Play Drums
+    void playDrums(int beat_idx);
     void playKick(int beat_idx);
     void playSnare(int beat_idx);
     void playTom(int beat_idx);
     void playHiHat(int beat_idx);
 
     //Stop Droms
+    void stopDrums();
     void stopKick();
     void stopTom();
     void stopSnare();

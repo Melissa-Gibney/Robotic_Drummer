@@ -76,12 +76,25 @@ void Drum::play(int beat_idx/*, unsigned long holdTime, unsigned long beatTime*/
     
     // Write Pin high!
 
+    // Serial.print("play\n");
+    delay(1);
+
     analogWrite(solenoidPin, 255);
   }
 }
 
+int Drum::getSeqBin(int offset){
+  int bin = 0;
+  for(int i = 0; i < WIN_LEN; i++)
+    bin = bin & (sequence[i+offset] << i);
+
+  return bin;
+}
+
 void Drum::stop()
 {
+  // Serial.print("stop\n");
+  delay(1);
   analogWrite(solenoidPin, 0);
 }
 
