@@ -1,5 +1,6 @@
 #include <Wire.h>
 
+// #define I2CADDRESS 0x2A
 #define I2CADDRESS 0x2B
 
 #define BMASK 0b10111111  // PB6 inaccessible
@@ -68,7 +69,7 @@ void setup(){
   // Setup I2C
   Wire.begin(I2CADDRESS);
   Wire.onRequest(sendVect);
-  //Wire.onReceive(setLights);
+  Wire.onReceive(setLights);
   
 }
 
@@ -152,11 +153,13 @@ void sendVect(){
   // Wire.endTransmission();
 }
 
-void setLights(){
-  uint8_t lowBits = Wire.read();
-  uint8_t highBits = Wire.read();
+void setLights(int b){
+  if(b == 2){
+    uint8_t lowBits = Wire.read();
+    uint8_t highBits = Wire.read();
 
-  lights = highBits<<8 | lowBits;
+    lights = highBits<<8 | lowBits;
+  }
 }
 
 

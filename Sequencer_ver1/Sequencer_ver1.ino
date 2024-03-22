@@ -1,4 +1,4 @@
-// Drum Sequencer for Demo on 3/19/24
+// Drum Sequencer with Sliding Window
 // authors: Hanna Berger, Melissa Gibney, Anna Boyd
 // modified: 3/22/24
 
@@ -11,7 +11,10 @@
 #include <Wire.h>
 
 // Sequencing
-int startMark = 0;
+int startMark = 4;
+int lowerBound = 0;
+int upperBound = MAX_LEN;
+bool seqIsLocked = false;
 
 // Solenoid Pins
 #define SOL_PIN_KICK 54
@@ -23,9 +26,9 @@ int startMark = 0;
 const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Buttons
-Button bl(12);
-Button br(13);
-Button bs(14);  // HERE
+Button bl(12);  // move left
+Button br(13);  // move right
+Button bs(11);  // lock/unlock
 
 // Declare Drums
 Drum kick;
@@ -85,26 +88,36 @@ void setup() {
 
 void loop() {
   // Check buttons
-  bl.loop(); br.loop();
+  bl.loop(); br.loop(); bs.loop();
 
   if(bl.justPressed() && (startMark > 0)){
     Serial.print("BL\n");
     startMark--;
+    lowerBound--;
+    upperBound--;
     updateBPMLights();
-    // updateSwitchMatrix();
+    updateSwitchMatrix();
   }
   
   if(br.justPressed() && (startMark < MAX_LEN - WIN_LEN)){
     Serial.print("BR\n");
     startMark++;
+    lowerBound++;
+    upperBound++;
     updateBPMLights();
-    // updateSwitchMatrix();
+    updateSwitchMatrix();
+  }
+
+  if(bs.justPressed()){
+    toggleLockSequence();
   }
 
   //Check if there is a new beat
   if(msBeatCount >= msPerBeat)
   {
-    curBeatIndex = (curBeatIndex + 1) % MAX_LEN;
+    curBeatIndex++;
+    if(curBeatIndex >= upperBound)
+      curBeatIndex = lowerBound;
 
     manager.checkSequence(alternate, startMark);
     alternate = (alternate == 1) ? 2 : 1;
@@ -121,6 +134,24 @@ void loop() {
   manager.stopDrums();
 }
 
+
+/* SEQUENCE LOCK */
+void toggleLockSequence(){
+  if(seqIsLocked){
+    lowerBound = 0;
+    upperBound = MAX_LEN;
+  }
+  else{
+    lowerBound = startMark;
+    upperBound = startMark + WIN_LEN;
+  }
+
+  seqIsLocked = !seqIsLocked;
+}
+
+
+/* LED CONTROL */
+
 void updateBPMLights(){
   // Light up LED for that index
     for(int i = 0; i < 8; i++)
@@ -133,12 +164,17 @@ void updateBPMLights(){
 void updateSwitchMatrix(){
   // TODO
   Wire.beginTransmission(TINY1);
+  Serial.println(manager.getKick().getSeqBin(startMark));
   Wire.write(manager.getKick().getSeqBin(startMark));
   Wire.write(manager.getSnare().getSeqBin(startMark));
   Wire.endTransmission();
+
+  delay(2);
 
   Wire.beginTransmission(TINY2);
   Wire.write(manager.getTom().getSeqBin(startMark));
   Wire.write(manager.getHiHat().getSeqBin(startMark));
   Wire.endTransmission();
+
+  delay(2);
 }

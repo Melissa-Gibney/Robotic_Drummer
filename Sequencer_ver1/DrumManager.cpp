@@ -62,10 +62,10 @@ void DrumManager::checkSequence(int flag, int offset)
   // Row 2 Address 0x2A - byte 2
   // Row 3 Address 0x2B - byte 1
   // Row 4 Address 0x2B - byte 2
-  int kick_seq[MAX_LEN];
-  int snare_seq[MAX_LEN];
-  int tom_seq[MAX_LEN];
-  int hihat_seq[MAX_LEN];
+  int kick_seq[WIN_LEN] = {0};
+  int snare_seq[WIN_LEN] = {0};
+  int tom_seq[WIN_LEN] = {0};
+  int hihat_seq[WIN_LEN] = {0};
 
   if (flag == 3) {
     dataKick = 0b10101010;
@@ -75,51 +75,54 @@ void DrumManager::checkSequence(int flag, int offset)
   }
 
 
+  // Read TINY1
   if (flag == 1) {
     Wire.requestFrom(TINY1, 2);
     dataKick = Wire.read(); // Read Kick and save to data
     dataSnare = Wire.read();
+    // Flush
     while (Wire.available()){
       Wire.read();
     }
 
     for (int i = 0; i < 8; i++)
-      kick_seq[i+offset] = (dataKick & (1<<i)) ? 1 : 0;
+      kick_seq[i] = (dataKick & (1<<i)) ? 1 : 0;
 
     // Assign the parsed sequence
-    kick.update_sequence(kick_seq);
+    kick.update_sequence(kick_seq, offset);
 
     // Snare
     for (int i = 0; i < 8; i++)
-      snare_seq[i+offset] = (dataSnare & (1<<i)) ? 1 : 0;
+      snare_seq[i] = (dataSnare & (1<<i)) ? 1 : 0;
 
     // Assign the parsed sequence
-    snare.update_sequence(snare_seq);
+    snare.update_sequence(snare_seq, offset);
   }
 
   
+  // Read TINY2
   if (flag == 2 ) {
-
     Wire.requestFrom(TINY2, 2);
     dataTom = Wire.read();
     dataHiHat = Wire.read();
+    // Flush
     while (Wire.available()){
       Wire.read();
     }
 
     //Tom
     for (int i = 0; i < 8; i++)
-      tom_seq[i+offset] = (dataTom & (1<<i)) ? 1 : 0;
+      tom_seq[i] = (dataTom & (1<<i)) ? 1 : 0;
 
     // Assign the parsed sequence
-    tom.update_sequence(tom_seq);
+    tom.update_sequence(tom_seq, offset);
 
     // HiHat
     for (int i = 0; i < 8; i++)
-      hihat_seq[i+offset] = (dataHiHat & (1<<i)) ? 1 : 0;
+      hihat_seq[i] = (dataHiHat & (1<<i)) ? 1 : 0;
     
     // Assign the parsed sequence
-    hihat.update_sequence(hihat_seq);
+    hihat.update_sequence(hihat_seq, offset);
   }
 
 }

@@ -47,10 +47,10 @@ void Drum::reset_velocity()
   }
 }
 
-void Drum::update_sequence(int *new_sequence)
+void Drum::update_sequence(int *new_sequence, int offset)
 {
   for (int i = 0; i < 8; i++){
-    sequence[i] = new_sequence[i];
+    sequence[i+offset] = new_sequence[i];
   }
 }
 
@@ -86,7 +86,7 @@ void Drum::play(int beat_idx/*, unsigned long holdTime, unsigned long beatTime*/
 int Drum::getSeqBin(int offset){
   int bin = 0;
   for(int i = 0; i < WIN_LEN; i++)
-    bin = bin & (sequence[i+offset] << i);
+    bin = bin | (sequence[i+offset] << i);
 
   return bin;
 }

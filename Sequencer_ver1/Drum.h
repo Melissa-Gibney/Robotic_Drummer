@@ -29,7 +29,7 @@ class Drum
     void set_drum_timer(unsigned long n);
     void reset_sequence(); // reset the sequence array to 0
     void reset_velocity(); // reset the velocity to the default (1 for now)
-    void update_sequence(int *new_sequence);
+    void update_sequence(int *new_sequence, int offset);
     void update_velocity(int *new_velocity);
 
     void play(int beat_idx);
