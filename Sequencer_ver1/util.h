@@ -1,7 +1,11 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#define DEBOUNCE 5
+#include <ezButton.h>
+
+
+
+#define DEBOUNCE 10
 
 #define MAX_LEN 32
 #define WIN_LEN 8
@@ -10,33 +14,118 @@
 #define TINY1 0x2A
 #define TINY2 0x2B
 
-#include <ezButton.h>
 
-class Button : public ezButton{
+/********************************************************************************************/
+
+class Button : public ezButton {
   public:
-    Button(uint8_t pin) : ezButton(pin){
-      pinMode(pin, INPUT_PULLUP);
+    /*!
+    Constructor for a button. Sets pinModes, sets debounce, manages button states.
+    .
+    pin     ->  Button input pin.
+    pullUp  ->  True for INPUT_PULLUP, False for INPUT.
+    */
+    Button(uint8_t pin, bool pullUp) : ezButton(pin){
+      if(pullUp)
+        pinMode(pin, INPUT_PULLUP);
+      else
+        pinMode(pin, INPUT);
+
       this->setDebounceTime(DEBOUNCE);
     }
 
-    int justPressed(){
+
+    /*!
+    Return true  ->  button just pressed.
+    Return false ->  otherwise.
+    */
+    bool justPressed(){
       state = this->getState();
 
       if(!state && prevState){
         prevState = state;
-        return 1;
+        return true;
       }
 
       else{
         prevState = state;
-        return 0;
+        return false;
       }
     }
 
   private:
     bool state = false;
     bool prevState = false;
-
 };
+
+/********************************************************************************************/
+
+class Encoder {
+  private:
+    uint8_t CLK, DT;
+    Button button;
+
+    bool prevState;
+    bool stateCLK;
+    bool stateDT;
+
+
+  public:
+    /*!
+    Constructor for a rotary encoder. Sets pinModes, sets button debounce,
+    manages all states.
+    .
+    pinCLK    ->  CLK input pin.
+    pinDT     ->  DT input pin.
+    pinSW     ->  SW input pin.
+    */
+    Encoder(uint8_t pinCLK, uint8_t pinDT, uint8_t pinSW) : button(pinSW, true){
+      pinMode(pinCLK, INPUT);
+      pinMode(pinDT, INPUT);
+
+      prevState = stateCLK = digitalRead(pinCLK);
+      stateDT = digitalRead(pinDT);
+
+      CLK = pinCLK; DT = pinDT;
+    }
+
+    /*!
+    Call this in loop().
+    */
+    void loop(){
+      prevState = stateCLK;
+      stateCLK = digitalRead(CLK);
+      stateDT = digitalRead(DT);
+      button.loop();
+    }
+
+    /*!
+    Return 0   ->  Not rotated.
+    Return 1   ->  Rotated clockwise.
+    Return 2   ->  Rotated counter clockwise.
+    */
+    int rotated(){
+      if (stateCLK && !prevState){
+        if (stateCLK == stateDT)
+          return 1;   // CLOCKWISE
+        
+        else
+          return 2;   // COUNTER CLOCKWISE
+      }
+
+      else
+        return 0;     // NOT ROTATED
+    }
+
+    /*!
+    Return true  ->  button just pressed.
+    Return false ->  otherwise.
+    */
+    bool justPressed(){ return button.justPressed(); }
+
+  
+};
+
+/********************************************************************************************/
 
 #endif

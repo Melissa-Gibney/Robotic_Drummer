@@ -10,6 +10,10 @@
 #include <elapsedMillis.h>
 #include <Wire.h>
 
+void updateBPMLights();
+void updateSwitchMatrix();
+void toggleLockSequence();
+
 // Sequencing
 int startMark = 4;
 int lowerBound = 0;
@@ -25,10 +29,8 @@ bool seqIsLocked = false;
 // LED Pins
 const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
-// Buttons
-Button bl(12);  // move left
-Button br(13);  // move right
-Button bs(11);  // lock/unlock
+// Encoder
+Encoder control(13, 12, 11);
 
 // Declare Drums
 Drum kick;
@@ -87,30 +89,44 @@ void setup() {
 }
 
 void loop() {
-  // Check buttons
-  bl.loop(); br.loop(); bs.loop();
+  // Check encoder
+  control.loop();
 
-  if(bl.justPressed() && (startMark > 0)){
-    Serial.print("BL\n");
-    startMark--;
-    lowerBound--;
-    upperBound--;
-    updateBPMLights();
-    updateSwitchMatrix();
-  }
-  
-  if(br.justPressed() && (startMark < MAX_LEN - WIN_LEN)){
-    Serial.print("BR\n");
-    startMark++;
-    lowerBound++;
-    upperBound++;
-    updateBPMLights();
-    updateSwitchMatrix();
+  int dir = control.rotated();
+
+  switch(dir){
+    case 1:         // CW
+      // Serial.println("CW");
+      if(startMark < MAX_LEN - WIN_LEN){
+        startMark++;
+        lowerBound++;
+        upperBound++;
+        updateBPMLights();
+        updateSwitchMatrix();
+      }
+      break;
+
+    case 2:         // CCW
+      // Serial.println("CCW");
+      if(startMark > 0){
+        startMark--;
+        lowerBound--;
+        upperBound--;
+        updateBPMLights();
+        updateSwitchMatrix();
+      }
+      break;
+
+    default:
+      break;
   }
 
-  if(bs.justPressed()){
+  if(control.justPressed()){
+    // Serial.println("PRESS");
     toggleLockSequence();
   }
+
+
 
   //Check if there is a new beat
   if(msBeatCount >= msPerBeat)
@@ -164,7 +180,6 @@ void updateBPMLights(){
 void updateSwitchMatrix(){
   // TODO
   Wire.beginTransmission(TINY1);
-  Serial.println(manager.getKick().getSeqBin(startMark));
   Wire.write(manager.getKick().getSeqBin(startMark));
   Wire.write(manager.getSnare().getSeqBin(startMark));
   Wire.endTransmission();
