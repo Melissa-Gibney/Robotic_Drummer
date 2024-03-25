@@ -2,31 +2,27 @@
 // authors: Hanna Berger, Melissa Gibney
 // modified: 3/20/24
 
-#include "Drum.h"
-#include "DrumManager.h"
+/* UTIL LIBRARIES */
 #include <Arduino.h>
 #include <ezButton.h>
 #include <elapsedMillis.h>
 #include <Wire.h>
+#include "util.h"
 
-// Stuff for OLED Display
+/* DRUM LIBRARIES */
+#include "Drum.h"
+#include "DrumManager.h"
+
+/* DISPLAY LIBRARIES */
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include "tempo_menu.h"
 #include "preset_menu.h"
 #include "velocity_menu.h"
 
-#define N_STEPS 8
 
-//Define Solenoid Pins
-#define SOL_PIN_KICK 54
-#define SOL_PIN_SNARE 55
-#define SOL_PIN_TOM 56
-#define SOL_PIN_HIHAT 57
 
-// Define LED Pins
-//#define LED_TEMPO_PINS (int[]){2, 3, 4, 5, 6, 7, 8, 9}
-const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+// #define N_STEPS 8
 
 // Declare Drums
 Drum kick;
@@ -68,7 +64,7 @@ long unsigned int timeToRetractSolenoid = msHoldTime + msPerBeat; // Time to hol
 // On an arduino MEGA 2560: 20(SDA), 21(SCL)
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);     
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 100000UL);     
 
 // Variable Declarations
 // Rotary Encoder
@@ -100,20 +96,68 @@ int page_counter = 0;
 void print_page(int counter);
 
 // Dummy Velocity
-int velocity[N_STEPS] = {60, 75, 83, 75, 60, 52, 60, 60};
+int velocity[WIN_LEN] = {60, 75, 83, 75, 60, 52, 60, 60};
+
+
+// DEBUG
+Button debugButton(52, true);
+
+void debug(){
+  Serial.println("PRESS");
+  Wire.beginTransmission(0x3C);
+
+  /********************************************************/
+
+  int bytes = 4;
+
+  for(int i = 0; i < bytes; i++){
+    // Wire.beginTransmission(SCREEN_ADDRESS);
+    Wire.write(0b01010101);  
+    // Wire.endTransmission(false);
+  }
+
+  /********************************************************/
+  int err = Wire.endTransmission();
+
+  switch(err){
+    case 0:
+      Serial.println("Success");
+      break;
+    case 1:
+      Serial.println("Data too long, buffer overflow");
+      break;
+    case 2:
+      Serial.println("NACK on trasmit of address");
+      break;
+    case 3:
+      Serial.println("NACK on transmit of data");
+      break;
+    case 4:
+      Serial.println("Other error");
+      break;
+    case 5:
+      Serial.println("Timeout");
+      break;
+    default:
+      break;
+  }
+
+  delay(1);
+}
+
 
 void setup() {
-  // put your setup code here, to run once
 
-  // Test
   Wire.begin();     
   Serial.begin(9600);
 
-  //Serial.println("Hello World");
+  // DEBUG
+  digitalWrite(SDA, LOW);
+  digitalWrite(SCL, LOW);
+
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
   {
-    // Serial.println("Hello World");
     pinMode(LED_TEMPO_PINS[i], OUTPUT);
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
@@ -144,7 +188,7 @@ void setup() {
   manager.checkSequence(alternate);
   alternate = 1;
 
-  delay(1);
+  // delay(1);
   // Serial.println("Kick Sequence");
   // manager.printKickSequence();
   // Serial.println("Snare Sequence");
@@ -154,7 +198,7 @@ void setup() {
   // Serial.println("Hi-Hat Sequence");
   // manager.printHiHatSequence();
 
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS, false, false)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
@@ -168,30 +212,30 @@ void setup() {
   pinMode(ROTARY_b, INPUT);
   pinMode(ROTARY_button, INPUT_PULLUP);
 
-  // Welcome Screen displays for 3 seconds
+  // // Welcome Screen displays for 3 seconds
   display.clearDisplay();
-  display.fillCircle(64, 32, 30, SSD1306_WHITE);
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_BLACK);
-  display.setCursor(35, 30);
-  display.println(F("Welcome...\n"));
-  display.fillCircle(5, 5, 5, SSD1306_WHITE);
-  display.drawCircle(122, 5, 5, SSD1306_WHITE);
-  display.fillCircle(122, 58, 5, SSD1306_WHITE);
-  display.drawCircle(5, 58, 5, SSD1306_WHITE);
+  // display.fillCircle(64, 32, 30, SSD1306_WHITE);
+  // display.setTextSize(1);
+  // display.setTextColor(SSD1306_BLACK);
+  // display.setCursor(35, 30);
+  // display.println(F("Welcome...\n"));
+  // display.fillCircle(5, 5, 5, SSD1306_WHITE);
+  // display.drawCircle(122, 5, 5, SSD1306_WHITE);
+  // display.fillCircle(122, 58, 5, SSD1306_WHITE);
+  // display.drawCircle(5, 58, 5, SSD1306_WHITE);
   display.display();
-  delay(3000);
-  display.clearDisplay();
+  // delay(3000);
+  // display.clearDisplay();
 
-  // set menus to the OLED display and initialize them
-  tempo_display.set_display(display);
-  preset_display.set_display(display);
-  velocity_display.set_display(display);
-  tempo_display.tempo = 120;
-  velocity_display.velocity = 60;
-  preset_display.preset_counter = 0;
+  // // set menus to the OLED display and initialize them
+  // tempo_display.set_display(display);
+  // preset_display.set_display(display);
+  // velocity_display.set_display(display);
+  // tempo_display.tempo = 120;
+  // velocity_display.velocity = 60;
+  // preset_display.preset_counter = 0;
   
-  print_page(page_counter); // initialize screen to the first page
+  // print_page(page_counter); // initialize screen to the first page
 }
 
 void loop() {
@@ -226,13 +270,10 @@ void loop() {
   //Check if there is a new beat
   if(msBeatCount >= msPerBeat)
   {
-    curBeatIndex = (curBeatIndex + 1) % N_STEPS;
+    curBeatIndex = (curBeatIndex + 1) % WIN_LEN;
     manager.checkSequence(alternate);
-    if (alternate == 1){
-      alternate = 2;
-    } else {
-      alternate = 1;
-    }
+    // debug();
+    alternate = (alternate == 1) ? 2 : 1;
     
     //kick.print_sequence();
     manager.setDrumTimers(msPerBeat-msPullTimeKick, msPerBeat - msPullTimeTom, msPerBeat-msPullTimeSnare, msPerBeat - msPullTimeHiHat);
@@ -287,6 +328,10 @@ void loop() {
 
 
   // OLED SCREEN STUFF (from OLED_Menu_ver2)
+  debugButton.loop();
+
+  if(debugButton.justPressed())
+    debug();
 
   // read button states
   b1state = digitalRead(BUTTON1);

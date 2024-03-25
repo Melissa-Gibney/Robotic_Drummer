@@ -60,7 +60,6 @@ void DrumManager::checkSequence(int flag)
   // Row 2 Address 0x2A - byte 2
   // Row 3 Address 0x2B - byte 1
   // Row 4 Address 0x2B - byte 2
-  Serial.print("Entered check sequence");
   int kick_seq[8];
   int snare_seq[8];
   int tom_seq[8];
@@ -112,60 +111,64 @@ void DrumManager::checkSequence(int flag)
 
   if (flag == 1) {
     Wire.requestFrom(TINY1, 2);
-    int data = Wire.read(); // Read Kick and save to data
-    int dataSnare = Wire.read();
-    while (Wire.available()){
-    Wire.read();
-  }
+    int data, dataSnare;
 
-
-  for (int i = 0; i < 8; i++)
-  {
-    if ((1<<i) & (data & (1<<i)))
-    {
-      kick_seq[i] = 1;
-      //Serial.print(1);
+    if(Wire.available()){
+      data = Wire.read(); // Read Kick and save to data
+      dataSnare = Wire.read();
     }
-    else
-    {
-      kick_seq[i] = 0;
-      //Serial.print(0);
-    }
-  }
-  // Assign the parsed sequence
-  kick.update_sequence(kick_seq);
-  //kick.print_sequence();
+    // while (Wire.available())
+    //   Wire.read();
+  
 
-  // Snare
-  //data = 0b01010101; // dummy for now will eventually be read from the tinys
 
-  //data = Wire.read(); // Read wire again to get the snare data
-  for (int i = 0; i < 8; i++)
-  {
-    if ((1<<i) & (dataSnare & (1<<i)))
+    for (int i = 0; i < 8; i++)
     {
-      snare_seq[i] = 1;
+      if (data & (1<<i))
+      {
+        kick_seq[i] = 1;
+        //Serial.print(1);
+      }
+      else
+      {
+        kick_seq[i] = 0;
+        //Serial.print(0);
+      }
     }
-    else
-    {
-      snare_seq[i] = 0;
-    }
-  }
-  // Assign the parsed sequence
-  snare.update_sequence(snare_seq);
-  }
+    // Assign the parsed sequence
+    kick.update_sequence(kick_seq);
+    //kick.print_sequence();
 
+    // Snare
+    for (int i = 0; i < 8; i++)
+    {
+      if (dataSnare & (1<<i))
+      {
+        snare_seq[i] = 1;
+      }
+      else
+      {
+        snare_seq[i] = 0;
+      }
+    }
+    // Assign the parsed sequence
+    snare.update_sequence(snare_seq);
+  }
+  
   
   // data = Wire.read(); // assign Tom sequence to data
 
   if (flag == 2 ) {
 
     Wire.requestFrom(TINY2, 2);
-    int dataTom = Wire.read();
-    int dataHiHat = Wire.read();
-    while (Wire.available()){
-    Wire.read();
-  }
+    int dataTom, dataHiHat;
+    if(Wire.available()){
+      dataTom = Wire.read();
+      dataHiHat = Wire.read();
+    }
+    // while (Wire.available())
+    //   Wire.read();
+  
 
 
     
@@ -173,10 +176,10 @@ void DrumManager::checkSequence(int flag)
 
   //Tom
   //data = 0b00011001; // dummy for now will eventually be read from the tinys
-  Serial.print(dataTom);
+  // Serial.print(dataTom);
   for (int i = 0; i < 8; i++)
   {
-    if ((1<<i) & (dataTom & (1<<i)))
+    if (dataTom & (1<<i))
     {
       tom_seq[i] = 1;
     }
@@ -191,10 +194,9 @@ void DrumManager::checkSequence(int flag)
   // HiHat
   //data = 0b01101101; // dummy for now will eventually be read from the tinys
   //data = Wire.read(); // read from TINY 2 byte 2 to get hihat sequence
-  Serial.print("got to for loop");
   for (int i = 0; i < 8; i++)
   {
-    if ((1<<i) & (dataHiHat & (1<<i)))
+    if (dataHiHat & (1<<i))
     {
       hihat_seq[i] = 1;
     }
@@ -205,9 +207,10 @@ void DrumManager::checkSequence(int flag)
   }
   // Assign the parsed sequence
   hihat.update_sequence(hihat_seq);
+  }
 }
 
-}
+
 
 void DrumManager::playKick(int beat_idx)
 {
