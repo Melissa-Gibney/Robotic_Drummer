@@ -17,17 +17,8 @@ void toggleLockSequence();
 // Sequencing
 int startMark = 4;
 int lowerBound = 0;
-int upperBound = MAX_LEN;
+int upperBound = MAX_LEN - WIN_LEN;
 bool seqIsLocked = false;
-
-// Solenoid Pins
-#define SOL_PIN_KICK 54
-#define SOL_PIN_SNARE 55
-#define SOL_PIN_TOM 56
-#define SOL_PIN_HIHAT 57
-
-// LED Pins
-const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Encoder
 Encoder control(13, 12, 11);
@@ -121,6 +112,8 @@ void loop() {
       break;
   }
 
+  // Serial.println(startMark);
+
   if(control.justPressed()){
     // Serial.println("PRESS");
     toggleLockSequence();
@@ -131,19 +124,24 @@ void loop() {
   //Check if there is a new beat
   if(msBeatCount >= msPerBeat)
   {
+    // Update beat
     curBeatIndex++;
     if(curBeatIndex >= upperBound)
       curBeatIndex = lowerBound;
 
+    // Check drum sequence
     manager.checkSequence(alternate, startMark);
     alternate = (alternate == 1) ? 2 : 1;
     
+    // Play drums
     manager.setDrumTimers(msPerBeat-msPullTimeKick, msPerBeat - msPullTimeTom, msPerBeat-msPullTimeSnare, msPerBeat - msPullTimeHiHat);
     manager.playDrums(curBeatIndex);
 
+    // Udpate BPM LED
     updateBPMLights();
 
-    msBeatCount = 0;
+    // Reset beat count
+    msBeatCount -= msPerBeat;
   }
 
   //Check if each drum timer has reached the retraction time
@@ -155,8 +153,9 @@ void loop() {
 void toggleLockSequence(){
   if(seqIsLocked){
     lowerBound = 0;
-    upperBound = MAX_LEN;
+    upperBound = MAX_LEN - WIN_LEN;
   }
+
   else{
     lowerBound = startMark;
     upperBound = startMark + WIN_LEN;
@@ -167,18 +166,18 @@ void toggleLockSequence(){
 
 
 /* LED CONTROL */
-
 void updateBPMLights(){
-  // Light up LED for that index
-    for(int i = 0; i < 8; i++)
-      digitalWrite(LED_TEMPO_PINS[i], LOW);
-    
-    if(curBeatIndex >= startMark)
-      digitalWrite(LED_TEMPO_PINS[curBeatIndex-startMark], HIGH);
+  // Reset LEDs
+  for(int i = 0; i < 8; i++)
+    digitalWrite(LED_TEMPO_PINS[i], LOW);
+  
+  // Enable LED for current beat
+  if(curBeatIndex >= startMark)
+    digitalWrite(LED_TEMPO_PINS[curBeatIndex-startMark], HIGH);
 }
 
 void updateSwitchMatrix(){
-  // TODO
+  // TINY1
   Wire.beginTransmission(TINY1);
   Wire.write(manager.getKick().getSeqBin(startMark));
   Wire.write(manager.getSnare().getSeqBin(startMark));
@@ -186,6 +185,7 @@ void updateSwitchMatrix(){
 
   delay(2);
 
+  // TINY2
   Wire.beginTransmission(TINY2);
   Wire.write(manager.getTom().getSeqBin(startMark));
   Wire.write(manager.getHiHat().getSeqBin(startMark));

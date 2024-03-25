@@ -14,8 +14,8 @@ class Drum
 {
   private:
     int nsteps = MAX_LEN;
-    int sequence[MAX_LEN]; // array of states (on/off) for the sequence
-    int velocity[MAX_LEN]; // array of velocities for the sequence
+    int sequence[MAX_LEN] = {0}; // array of states (on/off) for the sequence
+    int velocity[MAX_LEN] = {0}; // array of velocities for the sequence
     int solenoidPin = 54; // pin output for solenoid
     unsigned long pullTime = 0; // amount of time before beat that drum needs to actuate
     elapsedMillis drumTimer; // keep track of time elapsed between beats, restart after each hold time

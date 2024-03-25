@@ -85,8 +85,11 @@ void Drum::play(int beat_idx/*, unsigned long holdTime, unsigned long beatTime*/
 
 int Drum::getSeqBin(int offset){
   int bin = 0;
-  for(int i = 0; i < WIN_LEN; i++)
+  for(int i = 0; i < WIN_LEN; i++){
+    Serial.print(sequence[i+offset]);
     bin = bin | (sequence[i+offset] << i);
+  }
+  Serial.println();
 
   return bin;
 }

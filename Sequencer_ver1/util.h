@@ -1,14 +1,23 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+// Libraries
 #include <ezButton.h>
 
 
-
+// Macros
 #define DEBOUNCE 10
 
 #define MAX_LEN 32
 #define WIN_LEN 8
+
+#define SOL_PIN_KICK 54
+#define SOL_PIN_SNARE 55
+#define SOL_PIN_TOM 56
+#define SOL_PIN_HIHAT 57
+
+const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+
 
 // I2C addresses for the Tinys
 #define TINY1 0x2A
@@ -93,9 +102,23 @@ class Encoder {
     Call this in loop().
     */
     void loop(){
+      int count = 0, lastRead = -1;
+
       prevState = stateCLK;
+
+      do{
       stateCLK = digitalRead(CLK);
       stateDT = digitalRead(DT);
+
+      count++;
+
+      if(lastRead != stateCLK)
+        count = 0;
+
+      lastRead = stateCLK;
+
+      } while(count < DEBOUNCE);
+
       button.loop();
     }
 
