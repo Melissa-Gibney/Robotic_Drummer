@@ -19,9 +19,11 @@
 const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 
-// I2C addresses for the Tinys
+// I2C addresses
 #define TINY1 0x2A
 #define TINY2 0x2B
+#define MASTER 0x0F
+#define SCREEN_ADDRESS 0x3C
 
 
 /********************************************************************************************/

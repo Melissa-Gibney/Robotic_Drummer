@@ -113,14 +113,9 @@ void DrumManager::checkSequence(int flag)
     Wire.requestFrom(TINY1, 2);
     int data, dataSnare;
 
-    if(Wire.available()){
-      data = Wire.read(); // Read Kick and save to data
-      dataSnare = Wire.read();
-    }
-    // while (Wire.available())
-    //   Wire.read();
-  
-
+    data = Wire.read(); // Read Kick and save to data
+    delay(1);
+    dataSnare = Wire.read();
 
     for (int i = 0; i < 8; i++)
     {
@@ -162,17 +157,11 @@ void DrumManager::checkSequence(int flag)
 
     Wire.requestFrom(TINY2, 2);
     int dataTom, dataHiHat;
-    if(Wire.available()){
-      dataTom = Wire.read();
-      dataHiHat = Wire.read();
-    }
-    // while (Wire.available())
-    //   Wire.read();
-  
 
+    dataTom = Wire.read();
+    delay(1);
+    dataHiHat = Wire.read();
 
-    
-    
 
   //Tom
   //data = 0b00011001; // dummy for now will eventually be read from the tinys

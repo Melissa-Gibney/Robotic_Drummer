@@ -63,8 +63,8 @@ long unsigned int timeToRetractSolenoid = msHoldTime + msPerBeat; // Time to hol
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels. 
 // On an arduino MEGA 2560: 20(SDA), 21(SCL)
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 100000UL);     
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 400000UL, 100000UL);     
 
 // Variable Declarations
 // Rotary Encoder
@@ -104,20 +104,27 @@ Button debugButton(52, true);
 
 void debug(){
   Serial.println("PRESS");
-  Wire.beginTransmission(0x3C);
+
+  page_counter++;
+  page_counter = page_counter % 3;
+  print_page(page_counter);
+
+
+  // Wire.beginTransmission(SCREEN_ADDRESS);
+  // Wire.beginTransmission(0x3A);
+  // Wire.requestFrom(0x3A, 1);
 
   /********************************************************/
 
-  int bytes = 4;
+  // int bytes = 32;
 
-  for(int i = 0; i < bytes; i++){
-    // Wire.beginTransmission(SCREEN_ADDRESS);
-    Wire.write(0b01010101);  
-    // Wire.endTransmission(false);
-  }
+  // for(int i = 0; i < bytes; i++){
+  //   Wire.write(0b01010101);  
+  // }
 
   /********************************************************/
-  int err = Wire.endTransmission();
+  // int err = Wire.endTransmission();
+  int err = 0;
 
   switch(err){
     case 0:
@@ -149,6 +156,8 @@ void debug(){
 void setup() {
 
   Wire.begin();     
+  Wire.setClock(100000UL);
+  Wire.setWireTimeout(1500); // When I2C bus locks, loop() does not lock
   Serial.begin(9600);
 
   // DEBUG
@@ -198,10 +207,12 @@ void setup() {
   // Serial.println("Hi-Hat Sequence");
   // manager.printHiHatSequence();
 
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS, false, false)) {
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS, true, false)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
+
+  // display.dim(true);  // DEBUG
 
   // pinmode buttons
   pinMode(BUTTON1,INPUT);
@@ -214,64 +225,27 @@ void setup() {
 
   // // Welcome Screen displays for 3 seconds
   display.clearDisplay();
-  // display.fillCircle(64, 32, 30, SSD1306_WHITE);
-  // display.setTextSize(1);
-  // display.setTextColor(SSD1306_BLACK);
-  // display.setCursor(35, 30);
-  // display.println(F("Welcome...\n"));
-  // display.fillCircle(5, 5, 5, SSD1306_WHITE);
-  // display.drawCircle(122, 5, 5, SSD1306_WHITE);
-  // display.fillCircle(122, 58, 5, SSD1306_WHITE);
-  // display.drawCircle(5, 58, 5, SSD1306_WHITE);
   display.display();
-  // delay(3000);
-  // display.clearDisplay();
 
   // // set menus to the OLED display and initialize them
-  // tempo_display.set_display(display);
-  // preset_display.set_display(display);
-  // velocity_display.set_display(display);
-  // tempo_display.tempo = 120;
-  // velocity_display.velocity = 60;
-  // preset_display.preset_counter = 0;
+  tempo_display.set_display(display);
+  preset_display.set_display(display);
+  velocity_display.set_display(display);
+  tempo_display.tempo = 120;
+  velocity_display.velocity = 60;
+  preset_display.preset_counter = 0;
   
-  // print_page(page_counter); // initialize screen to the first page
+  print_page(page_counter); // initialize screen to the first page
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  // Keep track of elapsed milliseconds and update every set amount of milliseconds based on the tempo
-  // if(msBeatCount >= msPerBeat-msPullTimeKick && !drumsArePlaying)
-  // {
-  //   //Set drum timers to current time
-  //   manager.setDrumTimers(msPullTimeKick, msPullTimeTom, msPullTimeSnare, msPullTimeHiHat);
-  //   //Play drum at index
-  //   manager.playKick(curBeatIndex);
-  //   manager.playTom(curBeatIndex);
-  //   manager.playSnare(curBeatIndex);
-  //   manager.playHiHat(curBeatIndex);
-  //   drumsArePlaying = true;
-
-  //   //Set the amount of time the solenoid should be extended
-  //   timeToRetractSolenoid = msHoldTime + msPerBeat;
-  // }
-
-  // if(msBeatCount >= msPerBeat-msPullTimeKick && !drumsArePlaying)
-  // {
-  //   curBeatIndex = (curBeatIndex + 1) % N_STEPS;
-  //   manager.checkSequence();
-  //   //kick.print_sequence();
-  //   manager.setDrumTimers(msPerBeat-msPullTimeKick, msPullTimeTom, msPullTimeSnare, msPullTimeHiHat);
-  //   manager.playKick(curBeatIndex);
-  //   //manager.playTom(curBeatIndex);
-  //   drumsArePlaying = true;
-  // }
 
   //Check if there is a new beat
   if(msBeatCount >= msPerBeat)
   {
     curBeatIndex = (curBeatIndex + 1) % WIN_LEN;
     manager.checkSequence(alternate);
+    delay(5);
     // debug();
     alternate = (alternate == 1) ? 2 : 1;
     
