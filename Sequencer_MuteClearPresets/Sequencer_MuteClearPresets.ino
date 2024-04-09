@@ -377,6 +377,7 @@ void loop() {
     else // presets page
     {
       preset_display.select_preset(); // select preset
+      manager.set_preset(preset_display.get_preset());
     }
   }
 

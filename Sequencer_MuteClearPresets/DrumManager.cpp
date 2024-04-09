@@ -11,6 +11,13 @@
 #define TINY1 0x2A
 #define TINY2 0x2B
 
+int preset1[4][8]{
+ {1, 0, 1, 0, 1, 0, 1, 0},
+ {0, 1, 0, 1, 0, 1, 0, 1},
+ {0, 0, 0, 0, 0, 0, 1, 1},
+ {1, 1, 0, 1, 1, 1, 0, 0}
+};
+
 DrumManager::DrumManager()
 {
 
@@ -245,13 +252,13 @@ void DrumManager::stopKick()
 {
   kick.stop();
 }
-void DrumManager::stopTom()
-{
-  tom.stop();
-}
 void DrumManager::stopSnare()
 {
   snare.stop();
+}
+void DrumManager::stopTom()
+{
+  tom.stop();
 }
 void DrumManager::stopHiHat()
 {
@@ -262,7 +269,7 @@ void DrumManager::clearKick()
 {
   // reset kick sequence in the manager -- will be called when clear button pressed
   kick.reset_sequence();
-  // TODO reset sequence on matrix through Tinys
+  // TODO reset sequence on matrix through Tinys-- do we even need to run reset sequence then??? Since check sequence will read it?
 }
 void DrumManager::clearSnare()
 {
@@ -340,6 +347,18 @@ void DrumManager::setDrumTimers(unsigned long kickTime, unsigned long tomTime, u
   hihat.set_drum_timer(hihatTime);
 }
 
+void DrumManager::set_preset(int npreset)
+{
+  // Do we want presets stored as global arrays???
+  // Or do we want them read in from a text file???
+  Serial.println(npreset);
+  
+  // TODO send the presets to the Tinys
+  // Check sequence should then pick up on the changes
+
+
+
+}
 // // Check for change in the sequence
 // void DrumManager::checkFullSequence(int kickData, int tomData, int snareData, int hihatData)
 // {

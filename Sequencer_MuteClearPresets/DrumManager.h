@@ -68,5 +68,7 @@ class DrumManager
     void muteTom();
     void muteHiHat();
 
+    void set_preset(int npreset);
+
 };
 #endif

@@ -23,6 +23,7 @@ class preset_menu {
     void initialize_menu(); // initialize menu with the default 
     void highlight_preset();
     void select_preset();
+    int get_preset();
 };
 
 #endif

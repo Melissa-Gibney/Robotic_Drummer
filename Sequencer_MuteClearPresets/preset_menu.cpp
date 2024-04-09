@@ -69,7 +69,6 @@ void preset_menu::initialize_menu()
       display.fillCircle(5, 48, 2, SSD1306_BLACK);
       display.fillCircle(5, 58, 2, SSD1306_WHITE);
     }
-
   }
 
   display.display();
@@ -312,5 +311,10 @@ void preset_menu::select_preset() // Flashes the highlighted preset!
 
   display.display();
 
+}
+
+int preset_menu::get_preset()
+{
+  return selected_preset;
 }
 
