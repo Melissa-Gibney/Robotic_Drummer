@@ -1,4 +1,4 @@
-// modified: 4/9/24
+// modified: 4/10/24
 
 /* UTIL LIBRARIES */
 #include "util.h"
@@ -11,28 +11,11 @@
 #include "DrumManager.h"
 
 /* DISPLAY LIBRARIES */
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include "tempo_menu.h"
-#include "preset_menu.h"
-#include "velocity_menu.h"
+#include "Display.h"
 
 /********************************************************************* DISPLAY INIT ***********************************************************************************/
 
-// TODO: make display manager
-
-// Declare OLED display
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 400000UL, 100000UL);  
-
-// Declare display pages
-tempo_menu tempo_display;
-preset_menu preset_display;
-velocity_menu velocity_display;
-
-// Page marker
-int page_counter = 0; 
-void print_page(int counter);
-
+DisplayManager dispManager;
 
 /********************************************************************* SEQUENCER INIT *********************************************************************************/
 
@@ -75,27 +58,8 @@ void setup() {
   digitalWrite(SDA, LOW);
   digitalWrite(SCL, LOW);
 
-
-
   // Begin display
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS, true, false)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-  }
-
-  // Init display menus
-  tempo_display.set_display(display);
-  preset_display.set_display(display);
-  velocity_display.set_display(display);
-  tempo_display.tempo = 120;
-  velocity_display.velocity = 60;
-  preset_display.preset_counter = 0;
-
-  display.clearDisplay();
-  display.display();
-  print_page(page_counter); // initialize screen to the first page
-
-  
+  dispManager.init();
 
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
@@ -103,8 +67,6 @@ void setup() {
     pinMode(LED_TEMPO_PINS[i], OUTPUT);
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
-
-
 
   // Init sequence using DUMMY sequence
   manager.checkSequence(readFlag);
@@ -120,8 +82,6 @@ void loop() {
   rotary1.loop();
   button1.loop();
   button2.loop();
-
-
 
   // Begin new beat
   if(msBeatCount >= msPerBeat)
@@ -147,116 +107,25 @@ void loop() {
   // Update drums
   manager.loop();
 
+  // Display buttons
+  if (button1.justPressed())
+    dispManager.movePage(1);
+  
+  if (button2.justPressed())
+    dispManager.movePage(-1);
 
 
-  // Update display page
-  if (button1.justPressed()){
-    page_counter++;
-    page_counter = page_counter % 3;
-    print_page(page_counter);
-  }
+  // Display rotary encoder
+  if(rotary1.justPressed())
+    dispManager.rotaryPress();
 
-  if (button2.justPressed()){
-    page_counter--;
-    if (page_counter == -1)
-    {
-      page_counter = 2;
-    }
-    page_counter = page_counter % 3;
-    print_page(page_counter);
-  }
-
-
-  //Check for rotary encoder button press
-  if(rotary1.justPressed()){
-    
-    if(page_counter == 1) // tempo page
-    {
-      tempo_display.tempo = 120;
-      tempo_display.update_tempo();
-    }
-    
-    else if(page_counter == 2) // velocity page
-    {
-      velocity_display.velocity = 60;
-      velocity_display.update_velocity();
-    }
-
-    else // presets page
-    {
-      preset_display.select_preset(); // select preset
-    }
-  }
-
-  //Check for change in the rotary encoder
   if(rotary1.rotated() == 1)  // CW
-  {
-    switch(page_counter){
-      case 0:   // presets
-        preset_display.preset_counter++;
-        preset_display.preset_counter %= 4;
-        preset_display.highlight_preset();
-        break;
-
-      case 1:   // tempo
-        tempo_display.tempo++;
-        if(tempo_display.tempo > 150)
-          tempo_display.tempo = 150;
-        tempo_display.update_tempo();
-        break;
-
-      case 2:   // velocity
-        velocity_display.velocity++;
-        if(velocity_display.velocity > 127)
-          velocity_display.velocity = 127;
-        velocity_display.update_velocity();
-        break;
-    }
-  }
+    dispManager.rotaryCW();
 
   else if(rotary1.rotated() == 2) // CCW
-  {
-    switch(page_counter){
-      case 0:   // presets
-        preset_display.preset_counter--;
-        if (preset_display.preset_counter == -1)
-          preset_display.preset_counter = 3;
-        preset_display.preset_counter %= 4;
-        preset_display.highlight_preset();
-        break;
-
-      case 1:   // tempo
-        tempo_display.tempo--;
-        if(tempo_display.tempo < 90)
-          tempo_display.tempo = 90;
-        tempo_display.update_tempo();
-        break;
-
-      case 2:   // velocity
-        velocity_display.velocity--;
-        if(velocity_display.velocity < 0)
-          velocity_display.velocity = 0;
-        velocity_display.update_velocity();
-        break;
-    }
-  }
+    dispManager.rotaryCCW();
 }
 
-// Function for cycling through pages!
-void print_page(int counter){
-  if (counter == 0)
-  {
-    preset_display.initialize_menu();
-  }
-  else if (counter == 1)
-  {
-    tempo_display.initialize_menu();
-  }
-  else
-  {
-    velocity_display.initialize_menu();
-  }
-}
 
 // int sequenceToBitwise(int seqData[])
 // {

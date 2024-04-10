@@ -17,6 +17,12 @@
 
 enum Alt {T1, T2, DUMMY};   // TINY query flags
 
+#define TEMPO_MIN 10    // BPM
+#define TEMPO_MAX 200   // BPM
+
+#define VELOCITY_MIN 0  
+#define VELOCITY_MAX 127
+
 
 // Pins
 #define SOL_PIN_KICK  54    // A0
