@@ -86,6 +86,20 @@ int b2state;
 int prevb1state = 0;
 int prevb2state = 0;
 
+// Clear Buttons
+#define ClearKickPin 49
+#define ClearSnarePin 48
+#define ClearTomPin 47
+#define ClearHiHatPin 46
+int ckstate;
+int prev_ckstate = 0;
+int csstate;
+int prev_csstate = 0;
+int ctstate;
+int prev_ctstate = 0;
+int chstate;
+int prev_chstate = 0;
+
 // declare objects for the pages
 tempo_menu tempo_display;
 preset_menu preset_display;
@@ -204,8 +218,14 @@ void setup() {
   }
 
   // pinmode buttons
-  pinMode(BUTTON1,INPUT);
-  pinMode(BUTTON2,INPUT);
+  pinMode(BUTTON1,INPUT_PULLUP);
+  pinMode(BUTTON2,INPUT_PULLUP);
+
+  // pinmode clear buttons
+  pinMode(ClearKickPin, INPUT_PULLUP);
+  pinMode(ClearSnarePin, INPUT_PULLUP);
+  pinMode(ClearTomPin, INPUT_PULLUP);
+  pinMode(ClearHiHatPin, INPUT_PULLUP);
 
   // pinmode for rotary encoder
   pinMode(ROTARY_a, INPUT);
@@ -214,28 +234,28 @@ void setup() {
 
   // // Welcome Screen displays for 3 seconds
   display.clearDisplay();
-  // display.fillCircle(64, 32, 30, SSD1306_WHITE);
-  // display.setTextSize(1);
-  // display.setTextColor(SSD1306_BLACK);
-  // display.setCursor(35, 30);
-  // display.println(F("Welcome...\n"));
-  // display.fillCircle(5, 5, 5, SSD1306_WHITE);
-  // display.drawCircle(122, 5, 5, SSD1306_WHITE);
-  // display.fillCircle(122, 58, 5, SSD1306_WHITE);
-  // display.drawCircle(5, 58, 5, SSD1306_WHITE);
+  display.fillCircle(64, 32, 30, SSD1306_WHITE);
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_BLACK);
+  display.setCursor(35, 30);
+  display.println(F("Welcome...\n"));
+  display.fillCircle(5, 5, 5, SSD1306_WHITE);
+  display.drawCircle(122, 5, 5, SSD1306_WHITE);
+  display.fillCircle(122, 58, 5, SSD1306_WHITE);
+  display.drawCircle(5, 58, 5, SSD1306_WHITE);
   display.display();
-  // delay(3000);
-  // display.clearDisplay();
+  delay(3000);
+  display.clearDisplay();
 
-  // // set menus to the OLED display and initialize them
-  // tempo_display.set_display(display);
-  // preset_display.set_display(display);
-  // velocity_display.set_display(display);
-  // tempo_display.tempo = 120;
-  // velocity_display.velocity = 60;
-  // preset_display.preset_counter = 0;
+  // set menus to the OLED display and initialize them
+  tempo_display.set_display(display);
+  preset_display.set_display(display);
+  velocity_display.set_display(display);
+  tempo_display.tempo = 120;
+  velocity_display.velocity = 60;
+  preset_display.preset_counter = 0;
   
-  // print_page(page_counter); // initialize screen to the first page
+  print_page(page_counter); // initialize screen to the first page
 }
 
 void loop() {
@@ -336,6 +356,11 @@ void loop() {
   // read button states
   b1state = digitalRead(BUTTON1);
   b2state = digitalRead(BUTTON2);
+
+  ckstate = digitalRead(ClearKickPin);
+  csstate = digitalRead(ClearSnarePin);
+  ctstate = digitalRead(ClearTomPin);
+  chstate = digitalRead(ClearHiHatPin);
 
   // To turn pages
   if (b1state && !prevb1state){
@@ -449,11 +474,33 @@ void loop() {
     }
   }
 
+  // Check to see if Clear Buttons have been pressed
+  if (ckstate && !prev_ckstate){
+    manager.clearKick();
+  }
+
+  if (csstate && !prev_csstate){
+    manager.clearSnare();
+  }
+
+  if (ctstate && !prev_ctstate){
+    manager.clearTom();
+  }
+
+  if (chstate && !prev_chstate){
+    manager.clearHiHat();
+  }
+
   // update previous button and encoder states
   prevb1state = b1state;
   prevb2state = b2state;
   ROTARY_state_prev = ROTARY_state_a;
   ROTARY_state_button_prev = ROTARY_state_button;
+
+  prev_ckstate = ckstate;
+  prev_csstate = csstate;
+  prev_ctstate = ctstate;
+  prev_chstate = chstate;
 
 }
 

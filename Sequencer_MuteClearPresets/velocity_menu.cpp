@@ -35,7 +35,7 @@ void velocity_menu::initialize_menu()
   display.println(F("Velocity (in MIDI):"));
   display.setCursor(10, 40);
   display.print(velocity);
-  // display.display();
+  display.display();
 }
 
 // function called when rotary encoder is changed

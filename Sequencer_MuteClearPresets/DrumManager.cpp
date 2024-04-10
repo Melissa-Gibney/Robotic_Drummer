@@ -268,26 +268,47 @@ void DrumManager::stopHiHat()
 void DrumManager::clearKick()
 {
   // reset kick sequence in the manager -- will be called when clear button pressed
-  kick.reset_sequence();
+  //kick.reset_sequence();
+  int snare_seq = snare.get_sequence();
   // TODO reset sequence on matrix through Tinys-- do we even need to run reset sequence then??? Since check sequence will read it?
+  Wire.beginTransmission(TINY1);
+  Wire.write(0b00000000);
+  Wire.write(snare_seq);
+  Wire.endTransmission();
+
 }
 void DrumManager::clearSnare()
 {
   // reset snare sequence in the manager -- will be called when clear button pressed
-  snare.reset_sequence();
+  //snare.reset_sequence();
+  int kick_seq = kick.get_sequence();
   // TODO reset sequence on matrix through Tinys
+  Wire.beginTransmission(TINY1);
+  Wire.write(kick_seq);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
 }
 void DrumManager::clearTom()
 {
   // reset tom sequence in the manager -- will be called when clear button pressed
-  tom.reset_sequence();
+  //tom.reset_sequence();
+  int hihat_seq = hihat.get_sequence();
   // TODO reset sequence on matrix through Tinys
+  Wire.beginTransmission(TINY2);
+  Wire.write(0b00000000);
+  Wire.write(hihat_seq);
+  Wire.endTransmission();
 }
 void DrumManager::clearHiHat()
 {
   // reset hihat sequence in the manager -- will be called when clear button pressed
-  hihat.reset_sequence();
+  //hihat.reset_sequence();
+  int tom_seq = tom.get_sequence();
   // TODO reset sequence on matrix through Tinys
+  Wire.beginTransmission(TINY2);
+  Wire.write(tom_seq);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
 }
 
 void DrumManager::muteKick()
@@ -351,12 +372,46 @@ void DrumManager::set_preset(int npreset)
 {
   // Do we want presets stored as global arrays???
   // Or do we want them read in from a text file???
-  Serial.println(npreset);
   
-  // TODO send the presets to the Tinys
-  // Check sequence should then pick up on the changes
+  //TODO send the presets to the Tinys
+  //Check sequence should then pick up on the changes
+  if (npreset == 1){
+    //Dummy Preset
+    int data = 0b10101010;
+    int dataSnare = 0b01010101;
+    int dataTom = 0b01010101;
+    int dataHiHat = 0b01010101;
 
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission(TINY1);
 
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission(TINY2);
+
+  }
+
+  if (npreset == 2){
+    //Dummy Preset
+    int data = 0b00111100;
+    int dataSnare = 0b11001101;
+    int dataTom = 0b11011101;
+    int dataHiHat = 0b10010011;
+
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission(TINY1);
+
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission(TINY2);
+
+  }
 
 }
 // // Check for change in the sequence

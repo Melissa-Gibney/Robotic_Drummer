@@ -85,6 +85,18 @@ void Drum::stop()
   analogWrite(solenoidPin, 0);
 }
 
+int Drum::get_sequence()
+{
+  int bin_sequence = 0;
+  for(int i = 0; i < 8; i++)
+  {
+    bin_sequence = bin_sequence | (sequence[i] << i);
+    //bin_sequence = bin_sequence << 1;
+    //bin_sequence = bin_sequence + (sequence[i] & 0b00000001);
+  }
+  return bin_sequence;
+}
+
 // For testing!
 void Drum::print_sequence()
 {

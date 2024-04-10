@@ -41,5 +41,8 @@ class Drum
     // flag that drum is muted
     bool mute = 0;
 
+    // flag to convert the drum sequence to a binary number
+    int get_sequence();
+
 };
 #endif
