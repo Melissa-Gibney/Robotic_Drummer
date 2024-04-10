@@ -1,342 +1,85 @@
-// Drum Manager Class CPP FIle
-// author: Hanna Berger
-// modified: 3/18/24
+// modified: 4/9/24
 
+#include "util.h"
 #include "DrumManager.h"
-#include "Drum.h"
-#include <Arduino.h>
-#include <Wire.h>
 
-// I2C addresses for the Tinys
-#define TINY1 0x2A
-#define TINY2 0x2B
+// Constructor
+DrumManager::DrumManager(int kp, int sp, int tp, int hp) : kick(kp), snare(sp), tom(tp), hihat(hp) {}
 
-DrumManager::DrumManager()
+// Play current beat
+void DrumManager::play(int beat)
 {
-
+  kick.play(beat);
+  snare.play(beat);
+  tom.play(beat);
+  hihat.play(beat);
 }
 
-void DrumManager::assignDrums(Drum *kk, Drum *sn, Drum *tm, Drum *hh)
+// Update state, stop if needed
+void DrumManager::loop()
 {
-  kick = *kk;
-  snare = *sn;
-  tom = *tm;
-  hihat = *hh;
+  kick.loop();
+  snare.loop();
+  tom.loop();
+  hihat.loop();
 }
 
-void DrumManager::assignSolenoids(int kickPin, int tomPin, int snarePin, int hihatPin)
-{
-  kick.set_solenoid_pin(kickPin);
-  tom.set_solenoid_pin(tomPin);
-  snare.set_solenoid_pin(snarePin);
-  hihat.set_solenoid_pin(hihatPin);
-}
-
-Drum DrumManager::getKick()
-{
-  return kick;
-}
-
-Drum DrumManager::getTom()
-{
-  return tom;
-}
-
-Drum DrumManager::getSnare()
-{
-  return snare;
-}
-
-Drum DrumManager::getHiHat()
-{
-  return hihat;
-}
-
-// Check for change in the sequence
+// Query TINYs for change in pattern
 void DrumManager::checkSequence(int flag)
 {
-  // Read in sequences from button matrix and parse them here!
-  // Row 1 Address 0x2A - byte 1
-  // Row 2 Address 0x2A - byte 2
-  // Row 3 Address 0x2B - byte 1
-  // Row 4 Address 0x2B - byte 2
-  int kick_seq[8];
-  int snare_seq[8];
-  int tom_seq[8];
-  int hihat_seq[8];
+  // Temp sequences
+  int newKickSeq[WIN_LEN]   = {0};
+  int newSnareSeq[WIN_LEN]  = {0};
+  int newTomSeq[WIN_LEN]    = {0};
+  int newHiHatSeq[WIN_LEN]  = {0};
 
-  if (flag == 3) {
-    int data = 0b10101010;
-    int dataSnare = 0b01010101;
-    int dataTom = 0b01010101;
-    int dataHiHat = 0b01010101;
+  int data1 = 0, data2 = 0;
+
+  if (flag == DUMMY) 
+  {
+    data1 = 0b10101010;
+    data2 = 0b01010101;
   }
 
-  // if (flag == 1) {
-
-  //   //int data = 0b10101010;
-  //   //int dataSnare = 0b01010101;
-  //   Wire.requestFrom(TINY1, 2);
-  //   int data = Wire.read(); // Read Kick and save to data
-  //   int dataSnare = Wire.read();
-
-  // }
-
-  // if (flag == 2){
-  //   Wire.requestFrom(TINY2, 2);
-  //   int dataTom = Wire.read();
-  //   int dataHiHat = Wire.read();
-
-
-  // }
-
-  // Request Kick and Snare Data from TINY 1
-  //int data = 0b10101010;
-  //int dataSnare = 0b01010101;
-  // Wire.requestFrom(TINY1, 2);
-  // data = Wire.read(); // Read Kick and save to data
-  // dataSnare = Wire.read();
-
-  // while (Wire.available()){
-  //   Wire.read();
-  // }
-  // Now Request from TINY 2 to get Tom and HiHat Data
-  //Wire.requestFrom(TINY2, 2);
-  //int dataTom = Wire.read();
-  //int dataHiHat = Wire.read();
-  
-  
-  // Kick
-  //int data = 0b10101010; // dummy for now will eventually be read from the tinys
-
-  if (flag == 1) {
+  else if (flag == T1) 
+  {
     Wire.requestFrom(TINY1, 2);
-    int data, dataSnare;
 
-    data = Wire.read(); // Read Kick and save to data
-    delay(1);
-    dataSnare = Wire.read();
+    data1 = Wire.read();
+    data2 = Wire.read();
 
-    for (int i = 0; i < 8; i++)
-    {
-      if (data & (1<<i))
-      {
-        kick_seq[i] = 1;
-        //Serial.print(1);
-      }
-      else
-      {
-        kick_seq[i] = 0;
-        //Serial.print(0);
-      }
-    }
-    // Assign the parsed sequence
-    kick.update_sequence(kick_seq);
-    //kick.print_sequence();
+    // Kick
+    for (int i = 0; i < WIN_LEN; i++)
+      newKickSeq[i] = (data1 & (1<<i)) ? 1 : 0;
+
+    kick.update_sequence(newKickSeq);
 
     // Snare
-    for (int i = 0; i < 8; i++)
-    {
-      if (dataSnare & (1<<i))
-      {
-        snare_seq[i] = 1;
-      }
-      else
-      {
-        snare_seq[i] = 0;
-      }
-    }
-    // Assign the parsed sequence
-    snare.update_sequence(snare_seq);
+    for (int i = 0; i < WIN_LEN; i++)
+      newSnareSeq[i] = (data2 & (1<<i)) ? 1 : 0;
+    
+    snare.update_sequence(newSnareSeq);
   }
   
-  
-  // data = Wire.read(); // assign Tom sequence to data
 
-  if (flag == 2 ) {
-
+  else if (flag == T2 ) 
+  {
     Wire.requestFrom(TINY2, 2);
-    int dataTom, dataHiHat;
 
-    dataTom = Wire.read();
-    delay(1);
-    dataHiHat = Wire.read();
+    data1 = Wire.read();
+    data2 = Wire.read();
 
 
-  //Tom
-  //data = 0b00011001; // dummy for now will eventually be read from the tinys
-  // Serial.print(dataTom);
-  for (int i = 0; i < 8; i++)
-  {
-    if (dataTom & (1<<i))
-    {
-      tom_seq[i] = 1;
-    }
-    else
-    {
-      tom_seq[i] = 0;
-    }
-  }
-  // Assign the parsed sequence
-  tom.update_sequence(tom_seq);
+    //Tom
+    for (int i = 0; i < WIN_LEN; i++)
+      newTomSeq[i] = (data1 & (1<<i)) ? 1 : 0;
 
-  // HiHat
-  //data = 0b01101101; // dummy for now will eventually be read from the tinys
-  //data = Wire.read(); // read from TINY 2 byte 2 to get hihat sequence
-  for (int i = 0; i < 8; i++)
-  {
-    if (dataHiHat & (1<<i))
-    {
-      hihat_seq[i] = 1;
-    }
-    else
-    {
-      hihat_seq[i] = 0;
-    }
-  }
-  // Assign the parsed sequence
-  hihat.update_sequence(hihat_seq);
+    tom.update_sequence(newTomSeq);
+
+    // HiHat
+    for (int i = 0; i < WIN_LEN; i++)
+      newHiHatSeq[i] = (data2 & (1<<i)) ? 1 : 0;
+
+    hihat.update_sequence(newHiHatSeq);
   }
 }
-
-
-
-void DrumManager::playKick(int beat_idx)
-{
-  kick.play(beat_idx);
-}
-void DrumManager::playSnare(int beat_idx)
-{
-  snare.play(beat_idx);
-}
-void DrumManager::playTom(int beat_idx)
-{
-  tom.play(beat_idx);
-}
-void DrumManager::playHiHat(int beat_idx)
-{
-  hihat.play(beat_idx);
-}
-
-void DrumManager::stopKick()
-{
-  kick.stop();
-}
-void DrumManager::stopTom()
-{
-  tom.stop();
-}
-void DrumManager::stopSnare()
-{
-  snare.stop();
-}
-void DrumManager::stopHiHat()
-{
-  hihat.stop();
-}
-
-void DrumManager::setDrumTimers(unsigned long kickTime, unsigned long tomTime, unsigned long snareTime, unsigned long hihatTime)
-{
-  kick.set_drum_timer(kickTime);
-  tom.set_drum_timer(tomTime);
-  snare.set_drum_timer(snareTime);
-  hihat.set_drum_timer(hihatTime);
-}
-
-// // Check for change in the sequence
-// void DrumManager::checkFullSequence(int kickData, int tomData, int snareData, int hihatData)
-// {
-//   // Read in sequences from button matrix and parse them here!
-//   // Row 1 Address 0x2A - byte 1
-//   // Row 2 Address 0x2A - byte 2
-//   // Row 3 Address 0x2B - byte 1
-//   // Row 4 Address 0x2B - byte 2
-
-//   int kick_seq[8];
-//   int snare_seq[8];
-//   int tom_seq[8];
-//   int hihat_seq[8];
-
-//   // Kick
-//   int data = kickData; // dummy for now will eventually be read from the tinys
-//   for (int i = 0; i < 8; i++)
-//   {
-//     if ((1<<i) & (data & (1<<i)))
-//     {
-//       kick_seq[i] = 1;
-//     }
-//     else
-//     {
-//       kick_seq[i] = 0;
-//     }
-//   }
-//   // Assign the parsed sequence
-//   kick.update_sequence(kick_seq);
-
-//   // Snare
-//   data = snareData; // dummy for now will eventually be read from the tinys
-//   for (int i = 0; i < 8; i++)
-//   {
-//     if ((1<<i) & (data & (1<<i)))
-//     {
-//       snare_seq[i] = 1;
-//     }
-//     else
-//     {
-//       snare_seq[i] = 0;
-//     }
-//   }
-//   // Assign the parsed sequence
-//   snare.update_sequence(snare_seq);
-
-//   // Tom
-//   data = tomData; // dummy for now will eventually be read from the tinys
-//   for (int i = 0; i < 8; i++)
-//   {
-//     if ((1<<i) & (data & (1<<i)))
-//     {
-//       tom_seq[i] = 1;
-//     }
-//     else
-//     {
-//       tom_seq[i] = 0;
-//     }
-//   }
-//   // Assign the parsed sequence
-//   tom.update_sequence(tom_seq);
-
-//   // HiHat
-//   data = hihatData; // dummy for now will eventually be read from the tinys
-//   for (int i = 0; i < 8; i++)
-//   {
-//     if ((1<<i) & (data & (1<<i)))
-//     {
-//       hihat_seq[i] = 1;
-//     }
-//     else
-//     {
-//       hihat_seq[i] = 0;
-//     }
-//   }
-//   // Assign the parsed sequence
-//   hihat.update_sequence(hihat_seq);
-// }
-
-// // Check for change in one drum's sequence
-// void DrumManager::checkSingleSequence(int newData, int drumIndex)
-// {
-//   int new_seq[8];
-
-//   int data = newData; // dummy for now will eventually be read from the tinys
-//   for (int i = 0; i < 8; i++)
-//   {
-//     if ((1<<i) & (data & (1<<i)))
-//     {
-//       new_seq[i] = 1;
-//     }
-//     else
-//     {
-//       new_seq[i] = 0;
-//     }
-//   }
-

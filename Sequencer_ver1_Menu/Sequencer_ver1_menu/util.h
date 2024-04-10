@@ -6,23 +6,37 @@
 
 
 // Macros
-#define DEBOUNCE 10
+#define DEBOUNCE 10   // ms
 
-#define MAX_LEN 32
-#define WIN_LEN 8
+#define MAX_LEN 32    // steps
+#define WIN_LEN 8     // steps
 
-#define SOL_PIN_KICK 54
-#define SOL_PIN_SNARE 55
-#define SOL_PIN_TOM 56
-#define SOL_PIN_HIHAT 57
+#define SCREEN_WIDTH  128   // pixels
+#define SCREEN_HEIGHT 64    // pixels 
+#define OLED_RESET    -1    // share Arduino reset pin
 
-const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+enum Alt {T1, T2, DUMMY};   // TINY query flags
+
+
+// Pins
+#define SOL_PIN_KICK  54    // A0
+#define SOL_PIN_SNARE 55    // A1
+#define SOL_PIN_TOM   56    // A2
+#define SOL_PIN_HIHAT 57    // A3
+
+#define ROT1_PIN_CLK  30
+#define ROT1_PIN_DT   29
+#define ROT1_PIN_SW   28      
+
+#define BUTTON1_PIN   50
+#define BUTTON2_PIN   51
+
+const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
 
 
 // I2C addresses
 #define TINY1 0x2A
 #define TINY2 0x2B
-#define MASTER 0x0F
 #define SCREEN_ADDRESS 0x3C
 
 
