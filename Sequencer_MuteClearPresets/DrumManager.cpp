@@ -11,6 +11,12 @@
 #define TINY1 0x2A
 #define TINY2 0x2B
 
+// For Mute LEDS
+#define MuteKickLED 41
+#define MuteSnareLED 40
+#define MuteTomLED 39
+#define MuteHiHatLED 38
+
 int preset1[4][8]{
  {1, 0, 1, 0, 1, 0, 1, 0},
  {0, 1, 0, 1, 0, 1, 0, 1},
@@ -317,10 +323,12 @@ void DrumManager::muteKick()
   if (kick.mute == 0)
   {
     kick.mute = 1;
+    digitalWrite(MuteKickLED, HIGH);
   }
   else
   {
     kick.mute = 0;
+    digitalWrite(MuteKickLED, LOW);
   }
 }
 void DrumManager::muteSnare()
@@ -329,10 +337,12 @@ void DrumManager::muteSnare()
   if (snare.mute == 0)
   {
     snare.mute = 1;
+    //digitalWrite(MuteSnareLED, HIGH);
   }
   else
   {
     snare.mute = 0;
+    //digitalWrite(MuteSnareLED, LOW);
   }
 }
 void DrumManager::muteTom()
@@ -341,10 +351,12 @@ void DrumManager::muteTom()
   if (tom.mute == 0)
   {
     tom.mute = 1;
+    //digitalWrite(MuteTomLED, HIGH);
   }
   else
   {
     tom.mute = 0;
+    //digitalWrite(MuteTomLED, LOW);
   }
 }
 void DrumManager::muteHiHat()
@@ -353,10 +365,12 @@ void DrumManager::muteHiHat()
   if (hihat.mute == 0)
   {
     hihat.mute = 1;
+    digitalWrite(MuteHiHatLED, HIGH);
   }
   else
   {
     hihat.mute = 0;
+    //digitalWrite(MuteHiHatLED, LOW);
   }
 }
 

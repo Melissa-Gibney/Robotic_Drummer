@@ -100,6 +100,24 @@ int prev_ctstate = 0;
 int chstate;
 int prev_chstate = 0;
 
+// Mute Buttons + LEDs
+#define MuteKickLED 41
+#define MuteSnareLED 40
+#define MuteTomLED 39
+#define MuteHiHatLED 38
+#define MuteKick 45
+#define MuteSnare 44
+#define MuteTom 43
+#define MuteHiHat 42
+int mkstate;
+int prev_mkstate = 0;
+int msstate;
+int prev_msstate = 0;
+int mtstate;
+int prev_mtstate = 0;
+int mhstate;
+int prev_mhstate = 0;
+
 // declare objects for the pages
 tempo_menu tempo_display;
 preset_menu preset_display;
@@ -226,6 +244,22 @@ void setup() {
   pinMode(ClearSnarePin, INPUT_PULLUP);
   pinMode(ClearTomPin, INPUT_PULLUP);
   pinMode(ClearHiHatPin, INPUT_PULLUP);
+
+  // pinmode clear buttons
+  pinMode(MuteKick, INPUT_PULLUP);
+  pinMode(MuteSnare, INPUT_PULLUP);
+  pinMode(MuteTom, INPUT_PULLUP);
+  pinMode(MuteHiHat, INPUT_PULLUP);
+
+  // pinmode Mute LEDS
+  pinMode(MuteKickLED, OUTPUT);
+  pinMode(MuteSnareLED, OUTPUT);
+  pinMode(MuteTomLED, OUTPUT);
+  pinMode(MuteHiHatLED, OUTPUT);
+  digitalWrite(MuteKickLED, LOW);
+  digitalWrite(MuteSnareLED, LOW);
+  digitalWrite(MuteTomLED, LOW);
+  digitalWrite(MuteHiHatLED, LOW);
 
   // pinmode for rotary encoder
   pinMode(ROTARY_a, INPUT);
@@ -362,6 +396,11 @@ void loop() {
   ctstate = digitalRead(ClearTomPin);
   chstate = digitalRead(ClearHiHatPin);
 
+  mkstate = digitalRead(MuteKick);
+  msstate = digitalRead(MuteSnare);
+  mtstate = digitalRead(MuteTom);
+  mhstate = digitalRead(MuteHiHat);
+
   // To turn pages
   if (b1state && !prevb1state){
     page_counter++;
@@ -491,6 +530,23 @@ void loop() {
     manager.clearHiHat();
   }
 
+  // Check to see if Mute Buttons have been pressed
+  if (mkstate && !prev_mkstate){
+    manager.muteKick();
+  }
+
+  if (msstate && !prev_msstate){
+    manager.muteSnare();
+  }
+
+  if (mtstate && !prev_mtstate){
+    manager.muteTom();
+  }
+
+  if (mhstate && !prev_mhstate){
+    manager.muteHiHat();
+  }
+
   // update previous button and encoder states
   prevb1state = b1state;
   prevb2state = b2state;
@@ -501,6 +557,11 @@ void loop() {
   prev_csstate = csstate;
   prev_ctstate = ctstate;
   prev_chstate = chstate;
+
+  prev_mkstate = mkstate;
+  prev_msstate = msstate;
+  prev_mtstate = mtstate;
+  prev_mhstate = mhstate;
 
 }
 
