@@ -337,12 +337,12 @@ void DrumManager::muteSnare()
   if (snare.mute == 0)
   {
     snare.mute = 1;
-    //digitalWrite(MuteSnareLED, HIGH);
+    digitalWrite(MuteSnareLED, HIGH);
   }
   else
   {
     snare.mute = 0;
-    //digitalWrite(MuteSnareLED, LOW);
+    digitalWrite(MuteSnareLED, LOW);
   }
 }
 void DrumManager::muteTom()
@@ -351,12 +351,12 @@ void DrumManager::muteTom()
   if (tom.mute == 0)
   {
     tom.mute = 1;
-    //digitalWrite(MuteTomLED, HIGH);
+    digitalWrite(MuteTomLED, HIGH);
   }
   else
   {
     tom.mute = 0;
-    //digitalWrite(MuteTomLED, LOW);
+    digitalWrite(MuteTomLED, LOW);
   }
 }
 void DrumManager::muteHiHat()
@@ -370,7 +370,7 @@ void DrumManager::muteHiHat()
   else
   {
     hihat.mute = 0;
-    //digitalWrite(MuteHiHatLED, LOW);
+    digitalWrite(MuteHiHatLED, LOW);
   }
 }
 
