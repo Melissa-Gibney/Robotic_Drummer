@@ -109,10 +109,10 @@ void loop() {
 
   // Display buttons
   if (button1.justPressed())
-    dispManager.movePage(1);
+    dispManager.movePage(1);  // increment
   
   if (button2.justPressed())
-    dispManager.movePage(-1);
+    dispManager.movePage(-1); // decrement
 
 
   // Display rotary encoder
@@ -125,15 +125,3 @@ void loop() {
   else if(rotary1.rotated() == 2) // CCW
     dispManager.rotaryCCW();
 }
-
-
-// int sequenceToBitwise(int seqData[])
-// {
-//   int bitwiseNum = 0b00000000;
-//   for(int i = 0; i < N_STEPS; i++)
-//   {
-//     bitwiseNum = bitwiseNum << 1;
-//     bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
-//   }
-//   return bitwiseNum;
-// }

@@ -10,12 +10,12 @@
 class Page
 {
   protected:
-    Adafruit_SSD1306 display;
+    Adafruit_SSD1306 * display;
 
   public:
-    Page(Adafruit_SSD1306 & d)
+    Page(Adafruit_SSD1306 * d)
     {
-      this->display = d;
+      display = d;
     }
 
     virtual void drawPage();
@@ -34,7 +34,7 @@ class TempoPage : public Page
     int tempo;
 
   public:
-    TempoPage(Adafruit_SSD1306 & d) : Page(d)
+    TempoPage(Adafruit_SSD1306 * d) : Page(d)
     {
       tempo = tempoDefault;
     }
@@ -56,7 +56,7 @@ class VelocityPage : public Page
     int velocity;
 
   public:
-    VelocityPage(Adafruit_SSD1306 & d) : Page(d)
+    VelocityPage(Adafruit_SSD1306 * d) : Page(d)
     {
       velocity = velocityDefault;
     }
@@ -79,7 +79,7 @@ class PresetPage : public Page
     int preset = 0;
 
   public:
-    PresetPage(Adafruit_SSD1306 & d) : Page(d) {}
+    PresetPage(Adafruit_SSD1306 * d) : Page(d) {}
 
     void drawPage();
 
@@ -98,7 +98,7 @@ class DisplayManager
 
     static const int nPages = 3;
     int page = 0;
-    Page * pages[nPages];
+    Page** pages = new Page* [nPages];
     
 
   public:
