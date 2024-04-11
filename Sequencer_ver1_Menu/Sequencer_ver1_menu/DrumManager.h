@@ -15,6 +15,9 @@ class DrumManager
     DrumManager(int kp, int sp, int tp, int hp);
 
     void checkSequence(int flag);
+
+    void setTempo(int ms);
+
     void play(int beat);
     void loop();
 

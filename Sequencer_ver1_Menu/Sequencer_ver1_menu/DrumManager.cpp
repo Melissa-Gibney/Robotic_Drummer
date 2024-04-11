@@ -6,6 +6,17 @@
 // Constructor
 DrumManager::DrumManager(int kp, int sp, int tp, int hp) : kick(kp), snare(sp), tom(tp), hihat(hp) {}
 
+
+// Set tempo in ms
+void DrumManager::setTempo(int ms)
+{
+  kick.setPlayDur(ms/2);
+  snare.setPlayDur(ms/2);
+  tom.setPlayDur(ms/2);
+  hihat.setPlayDur(ms/2);
+}
+
+
 // Play current beat
 void DrumManager::play(int beat)
 {

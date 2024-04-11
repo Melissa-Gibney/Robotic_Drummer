@@ -27,6 +27,8 @@ class Drum
     void update_sequence(int *new_sequence);
     void update_velocity(int *new_velocity);
 
+    void setPlayDur(int dur) { playDur = dur; }
+
     void play(int beat);
     void loop();
 };

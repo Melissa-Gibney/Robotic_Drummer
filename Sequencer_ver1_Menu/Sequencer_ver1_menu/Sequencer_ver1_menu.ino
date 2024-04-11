@@ -20,7 +20,7 @@ DisplayManager dispManager;
 /********************************************************************* SEQUENCER INIT *********************************************************************************/
 
 // Declare Drums
-DrumManager manager(SOL_PIN_KICK, SOL_PIN_SNARE, SOL_PIN_TOM, SOL_PIN_HIHAT);
+DrumManager drumManager(SOL_PIN_KICK, SOL_PIN_SNARE, SOL_PIN_TOM, SOL_PIN_HIHAT);
 
 // TINY Query Flag
 Alt readFlag = DUMMY;
@@ -28,16 +28,17 @@ Alt readFlag = DUMMY;
 //Declare Tempo and Timing Vars
 elapsedMillis msBeatCount;
 
-int tempo = 60; // The tempo in bpm
+int tempo; // The tempo in bpm
 int curBeatIndex = 0; // The current beat in the sequence
 
-long unsigned int msPerBeat = 15000 / tempo;
+long unsigned int msPerBeat;
 
 
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
 // Rotary Encoder
 Encoder rotary1(ROT1_PIN_CLK, ROT1_PIN_DT, ROT1_PIN_SW);
+Encoder rotary2(ROT2_PIN_CLK, ROT2_PIN_DT, ROT2_PIN_SW);
 
 // Buttons
 Button button1(BUTTON1_PIN, true);
@@ -61,6 +62,9 @@ void setup() {
   // Begin display
   dispManager.init();
 
+  // Init tempo
+  setTempo(60);
+
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
   {
@@ -69,7 +73,7 @@ void setup() {
   }
 
   // Init sequence using DUMMY sequence
-  manager.checkSequence(readFlag);
+  drumManager.checkSequence(readFlag);
   readFlag = T1;
 }
 
@@ -80,8 +84,16 @@ void loop() {
 
   // Update control states
   rotary1.loop();
+  rotary2.loop();
   button1.loop();
   button2.loop();
+
+  // Check for tempo change
+  if(rotary2.rotated() == 1)
+    setTempo(tempo+1);
+  
+  else if(rotary2.rotated() == 2)
+    setTempo(tempo-1);
 
   // Begin new beat
   if(msBeatCount >= msPerBeat)
@@ -94,18 +106,18 @@ void loop() {
     digitalWrite(LED_TEMPO_PINS[curBeatIndex], HIGH);
 
     // Update sequences
-    manager.checkSequence(readFlag);
+    drumManager.checkSequence(readFlag);
     readFlag = (readFlag == T1) ? T2 : T1;
     
     // Play drums
-    manager.play(curBeatIndex);
+    drumManager.play(curBeatIndex);
     
     // Update beat timer
     msBeatCount -= msPerBeat;
   }
 
   // Update drums
-  manager.loop();
+  drumManager.loop();
 
   // Display buttons
   if (button1.justPressed())
@@ -124,4 +136,14 @@ void loop() {
 
   else if(rotary1.rotated() == 2) // CCW
     dispManager.rotaryCCW();
+}
+
+
+
+void setTempo(int t)
+{
+  tempo = t;
+  msPerBeat = 15000 / tempo;
+
+  drumManager.setTempo(msPerBeat);
 }

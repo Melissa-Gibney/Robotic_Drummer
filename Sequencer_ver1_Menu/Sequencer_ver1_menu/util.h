@@ -30,9 +30,13 @@ enum Alt {T1, T2, DUMMY};   // TINY query flags
 #define SOL_PIN_TOM   56    // A2
 #define SOL_PIN_HIHAT 57    // A3
 
-#define ROT1_PIN_CLK  30
+#define ROT1_PIN_CLK  30    // display encoder
 #define ROT1_PIN_DT   29
 #define ROT1_PIN_SW   28      
+
+#define ROT2_PIN_CLK  27    // tempo encoder
+#define ROT2_PIN_DT   26
+#define ROT2_PIN_SW   25  
 
 #define BUTTON1_PIN   50
 #define BUTTON2_PIN   51
