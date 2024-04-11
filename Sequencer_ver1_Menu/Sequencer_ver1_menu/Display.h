@@ -18,6 +18,8 @@ class Page
       display = d;
     }
 
+    virtual void setVal(int);
+
     virtual void drawPage();
 
     virtual void rotaryCW();
@@ -38,6 +40,8 @@ class TempoPage : public Page
     {
       tempo = tempoDefault;
     }
+
+    void setVal(int t) { tempo = t; }
 
     void drawPage();
 
@@ -61,6 +65,8 @@ class VelocityPage : public Page
       velocity = velocityDefault;
     }
 
+    void setVal(int){}
+
     void drawPage();
 
     void rotaryCW();
@@ -81,6 +87,8 @@ class PresetPage : public Page
   public:
     PresetPage(Adafruit_SSD1306 * d) : Page(d) {}
 
+    void setVal(int){}
+
     void drawPage();
 
     void rotaryCW();
@@ -95,6 +103,7 @@ class DisplayManager
 {
   private:
     Adafruit_SSD1306 display;
+    enum pageNames {PRESETS, TEMPO, VELOCITY};
 
     static const int nPages = 3;
     int page = 0;
@@ -105,8 +114,9 @@ class DisplayManager
     DisplayManager();
     void init();
 
-    void movePage(int dir);
+    void setTempo(int bpm);
 
+    void movePage(int dir);
     void rotaryCW();
     void rotaryCCW();
     void rotaryPress();

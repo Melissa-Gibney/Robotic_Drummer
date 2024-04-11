@@ -48,6 +48,9 @@ void Drum::play(int beat)
   if (sequence[beat])
     analogWrite(PIN, 255);
 
+  else
+    analogWrite(PIN, 0);
+
 }
 
 void Drum::loop()

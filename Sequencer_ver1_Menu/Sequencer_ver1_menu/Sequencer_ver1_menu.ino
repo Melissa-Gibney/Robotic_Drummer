@@ -27,12 +27,14 @@ Alt readFlag = DUMMY;
 
 //Declare Tempo and Timing Vars
 elapsedMillis msBeatCount;
+int tempoChanged = 0;
+elapsedMillis timeSinceTempoChange = 0;
 
 int tempo; // The tempo in bpm
 int curBeatIndex = 0; // The current beat in the sequence
 
 long unsigned int msPerBeat;
-
+long unsigned int tic = 0, toc = 0;
 
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
@@ -82,6 +84,8 @@ void setup() {
 
 void loop() {
 
+  tic = millis();
+
   // Update control states
   rotary1.loop();
   rotary2.loop();
@@ -90,10 +94,44 @@ void loop() {
 
   // Check for tempo change
   if(rotary2.rotated() == 1)
-    setTempo(tempo+1);
-  
+  {
+    tempoChanged++;
+    timeSinceTempoChange = 0;
+    dispManager.setTempo(tempo+tempoChanged);
+  }  
   else if(rotary2.rotated() == 2)
-    setTempo(tempo-1);
+  {
+    tempoChanged--;
+    timeSinceTempoChange = 0;
+    dispManager.setTempo(tempo+tempoChanged);
+  }
+
+    // Display buttons
+  if (button1.justPressed())
+    dispManager.movePage(1);  // increment
+  
+  if (button2.justPressed())
+    dispManager.movePage(-1); // decrement
+
+  // Display rotary encoder
+  if(rotary1.justPressed())
+    dispManager.rotaryPress();
+
+  if(rotary1.rotated() == 1)  // CW
+    dispManager.rotaryCW();
+
+  else if(rotary1.rotated() == 2) // CCW
+    dispManager.rotaryCCW();
+
+
+  if((tempoChanged != 0) && (timeSinceTempoChange >= 150))
+  {
+    tempo += tempoChanged;
+    setTempo(tempo);
+    tempoChanged = 0;
+  }
+
+
 
   // Begin new beat
   if(msBeatCount >= msPerBeat)
@@ -114,36 +152,25 @@ void loop() {
     
     // Update beat timer
     msBeatCount -= msPerBeat;
+
   }
 
   // Update drums
   drumManager.loop();
 
-  // Display buttons
-  if (button1.justPressed())
-    dispManager.movePage(1);  // increment
-  
-  if (button2.justPressed())
-    dispManager.movePage(-1); // decrement
-
-
-  // Display rotary encoder
-  if(rotary1.justPressed())
-    dispManager.rotaryPress();
-
-  if(rotary1.rotated() == 1)  // CW
-    dispManager.rotaryCW();
-
-  else if(rotary1.rotated() == 2) // CCW
-    dispManager.rotaryCCW();
+  toc = millis();
+  // Serial.println(toc-tic);
 }
 
 
 
 void setTempo(int t)
 {
-  tempo = t;
-  msPerBeat = 15000 / tempo;
+  if((t <= TEMPO_MAX) && (t >= TEMPO_MIN))
+  {
+    tempo = t;
+    msPerBeat = 15000 / tempo;
 
-  drumManager.setTempo(msPerBeat);
+    drumManager.setTempo(msPerBeat);
+  }
 }

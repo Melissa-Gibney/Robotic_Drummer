@@ -8,9 +8,9 @@
 // Constuctor
 DisplayManager::DisplayManager() : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 100000UL, 100000UL)
 {
-  pages[0] = new PresetPage(&display);
-  pages[1] = new TempoPage(&display);
-  pages[2] = new VelocityPage(&display);
+  pages[PRESETS] = new PresetPage(&display);
+  pages[TEMPO] = new TempoPage(&display);
+  pages[VELOCITY] = new VelocityPage(&display);
 }
 
 
@@ -25,6 +25,15 @@ void DisplayManager::init()
   display.display();
 
   pages[page]->drawPage();
+}
+
+
+// Change tempo
+void DisplayManager::setTempo(int bpm)
+{
+  pages[TEMPO]->setVal(bpm);
+  pages[TEMPO]->drawPage();
+  page = TEMPO;
 }
 
 
