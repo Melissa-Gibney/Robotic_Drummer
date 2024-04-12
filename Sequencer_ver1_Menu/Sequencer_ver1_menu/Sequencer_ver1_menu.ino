@@ -1,4 +1,4 @@
-// modified: 4/10/24
+// modified: 4/12/24
 
 /* UTIL LIBRARIES */
 #include "util.h"
@@ -46,6 +46,19 @@ Encoder rotary2(ROT2_PIN_CLK, ROT2_PIN_DT, ROT2_PIN_SW);
 Button button1(BUTTON1_PIN, true);
 Button button2(BUTTON2_PIN, true);
 
+Button clearkick(CLEAR_KICK, true);
+Button clearsnare(CLEAR_SNARE, true);
+Button cleartom(CLEAR_TOM, true);
+Button clearhihat(CLEAR_HIHAT, true);
+
+Button mutekick(MUTE_KICK, true);
+Button mutesnare(MUTE_SNARE, true);
+Button mutetom(MUTE_TOM, true);
+Button mutehihat(MUTE_HIHAT, true);
+
+// TODO
+// Master Reset Button
+// Master Play/Stop Button
 
 /********************************************************************* SETUP ******************************************************************************************/
 
@@ -74,6 +87,16 @@ void setup() {
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
 
+  // Set Pin Modes for Mute LEDs
+  pinMode(MUTE_KICK_LED, OUTPUT);
+  digitalWrite(MUTE_KICK_LED, LOW);
+  pinMode(MUTE_SNARE_LED, OUTPUT);
+  digitalWrite(MUTE_SNARE_LED, LOW);
+  pinMode(MUTE_TOM_LED, OUTPUT);
+  digitalWrite(MUTE_TOM_LED, LOW);
+  pinMode(MUTE_HIHAT_LED, OUTPUT);
+  digitalWrite(MUTE_HIHAT_LED, LOW);
+
   // Init sequence using DUMMY sequence
   drumManager.checkSequence(readFlag);
   readFlag = T1;
@@ -91,6 +114,14 @@ void loop() {
   rotary2.loop();
   button1.loop();
   button2.loop();
+  clearkick.loop();
+  clearsnare.loop();
+  cleartom.loop();
+  clearhihat.loop();
+  mutekick.loop();
+  mutesnare.loop();
+  mutetom.loop();
+  mutehihat.loop();
 
   // Check for tempo change
   if(rotary2.rotated() == 1)
@@ -131,7 +162,40 @@ void loop() {
     tempoChanged = 0;
   }
 
+  // Mute and Clear Buttons
+  if(clearkick.justPressed())
+  {
+    drumManager.clearKick();
+  }
+  if(clearsnare.justPressed())
+  {
+    drumManager.clearSnare();
+  }
+  if(cleartom.justPressed())
+  {
+    drumManager.clearTom();
+  }
+  if(clearhihat.justPressed())
+  {
+    drumManager.clearHiHat();
+  }
 
+  if(mutekick.justPressed())
+  {
+    drumManager.muteKick();
+  }
+  if(mutesnare.justPressed())
+  {
+    drumManager.muteSnare();
+  }
+  if(mutetom.justPressed())
+  {
+    drumManager.muteTom();
+  }
+  if(mutehihat.justPressed())
+  {
+    drumManager.muteHiHat();
+  }
 
   // Begin new beat
   if(msBeatCount >= msPerBeat)

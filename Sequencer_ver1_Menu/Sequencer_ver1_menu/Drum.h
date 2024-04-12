@@ -1,4 +1,4 @@
-// modified: 4/9/24
+// modified: 4/12/24
 
 #ifndef DRUM_H
 #define DRUM_H
@@ -31,5 +31,11 @@ class Drum
 
     void play(int beat);
     void loop();
+
+    // flag that drum is muted
+    bool mute = 0;
+
+    // flag to convert the drum sequence to a binary number
+    int get_sequence();
 };
 #endif

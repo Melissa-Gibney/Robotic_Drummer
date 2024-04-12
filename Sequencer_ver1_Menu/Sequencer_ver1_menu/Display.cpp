@@ -180,6 +180,81 @@ void PresetPage::rotaryPress()
 {
   selectedPreset = preset;
   drawPage();
+  
+  // Send presets to TINYs- Check sequence should then pick up on the changes
+  if (selectedPreset == 1){
+    //Dummy Preset 1
+    int data = 0b10101010;
+    int dataSnare = 0b01010101;
+    int dataTom = 0b01010101;
+    int dataHiHat = 0b01010101;
+
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission();
+
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission();
+
+  }
+
+  if (selectedPreset == 2){
+    //Dummy Preset 2
+    int data = 0b00111100;
+    int dataSnare = 0b11001101;
+    int dataTom = 0b11011101;
+    int dataHiHat = 0b10010011;
+
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission();
+
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission();
+
+  }
+
+  if (selectedPreset == 3){
+    //Dummy Preset 3
+    int data = 0b10001000;
+    int dataSnare = 0b01000100;
+    int dataTom = 0b00100010;
+    int dataHiHat = 0b00010001;
+
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission();
+
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission();
+  }
+
+  if (selectedPreset == 4){
+    //Dummy Preset 4
+    int data = 0b000000000;
+    int dataSnare = 0b000000000;
+    int dataTom = 0b000000000;
+    int dataHiHat = 0b000000000;
+
+    Wire.beginTransmission(TINY1);
+    Wire.write(data);
+    Wire.write(dataSnare);
+    Wire.endTransmission();
+
+    Wire.beginTransmission(TINY2);
+    Wire.write(dataTom);
+    Wire.write(dataHiHat);
+    Wire.endTransmission();
+  }
 }
 
 

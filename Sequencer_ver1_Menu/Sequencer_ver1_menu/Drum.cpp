@@ -1,4 +1,4 @@
-// modified: 4/9/24
+// modified: 4/12/24
 
 #include "Drum.h"
 
@@ -45,7 +45,7 @@ void Drum::play(int beat)
 {
   playTimer = 0;
 
-  if (sequence[beat])
+  if (sequence[beat] && (mute != 1))
     analogWrite(PIN, 255);
 
   else
@@ -60,4 +60,14 @@ void Drum::loop()
     analogWrite(PIN, 0);
     playTimer = 0;
   }
+}
+
+int Drum::get_sequence()
+{
+  int bin_sequence = 0;
+  for(int i = 0; i < 8; i++)
+  {
+    bin_sequence = bin_sequence | (sequence[i] << i);
+  }
+  return bin_sequence;
 }

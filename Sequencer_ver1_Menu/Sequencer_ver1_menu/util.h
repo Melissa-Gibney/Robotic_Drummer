@@ -1,3 +1,5 @@
+// updated 4/12/24
+
 #ifndef UTIL_H
 #define UTIL_H
 
@@ -40,6 +42,24 @@ enum Alt {T1, T2, DUMMY};   // TINY query flags
 
 #define BUTTON1_PIN   50
 #define BUTTON2_PIN   51
+
+#define CLEAR_KICK    49    // individual clear buttons
+#define CLEAR_SNARE   48
+#define CLEAR_TOM     47
+#define CLEAR_HIHAT   46
+
+#define MUTE_KICK     45    // individual mute buttons
+#define MUTE_SNARE    44
+#define MUTE_TOM      43
+#define MUTE_HIHAT    42
+
+#define MUTE_KICK_LED   41  // individual mute LEDs
+#define MUTE_SNARE_LED  40
+#define MUTE_TOM_LED    39
+#define MUTE_HIHAT_LED  38
+
+#define MASTER_RESET  37    // Master reset all drums
+#define START_STOP    36    // Start Stop Sequence
 
 const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
 

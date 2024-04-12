@@ -1,4 +1,4 @@
-// modified: 4/9/24
+// modified: 4/12/24
 
 #ifndef DRUMMANAGER_H
 #define DRUMMANAGER_H
@@ -20,6 +20,24 @@ class DrumManager
 
     void play(int beat);
     void loop();
+
+    void masterReset();
+    void startStop();
+
+    //Clear Drums
+    void clearKick();
+    void clearSnare();
+    void clearTom();
+    void clearHiHat();
+
+    // Mute Drums
+    void muteKick();
+    void muteSnare();
+    void muteTom();
+    void muteHiHat();
+
+    // Select Preset
+    void set_preset(int npreset);
 
 };
 #endif

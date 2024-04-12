@@ -1,4 +1,4 @@
-// modified: 4/9/24
+// modified: 4/12/24
 
 #include "util.h"
 #include "DrumManager.h"
@@ -33,6 +33,114 @@ void DrumManager::loop()
   snare.loop();
   tom.loop();
   hihat.loop();
+}
+
+void DrumManager::masterReset()
+{
+  clearKick();
+  clearSnare();
+  clearTom();
+  clearHiHat();
+
+  // ****** TODO!!! ******
+  // Anything else we want to include on the reset button?? Reset tempo and velocity too??
+}
+
+// ****** TODO!!! ******
+void DrumManager::startStop()
+{
+
+}
+
+void DrumManager::clearKick()
+{
+  int snare_seq = snare.get_sequence();
+  Wire.beginTransmission(TINY1);
+  Wire.write(0b00000000);
+  Wire.write(snare_seq);
+  Wire.endTransmission();
+
+}
+void DrumManager::clearSnare()
+{
+  int kick_seq = kick.get_sequence();
+  Wire.beginTransmission(TINY1);
+  Wire.write(kick_seq);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
+}
+void DrumManager::clearTom()
+{
+  int hihat_seq = hihat.get_sequence();
+  Wire.beginTransmission(TINY2);
+  Wire.write(0b00000000);
+  Wire.write(hihat_seq);
+  Wire.endTransmission();
+}
+void DrumManager::clearHiHat()
+{
+  int tom_seq = tom.get_sequence();
+  Wire.beginTransmission(TINY2);
+  Wire.write(tom_seq);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
+}
+
+void DrumManager::muteKick()
+{
+  // Toggle Mute -- this function will be called when button pressed
+  if (kick.mute == 0)
+  {
+    kick.mute = 1;
+    digitalWrite(MUTE_KICK_LED, HIGH);
+  }
+  else
+  {
+    kick.mute = 0;
+    digitalWrite(MUTE_KICK_LED, LOW);
+  }
+}
+void DrumManager::muteSnare()
+{
+  // Toggle Mute -- this function will be called when button pressed
+  if (snare.mute == 0)
+  {
+    snare.mute = 1;
+    digitalWrite(MUTE_SNARE_LED, HIGH);
+  }
+  else
+  {
+    snare.mute = 0;
+    digitalWrite(MUTE_SNARE_LED, LOW);
+  }
+}
+void DrumManager::muteTom()
+{
+  // Toggle Mute -- this function will be called when button pressed
+  if (tom.mute == 0)
+  {
+    tom.mute = 1;
+    digitalWrite(MUTE_TOM_LED, HIGH);
+  }
+  else
+  {
+    tom.mute = 0;
+    digitalWrite(MUTE_TOM_LED, LOW);
+  }
+}
+void DrumManager::muteHiHat()
+{
+  // Toggle Mute -- this function will be called when button pressed
+  if (hihat.mute == 0)
+  {
+    hihat.mute = 1;
+    digitalWrite(MUTE_HIHAT_LED, HIGH);
+  }
+  else
+  {
+    hihat.mute = 0;
+    digitalWrite(MUTE_HIHAT_LED, LOW);
+  }
 }
 
 // Query TINYs for change in pattern
