@@ -16,9 +16,12 @@
 #define SOL_PIN_SNARE 55
 #define SOL_PIN_TOM 56
 #define SOL_PIN_HIHAT 57
+#define ROT_TEMPO_PIN_A 34
+#define ROT_TEMPO_PIN_B 33
+#define ROT_TEMPO_PIN_BUTTON 32
 
 // Define LED Pins
-#define const int LED_TEMPO_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+const int LED_TEMPO_PINS[N_STEPS] = {2, 3, 4, 5, 6, 7, 8, 9};
 
 // Declare Drums
 Drum kick;
@@ -26,6 +29,11 @@ Drum snare;
 Drum tom;
 Drum hihat;
 DrumManager manager;
+
+//Tempo States
+int tempoStateA;
+int tempoStateB;
+int tempoStateButton;
 
 int alternate = 3;
 
@@ -87,17 +95,21 @@ void setup() {
   //Assign Solenoid Pins to Drums
   manager.assignSolenoids(SOL_PIN_KICK, SOL_PIN_TOM, SOL_PIN_SNARE, SOL_PIN_HIHAT);
 
-  for(int i = 0; i < N_STEPS; i++)
-  {
-    Serial.print(velocity[i] + " ");
-  }
+  //Attach Interrupt to Tempo Pin A and Button
+  attachInterrupt(digitalPinToInterrupt(ROT_TEMPO_PIN_A), changeTempo, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(ROT_TEMPO_PIN_BUTTON), changeTempo, CHANGE);
+
+  // for(int i = 0; i < N_STEPS; i++)
+  // {
+  //   Serial.print(velocity[i] + " ");
+  // }
 
   // Scale the Velocity to go from 0 to 255 instead of 0 to 127
-  for(int i = 0; i < N_STEPS; i++)
-  {
-    velocity[i] = round((float)(velocity[i])/128.0*255.0);
-    Serial.print(velocity[i] + " ");
-  }
+  // for(int i = 0; i < N_STEPS; i++)
+  // {
+  //   velocity[i] = round((float)(velocity[i])/128.0*255.0);
+  //   Serial.print(velocity[i] + " ");
+  // }
 
   // Serial.println("Intialized Sequence");
   // manager.printHiHatSequence();
@@ -121,6 +133,10 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+  // Update Tempo if Tempo Rotary Encoder Changes
+
+
   // Keep track of elapsed milliseconds and update every set amount of milliseconds based on the tempo
   // if(msBeatCount >= msPerBeat-msPullTimeKick && !drumsArePlaying)
   // {
@@ -209,4 +225,14 @@ int sequenceToBitwise(int seqData[])
     bitwiseNum = bitwiseNum + (seqData[i] & 0b00000001);
   }
   return bitwiseNum;
+}
+
+void setTempo()
+{
+  //Amount to change tempo
+  int bpmChange = 0;
+  
+  tempo = ROT_TEMPO_PIN_A;
+
+  
 }
