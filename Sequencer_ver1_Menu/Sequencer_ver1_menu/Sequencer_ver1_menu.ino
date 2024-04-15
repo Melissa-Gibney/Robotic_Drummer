@@ -136,6 +136,12 @@ void loop() {
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
   }
+  if(rotary2.justPressed())
+  {
+    tempoChanged = 120 - tempo;
+    timeSinceTempoChange = 0;
+    dispManager.setTempo(tempo+tempoChanged);
+  }
 
     // Display buttons
   if (button1.justPressed())

@@ -55,36 +55,6 @@ void DisplayManager::rotaryPress() { pages[page]->rotaryPress(); }
 
 /********************************************************************************************************************************************************/
 
-// CW turn, increment tempo
-void TempoPage::rotaryCW()
-{
-  if(tempo < TEMPO_MAX)
-  {
-    tempo++;
-    drawPage();
-  }
-}
-
-
-// CCW turn, decrement tempo
-void TempoPage::rotaryCCW()
-{
-  if(tempo > TEMPO_MIN)
-  {
-    tempo--;
-    drawPage();
-  }
-}
-
-
-// Button press, reset tempo
-void TempoPage::rotaryPress()
-{
-  tempo = tempoDefault;
-  drawPage();
-}
-
-
 // Draw page to display
 void TempoPage::drawPage()
 {
@@ -182,7 +152,7 @@ void PresetPage::rotaryPress()
   drawPage();
   
   // Send presets to TINYs- Check sequence should then pick up on the changes
-  if (selectedPreset == 1){
+  if (selectedPreset == 0){
     //Dummy Preset 1
     int data = 0b10101010;
     int dataSnare = 0b01010101;
@@ -201,7 +171,7 @@ void PresetPage::rotaryPress()
 
   }
 
-  if (selectedPreset == 2){
+  if (selectedPreset == 1){
     //Dummy Preset 2
     int data = 0b00111100;
     int dataSnare = 0b11001101;
@@ -220,7 +190,7 @@ void PresetPage::rotaryPress()
 
   }
 
-  if (selectedPreset == 3){
+  if (selectedPreset == 2){
     //Dummy Preset 3
     int data = 0b10001000;
     int dataSnare = 0b01000100;
@@ -238,7 +208,7 @@ void PresetPage::rotaryPress()
     Wire.endTransmission();
   }
 
-  if (selectedPreset == 4){
+  if (selectedPreset == 3){
     //Dummy Preset 4
     int data = 0b000000000;
     int dataSnare = 0b000000000;

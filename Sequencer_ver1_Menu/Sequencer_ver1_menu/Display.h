@@ -45,9 +45,9 @@ class TempoPage : public Page
 
     void drawPage();
 
-    void rotaryCW();
-    void rotaryCCW();
-    void rotaryPress();
+    void rotaryCW(){};
+    void rotaryCCW(){};
+    void rotaryPress(){};
 
 };
 
