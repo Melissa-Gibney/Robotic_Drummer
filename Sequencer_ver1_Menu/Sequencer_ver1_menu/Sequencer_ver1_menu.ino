@@ -62,6 +62,8 @@ Button mutehihat(MUTE_HIHAT, true);
 Button reset(MASTER_RESET, true);
 Button startstop(START_STOP, true);
 
+int pause_timer;
+
 /********************************************************************* SETUP ******************************************************************************************/
 
 void setup() {
@@ -216,6 +218,16 @@ void loop() {
   if(startstop.justPressed())
   {
     drumManager.toggleStartStop();
+
+    if(drumManager.startStop == 0)
+    {
+      pause_timer = msBeatCount;
+    }
+    else
+    {
+      msBeatCount = pause_timer;
+    }
+
   }
 
   if (drumManager.startStop == 1)
