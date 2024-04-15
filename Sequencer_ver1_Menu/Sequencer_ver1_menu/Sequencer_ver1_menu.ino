@@ -59,6 +59,8 @@ Button mutehihat(MUTE_HIHAT, true);
 // TODO
 // Master Reset Button
 // Master Play/Stop Button
+Button reset(MASTER_RESET, true);
+Button startstop(START_STOP, true);
 
 /********************************************************************* SETUP ******************************************************************************************/
 
@@ -122,6 +124,9 @@ void loop() {
   mutesnare.loop();
   mutetom.loop();
   mutehihat.loop();
+
+  reset.loop();
+  startstop.loop();
 
   // Check for tempo change
   if(rotary2.rotated() == 1)
@@ -197,26 +202,39 @@ void loop() {
     drumManager.muteHiHat();
   }
 
-  // Begin new beat
-  if(msBeatCount >= msPerBeat)
+  if(reset.justPressed())
   {
-    curBeatIndex = (curBeatIndex + 1) % WIN_LEN;
+    drumManager.masterReset();
+  }
 
-    // Update BPM LED
-    for(int i = 0; i < 8; i++)
-      digitalWrite(LED_TEMPO_PINS[i], LOW);
-    digitalWrite(LED_TEMPO_PINS[curBeatIndex], HIGH);
+  if(startstop.justPressed())
+  {
+    drumManager.toggleStartStop();
+  }
 
-    // Update sequences
-    drumManager.checkSequence(readFlag);
-    readFlag = (readFlag == T1) ? T2 : T1;
-    
-    // Play drums
-    drumManager.play(curBeatIndex);
-    
-    // Update beat timer
-    msBeatCount -= msPerBeat;
+  if (drumManager.startStop == 1)
+  {
+    // Begin new beat
+    if(msBeatCount >= msPerBeat)
+    {
+      curBeatIndex = (curBeatIndex + 1) % WIN_LEN;
 
+      // Update BPM LED
+      for(int i = 0; i < 8; i++)
+        digitalWrite(LED_TEMPO_PINS[i], LOW);
+      digitalWrite(LED_TEMPO_PINS[curBeatIndex], HIGH);
+
+      // Update sequences
+      drumManager.checkSequence(readFlag);
+      readFlag = (readFlag == T1) ? T2 : T1;
+      
+      // Play drums
+      drumManager.play(curBeatIndex);
+      
+      // Update beat timer
+      msBeatCount -= msPerBeat;
+
+    }
   }
 
   // Update drums

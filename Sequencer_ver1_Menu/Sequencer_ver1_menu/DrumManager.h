@@ -22,7 +22,9 @@ class DrumManager
     void loop();
 
     void masterReset();
-    void startStop();
+    void toggleStartStop();
+
+    int startStop;
 
     //Clear Drums
     void clearKick();

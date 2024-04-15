@@ -37,19 +37,32 @@ void DrumManager::loop()
 
 void DrumManager::masterReset()
 {
-  clearKick();
-  clearSnare();
-  clearTom();
-  clearHiHat();
+  Wire.beginTransmission(TINY1);
+  Wire.write(0b00000000);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
+
+  Wire.beginTransmission(TINY2);
+  Wire.write(0b00000000);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
+
 
   // ****** TODO!!! ******
   // Anything else we want to include on the reset button?? Reset tempo and velocity too??
 }
 
 // ****** TODO!!! ******
-void DrumManager::startStop()
+void DrumManager::toggleStartStop()
 {
-
+  if (startStop == 0)
+  {
+    startStop = 1;
+  }
+  else
+  {
+    startStop = 0;
+  }
 }
 
 void DrumManager::clearKick()

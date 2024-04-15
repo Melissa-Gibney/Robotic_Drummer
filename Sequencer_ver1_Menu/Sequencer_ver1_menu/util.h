@@ -58,8 +58,8 @@ enum Alt {T1, T2, DUMMY};   // TINY query flags
 #define MUTE_TOM_LED    39
 #define MUTE_HIHAT_LED  38
 
-#define MASTER_RESET  37    // Master reset all drums
-#define START_STOP    36    // Start Stop Sequence
+#define MASTER_RESET  53    // Master reset all drums
+#define START_STOP    52    // Start Stop Sequence
 
 const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
 
