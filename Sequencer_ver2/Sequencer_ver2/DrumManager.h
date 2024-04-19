@@ -33,10 +33,6 @@ class DrumManager
 
     // Mute Drums
     void muteDrum(DrumID id);
-    void muteKick();
-    void muteSnare();
-    void muteTom();
-    void muteHiHat();
 
     // Select Preset
     void set_preset(int npreset);

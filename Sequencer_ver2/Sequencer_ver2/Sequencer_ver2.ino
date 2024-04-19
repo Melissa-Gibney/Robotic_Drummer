@@ -103,6 +103,9 @@ void loop() {
   // Update control states
   updateControlStates();
 
+  // Check buttons
+  checkButtons();
+
   // Check for tempo change
   checkTempoChange();
 
