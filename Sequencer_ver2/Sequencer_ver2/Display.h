@@ -1,4 +1,4 @@
-// updated 4/11/24
+// updated 4/19/24
 
 #ifndef DISPLAY_H
 #define DISPLAY_H
@@ -120,6 +120,8 @@ class DisplayManager
     void rotaryCW();
     void rotaryCCW();
     void rotaryPress();
+
+    int getPage() { return page; }
 
 };
 

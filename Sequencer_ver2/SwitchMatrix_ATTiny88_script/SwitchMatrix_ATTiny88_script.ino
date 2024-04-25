@@ -9,7 +9,7 @@
 
 #include <Wire.h>
 
-#define I2CADDRESS 0x2A
+#define I2CADDRESS 0x2B
 
 #define BMASK   0b10111111  // PB6 inaccessible
 #define CMASK   0b10000000  // only read C7, C4 C5 inputs
@@ -17,11 +17,13 @@
 #define DMASK   0b11111010  // D0 and D2 reversed
 
 
-int lights = 0, switchStates = 0, prevSwitchStates = 0;
+int lights = 0, data = 0, switchStates = 0, prevSwitchStates = 0;
+int pressedSwitch = 0;
 
 int row = 0;  // row interator for light multiplexing
 
-bool transmitting = false;  // DEBUG
+// bool velocityMode = true;
+bool velocityMode = false;
 
 
 /************** SETUP **************/
@@ -76,7 +78,7 @@ void setup(){
   Wire.begin(I2CADDRESS);
   Wire.setClock(10000UL);
   Wire.onRequest(sendVect);
-  //Wire.onReceive(setLights);
+  Wire.onReceive(setLights);
   
   // Setup GPIO
   setupLights();
@@ -127,9 +129,24 @@ void updateVect(){
 
   // Find all switches "just pressed"
   int toggle = ~prevSwitchStates & switchStates;  // 0 -> 1 = just pressed
+  // int change = data ^ toggle;
 
   // Update lights
-  lights = lights ^ toggle;
+  if(!velocityMode)
+  {
+    data = data ^ toggle;;
+    lights = data;
+  }
+  
+  else if(toggle){     // velocity mode && button was just pressed
+    for(int i = 0; i < 16; i++){
+      if(toggle & (1 << i)){
+        pressedSwitch = i;
+        break;
+      }
+    }
+    // lights = (1 << pressedSwitch);     // DEBUG
+  }
 }
 
 
@@ -154,22 +171,39 @@ ISR(PCINT0_vect){ updateVect(); }
 /********* ON I2C REQUEST **********/
 
 void sendVect(){
-  transmitting = true;
-
-  int sendData = lights;
+  // int sendData = lights;
+  int sendData = data;
 
   Wire.write(sendData & 0xFF);      // send first row (1 byte)
   Wire.write(sendData>>8 & 0xFF);   // send second row (1 byte)
+  Wire.write(pressedSwitch+1);      // 0 for no press
+}
 
-  transmitting = false;
- }
 
+void setLights(int nBytes){
+  if(nBytes == 2){
+    // Read lights data
+    uint8_t lowBits = Wire.read();
+    uint8_t highBits = Wire.read();
 
-void setLights(){
-  uint8_t lowBits = Wire.read();
-  uint8_t highBits = Wire.read();
+    lights = highBits<<8 | lowBits;
 
-  lights = highBits<<8 | lowBits;
+    if(!velocityMode)
+      data = lights;
+  }
+
+  else if(nBytes == 1){
+    // Read velocity data
+    uint8_t vel = Wire.read();
+
+    if(vel){
+      velocityMode = true;
+    }
+    else{
+      velocityMode = false;
+      pressedSwitch = 0;
+    }
+  }
 }
 
 

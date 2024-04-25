@@ -1,4 +1,4 @@
-// modified: 4/12/24
+// modified: 4/19/24
 
 #include "Drum.h"
 
@@ -18,9 +18,21 @@ Drum::Drum(int pin, int ledPin)
 
   // Init sequences
   resetSequence();
-  resetVelocity();
+  // resetVelocity();
 }
 
+
+
+void Drum::setVel(int midiVel)
+{
+  if((midiVel < VELOCITY_MIN) || midiVel > VELOCITY_MAX)
+    return;
+
+  velocity = 63 + ((midiVel*192) / 127);
+  pullTime = pullTimes[velocity-63];
+
+  velocity = 200; // DEBUG
+}
 
 
 void Drum::toggleMute()
@@ -41,11 +53,11 @@ void Drum::resetSequence()
     sequence[i] = 0;
 }
 
-void Drum::resetVelocity()
-{
-  for (int i = 0; i < WIN_LEN; i++)
-    velocity[i] = VELOCITY_DEFAULT;
-}
+// void Drum::resetVelocity()
+// {
+//   for (int i = 0; i < WIN_LEN; i++)
+//     velocity[i] = VELOCITY_DEFAULT;
+// }
 
 void Drum::updateSequence(int *newSequence)
 {
@@ -53,31 +65,45 @@ void Drum::updateSequence(int *newSequence)
     sequence[i] = newSequence[i];
 }
 
-void Drum::updateVelocity(int *newVelocity)
-{
-  for (int i = 0; i < WIN_LEN; i++)
-    velocity[i] = newVelocity[i];
-}
+// void Drum::updateVelocity(int *newVelocity)
+// {
+//   for (int i = 0; i < WIN_LEN; i++)
+//     velocity[i] = newVelocity[i];
+// }
 
-void Drum::play(int beat)
+void Drum::play()
 {
   playTimer = 0;
+  on = true;
 
   if (sequence[beat] && (!muted))
-    analogWrite(PIN, 255);
+    analogWrite(PIN, velocity);
 
-  else
-    analogWrite(PIN, 0);
+  // else
+  //   analogWrite(PIN, 0);
 
+}
+
+void Drum::stop()
+{
+  // Release
+  analogWrite(PIN, 0);
+  on = false;
 }
 
 void Drum::loop()
 {
-  if (playTimer >= playDur)
+  // Extend
+  if ((!on) && (waitTimer >= beatDur-pullTime-HOLD_TIME))
   {
-    analogWrite(PIN, 0);
-    playTimer = 0;
+    waitTimer = 0;
+    play();
   }
+
+  // Hold
+  if ((on) && (playTimer >= pullTime))
+    analogWrite(PIN, HOLD_VEL);
+
 }
 
 int Drum::getBinSequence()

@@ -1,4 +1,4 @@
-// updated 4/12/24
+// updated 4/18/24
 
 #ifndef UTIL_H
 #define UTIL_H
@@ -20,14 +20,16 @@
 enum Alt {T1, T2, DUMMY};   // TINY query flags
 enum DrumID {KICK, SNARE, TOM, HIHAT};
 
-#define TEMPO_MIN     10    // BPM
-#define TEMPO_MAX     200   // BPM
-#define TEMPO_DEFAULT 120   // BPM
+#define TEMPO_MIN         10    // BPM
+#define TEMPO_MAX         200   // BPM
+#define TEMPO_DEFAULT     120   // BPM
 
 #define VELOCITY_MIN      0  
 #define VELOCITY_MAX      127
 #define VELOCITY_DEFAULT  60
 
+#define HOLD_TIME 10    // ms
+#define HOLD_VEL  60    // of 255
 
 // Pins
 #define SOL_PIN_KICK  54    // A0
@@ -61,8 +63,8 @@ enum DrumID {KICK, SNARE, TOM, HIHAT};
 #define MUTE_TOM_LED    39
 #define MUTE_HIHAT_LED  38
 
-#define MASTER_RESET  53    // Master reset all drums
-#define START_STOP    52    // Start Stop Sequence
+#define MASTER_RESET  53    // master reset all drums
+#define START_STOP    52    // start/stop Sequence
 
 const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
 
@@ -71,6 +73,25 @@ const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
 #define TINY1 0x2A
 #define TINY2 0x2B
 #define SCREEN_ADDRESS 0x3C
+
+
+// Lookup tables
+const int pullTimes[] = 
+{
+  22, 22, 21, 21, 21, 20, 20, 19, 19, 19, 18, 18, 18, 17, 17, 17, 16, 16, 16, 15, 15, 15, 15,
+  14, 14, 14, 14, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 11, 11, 11, 11, 11, 11, 11, 10,
+  10, 10, 10, 10, 10, 10, 10, 10,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  8,  8,
+   8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
+   8,  8,  8,  8,  8,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7, 
+   7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
+   7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  6,  6,  6,  6,  6,  6, 
+   6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6, 
+   6,  6,  6,  6,  6,  6,  6,  6,  6
+};
+
+// Globals
+// int velocityMode = 0;
+// int lastT1 = -1, lastT2 = -1;
 
 
 /********************************************************************************************/

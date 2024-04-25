@@ -1,4 +1,4 @@
-// modified: 4/12/24
+// modified: 4/19/24
 
 /* UTIL LIBRARIES */
 #include "util.h"
@@ -29,12 +29,17 @@ Alt readFlag = DUMMY;
 elapsedMillis msBeatCount;
 int tempoChanged = 0;
 elapsedMillis timeSinceTempoChange = 0;
+int pause_timer;
 
 int tempo; // The tempo in bpm
 int curBeatIndex = 0; // The current beat in the sequence
 
 long unsigned int msPerBeat;
 long unsigned int tic = 0, toc = 0;
+
+elapsedMillis flashTimer = 0;
+bool flash = true;  // high or low
+int velocityMode = 0;
 
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
@@ -59,7 +64,15 @@ Button mutehihat(MUTE_HIHAT, true);
 Button reset(MASTER_RESET, true);
 Button startstop(START_STOP, true);
 
-int pause_timer;
+/********************************************************************* PROTOTYPES *************************************************************************************/
+
+void setTempo(int);
+void updateControlStates();
+void checkButtons();
+void checkTempoChange();
+void updateDisplay();
+void setTempo(int);
+
 
 /********************************************************************* SETUP ******************************************************************************************/
 
@@ -79,7 +92,8 @@ void setup() {
   dispManager.init();
 
   // Init tempo
-  setTempo(TEMPO_DEFAULT);
+  // setTempo(TEMPO_DEFAULT);
+  setTempo(20); //DEBUG
 
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
@@ -87,6 +101,9 @@ void setup() {
     pinMode(LED_TEMPO_PINS[i], OUTPUT);
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
+
+  pinMode(10, OUTPUT);    // DEBUG
+  digitalWrite(10, LOW);
 
   // Init sequence using DUMMY sequence
   drumManager.checkSequence(readFlag);
@@ -106,10 +123,10 @@ void loop() {
   // Check buttons
   checkButtons();
 
-  // Check for tempo change
+  // Check tempo encoder
   checkTempoChange();
 
-  // Display buttons
+  // Update OLED
   updateDisplay();
   
   // Check pause button
@@ -141,13 +158,17 @@ void loop() {
     // Update BPM LED
     for(int i = 0; i < 8; i++)
       digitalWrite(LED_TEMPO_PINS[i], LOW);
+
     digitalWrite(LED_TEMPO_PINS[curBeatIndex], HIGH);
 
     // Update sequences
     drumManager.checkSequence(readFlag);
     readFlag = (readFlag == T1) ? T2 : T1;
     
-    // Play drums
+    // Stop drums
+    drumManager.endBeat();
+
+    // Start new beat
     drumManager.play(curBeatIndex);
     
     // Update beat timer
@@ -158,9 +179,31 @@ void loop() {
   // Update drums
   drumManager.loop();
 
+  // Velocity mode flash
+  if(!velocityMode)
+    flashTimer = 0;
+
+  else if(flashTimer >= 500)
+  {
+    flash = !flash;
+
+    int * step = drumManager.getFlashingStep();
+
+    if(step[1] <= 8)
+      drumManager.refresh(step[0], 0, step[1]-1, flash);
+
+    else
+      drumManager.refresh(step[0], 1, step[1]-9, flash);
+
+    flashTimer -= 500;
+  }
+
   toc = millis();
   // Serial.println(toc-tic);
 }
+  
+
+  
 
 
 
@@ -215,10 +258,26 @@ void setTempo(int t)
 void updateDisplay()
 {
   if (button1.justPressed())
-    dispManager.movePage(1);  // increment
+  {
+    dispManager.movePage(1);  // increment page
+    if(dispManager.getPage() == 2)
+      velocityMode = 1;
+    else
+      velocityMode = 0;
+    
+    drumManager.setVelocityMode(velocityMode);
+  }
   
   if (button2.justPressed())
-    dispManager.movePage(-1); // decrement
+  {
+    dispManager.movePage(-1); // decrement page
+    if(dispManager.getPage() == 2)
+      velocityMode = 1;
+    else
+      velocityMode = 0;
+    
+    drumManager.setVelocityMode(velocityMode);
+  }
 
   // Display rotary encoder
   if(rotary1.justPressed())
@@ -235,19 +294,19 @@ void updateDisplay()
 
 void checkTempoChange()
 {
-  if(rotary2.rotated() == 1)
+  if(rotary2.rotated() == 1)  // increment
   {
     tempoChanged++;
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
   }  
-  else if(rotary2.rotated() == 2)
+  else if(rotary2.rotated() == 2) // decrement
   {
     tempoChanged--;
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
   }
-  if(rotary2.justPressed())
+  if(rotary2.justPressed()) // reset
   {
     tempoChanged = TEMPO_DEFAULT - tempo;
     timeSinceTempoChange = 0;

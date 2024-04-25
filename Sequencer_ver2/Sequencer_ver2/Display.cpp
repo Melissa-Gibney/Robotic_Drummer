@@ -1,4 +1,4 @@
-// updated 4/11/24
+// updated 4/19/24
 
 #include "Display.h"
 #include <Wire.h>
@@ -230,7 +230,7 @@ void PresetPage::rotaryPress()
 
 // Draw page to display
 void PresetPage::drawPage()
-{
+{  
   int y1 = 25;
   int y2 = 28;
   char buf[10] = {'\0'};
