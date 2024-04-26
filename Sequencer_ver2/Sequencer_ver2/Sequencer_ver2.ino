@@ -1,4 +1,4 @@
-// modified: 4/19/24
+// modified: 4/25/24
 
 /* UTIL LIBRARIES */
 #include "util.h"
@@ -94,6 +94,7 @@ void setup() {
   // Init tempo
   // setTempo(TEMPO_DEFAULT);
   setTempo(20); //DEBUG
+  drumManager.resetVelocity();
 
   // Set Pin Modes for LED Tempo Pins
   for(int i = 0; i < 8; i++)
@@ -186,15 +187,7 @@ void loop() {
   else if(flashTimer >= 500)
   {
     flash = !flash;
-
-    int * step = drumManager.getFlashingStep();
-
-    if(step[1] <= 8)
-      drumManager.refresh(step[0], 0, step[1]-1, flash);
-
-    else
-      drumManager.refresh(step[0], 1, step[1]-9, flash);
-
+    drumManager.flash(flash);
     flashTimer -= 500;
   }
 
@@ -203,24 +196,45 @@ void loop() {
 }
   
 
-  
-
-
 
 void checkButtons()
 {
   // Clear buttons
   if(clearkick.justPressed())
-    drumManager.clearDrum(KICK);
+  {
+    if(!velocityMode)
+      drumManager.clearDrum(KICK);
+
+    else
+      drumManager.resetVelocity(KICK);
+  }
   
   if(clearsnare.justPressed())
-    drumManager.clearDrum(SNARE);
+  {
+    if(!velocityMode)
+      drumManager.clearDrum(SNARE);
+
+    else
+      drumManager.resetVelocity(SNARE);
+  }
 
   if(cleartom.justPressed())
-    drumManager.clearDrum(TOM);
+  {
+    if(!velocityMode)
+      drumManager.clearDrum(TOM);
+
+    else
+      drumManager.resetVelocity(TOM);
+  }
     
   if(clearhihat.justPressed())
-    drumManager.clearDrum(HIHAT);
+  {
+    if(!velocityMode)
+      drumManager.clearDrum(HIHAT);
+
+    else
+      drumManager.resetVelocity(HIHAT);
+  }
 
   // Mute buttons
   if(mutekick.justPressed())
@@ -237,7 +251,12 @@ void checkButtons()
 
   // Reset button
   if(reset.justPressed())
-    drumManager.masterReset();
+  {
+    if(!velocityMode)
+      drumManager.masterReset();
+    else
+      drumManager.resetVelocity();
+  }
 }
 
 
@@ -281,13 +300,31 @@ void updateDisplay()
 
   // Display rotary encoder
   if(rotary1.justPressed())
+  {
     dispManager.rotaryPress();
 
+    if(velocityMode)
+      drumManager.setStepVelocity(VELOCITY_DEFAULT);
+  }
+
   if(rotary1.rotated() == 1)  // CW
+  {
     dispManager.rotaryCW();
 
+    if(velocityMode)
+      drumManager.setStepVelocity(drumManager.getStepVelocity()+1);
+  }
+
   else if(rotary1.rotated() == 2) // CCW
+  {
     dispManager.rotaryCCW();
+
+    if(velocityMode)
+      drumManager.setStepVelocity(drumManager.getStepVelocity()-1);
+  }
+
+  if(velocityMode && (drumManager.getStepVelocity() != dispManager.getVel()))
+    dispManager.setVel(drumManager.getStepVelocity());
 }
 
 
@@ -333,3 +370,5 @@ void updateControlStates()
   reset.loop();
   startstop.loop();
 }
+
+

@@ -15,6 +15,8 @@ class DrumManager
 
     bool startStop = true;
 
+    int velocities[N_DRUMS][WIN_LEN];
+
   public:
     DrumManager(int kp, int klp, int sp, int slp, int tp, int tlp, int hp, int hlp);
 
@@ -29,7 +31,13 @@ class DrumManager
 
     void masterReset();
     void toggleStartStop();
+
     void setVelocityMode(int v);
+    void setStepVelocity(int v);
+    int getStepVelocity();
+
+    void resetVelocity();
+    void resetVelocity(DrumID drum);
 
     bool isStopped() { return !startStop; }
 
@@ -42,8 +50,7 @@ class DrumManager
     // Select Preset
     void set_preset(int npreset);
 
-    // void refresh();
-    void refresh(int tiny, int row, int col, int level);
+    void flash(int level);
 
 };
 #endif

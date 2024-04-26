@@ -1,4 +1,4 @@
-// updated 4/18/24
+// updated 4/25/24
 
 #ifndef UTIL_H
 #define UTIL_H
@@ -12,6 +12,7 @@
 
 #define MAX_LEN 32    // steps
 #define WIN_LEN 8     // steps
+#define N_DRUMS 4
 
 #define SCREEN_WIDTH  128   // pixels
 #define SCREEN_HEIGHT 64    // pixels 
@@ -88,10 +89,6 @@ const int pullTimes[] =
    6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6, 
    6,  6,  6,  6,  6,  6,  6,  6,  6
 };
-
-// Globals
-// int velocityMode = 0;
-// int lastT1 = -1, lastT2 = -1;
 
 
 /********************************************************************************************/

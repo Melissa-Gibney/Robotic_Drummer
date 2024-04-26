@@ -1,4 +1,4 @@
-// updated 4/19/24
+// updated 4/24/24
 
 #ifndef DISPLAY_H
 #define DISPLAY_H
@@ -19,6 +19,7 @@ class Page
     }
 
     virtual void setVal(int);
+    virtual int getVal();
 
     virtual void drawPage();
 
@@ -32,16 +33,13 @@ class Page
 class TempoPage : public Page 
 {
   private:
-    const int tempoDefault = 120;
     int tempo;
 
   public:
-    TempoPage(Adafruit_SSD1306 * d) : Page(d)
-    {
-      tempo = tempoDefault;
-    }
+    TempoPage(Adafruit_SSD1306 * d) : Page(d), tempo(TEMPO_DEFAULT) {}
 
     void setVal(int t) { tempo = t; }
+    int getVal() {}
 
     void drawPage();
 
@@ -56,16 +54,13 @@ class TempoPage : public Page
 class VelocityPage : public Page 
 {
   private:
-    const int velocityDefault = 60;
     int velocity;
 
   public:
-    VelocityPage(Adafruit_SSD1306 * d) : Page(d)
-    {
-      velocity = velocityDefault;
-    }
+    VelocityPage(Adafruit_SSD1306 * d) : Page(d), velocity(VELOCITY_DEFAULT) {}
 
-    void setVal(int){}
+    void setVal(int v){ velocity = v; }
+    int getVal() { return velocity; }
 
     void drawPage();
 
@@ -88,6 +83,7 @@ class PresetPage : public Page
     PresetPage(Adafruit_SSD1306 * d) : Page(d) {}
 
     void setVal(int){}
+    int getVal() {}
 
     void drawPage();
 
@@ -115,6 +111,8 @@ class DisplayManager
     void init();
 
     void setTempo(int bpm);
+    void setVel(int v);
+    int getVel() { return pages[VELOCITY]->getVal(); }
 
     void movePage(int dir);
     void rotaryCW();

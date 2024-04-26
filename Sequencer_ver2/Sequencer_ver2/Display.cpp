@@ -1,4 +1,4 @@
-// updated 4/19/24
+// updated 4/24/24
 
 #include "Display.h"
 #include <Wire.h>
@@ -36,6 +36,12 @@ void DisplayManager::setTempo(int bpm)
   page = TEMPO;
 }
 
+
+void DisplayManager::setVel(int v)
+{ 
+  pages[VELOCITY]->setVal(v); 
+  pages[VELOCITY]->drawPage();
+}
 
 // Change pages
 void DisplayManager::movePage(int dir)

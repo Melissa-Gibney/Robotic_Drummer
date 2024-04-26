@@ -1,4 +1,4 @@
-// modified: 4/19/24
+// modified: 4/25/24
 
 #include "util.h"
 #include "DrumManager.h"
@@ -20,10 +20,10 @@ void DrumManager::setTempo(int ms)
 // Play current beat
 void DrumManager::play(int beat)
 {
-  kick.setVel(1);
-  snare.setVel(1);
-  tom.setVel(1);
-  hihat.setVel(1);
+  kick.setVel(velocities[KICK][beat]);
+  snare.setVel(velocities[SNARE][beat]);
+  tom.setVel(velocities[TOM][beat]);
+  hihat.setVel(velocities[HIHAT][beat]);
 
   kick.startBeat(beat);
   snare.startBeat(beat);
@@ -194,13 +194,13 @@ void DrumManager::checkSequence(int flag)
   hihat.updateSequence(newHiHatSeq);
 
 
-  if((lastT1 != lastT1Prev))
+  if((lastT1 != lastT1Prev) && (lastT1 > 0) && (lastT1 < 17))
   {
     flashingStep[0] = 0;
     flashingStep[1] = lastT1;
   }
 
-  else if(lastT2 != lastT2Prev)
+  else if((lastT2 != lastT2Prev) && (lastT2 > 0) && (lastT2 < 17))
   {
     flashingStep[0] = 1;
     flashingStep[1] = lastT2;
@@ -211,45 +211,44 @@ void DrumManager::checkSequence(int flag)
 
 }
 
-// void DrumManager::refresh()
-// {
-//   int data1 = kick.getBinSequence();
-//   int data2 = snare.getBinSequence();
-//   int data3 = tom.getBinSequence();
-//   int data4 = hihat.getBinSequence();
 
-//   Wire.beginTransmission(TINY1);
-//   Wire.write(data1);
-//   Wire.write(data2);
-//   Wire.endTransmission();
-//   delay(1);
-//   Wire.beginTransmission(TINY2);
-//   Wire.write(data3);
-//   Wire.write(data4);
-//   Wire.endTransmission();
-// }
-
-void DrumManager::refresh(int tiny, int row, int col, int level)
+void DrumManager::flash(int level)
 {
   int data1 = kick.getBinSequence();
   int data2 = snare.getBinSequence();
   int data3 = tom.getBinSequence();
   int data4 = hihat.getBinSequence();
 
+
+  int col, row;
+
+  if(flashingStep[1] <= 8)
+  {
+    row = 0;
+    col = flashingStep[1]-1;
+  }
+  else
+  {
+    row = 1;
+    col = flashingStep[1]-9;
+  }
+
+
   int flashMask = ~(1<<col);
   int flash = level<<col;
 
-  if((tiny==0) && (row==0))
+  if((flashingStep[0]==0) && (row==0))
     data1 = (data1 & flashMask) | flash;
 
-  else if((tiny==0) && (row==1))
+  else if((flashingStep[0]==0) && (row==1))
     data2 = (data2 & flashMask) | flash;
 
-  else if((tiny==1) && (row==0))
+  else if((flashingStep[0]==1) && (row==0))
     data3 = (data3 & flashMask) | flash;
 
-  else if((tiny==1) && (row==1))
+  else if((flashingStep[0]==1) && (row==1))
     data4 = (data4 & flashMask) | flash;
+
 
   Wire.beginTransmission(TINY1);
   Wire.write(data1);
@@ -260,4 +259,45 @@ void DrumManager::refresh(int tiny, int row, int col, int level)
   Wire.write(data3);
   Wire.write(data4);
   Wire.endTransmission();
+}
+
+
+
+void DrumManager::setStepVelocity(int v)
+{
+  if(((flashingStep[0] != 0) && (flashingStep[0] != 1)) || ((flashingStep[1] < 1) || (flashingStep[1] > 16)))
+    return;
+
+  int tiny = flashingStep[0];
+  int row = (flashingStep[1]-1) / 8;
+  int col = flashingStep[1] - 8*(row) - 1;
+
+  velocities[2*tiny + row][col] = v;
+}
+
+int DrumManager::getStepVelocity()
+{
+  if(((flashingStep[0] != 0) && (flashingStep[0] != 1)) || ((flashingStep[1] < 1) || (flashingStep[1] > 16)))
+    return;
+
+  int tiny = flashingStep[0];
+  int row = (flashingStep[1]-1) / 8;
+  int col = flashingStep[1] - 8*(row) - 1;
+
+  return velocities[2*tiny + row][col];
+}
+
+
+void DrumManager::resetVelocity()
+{
+  for(int i = 0; i < N_DRUMS; i++)
+    for(int j = 0; j < WIN_LEN; j++)
+      velocities[i][j] = VELOCITY_DEFAULT;
+}
+
+
+void DrumManager::resetVelocity(DrumID drum)
+{
+  for(int i = 0; i < WIN_LEN; i++)
+    velocities[drum][i] = VELOCITY_DEFAULT;
 }
