@@ -333,21 +333,27 @@ void checkTempoChange()
 {
   if(rotary2.rotated() == 1)  // increment
   {
+    velocityMode = 0;
     tempoChanged++;
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
+    drumManager.setVelocityMode(velocityMode);
   }  
   else if(rotary2.rotated() == 2) // decrement
   {
+    velocityMode = 0;
     tempoChanged--;
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
+    drumManager.setVelocityMode(velocityMode);
   }
   if(rotary2.justPressed()) // reset
   {
+    velocityMode = 0;
     tempoChanged = TEMPO_DEFAULT - tempo;
     timeSinceTempoChange = 0;
     dispManager.setTempo(tempo+tempoChanged);
+    drumManager.setVelocityMode(velocityMode);
   }
 }
 
