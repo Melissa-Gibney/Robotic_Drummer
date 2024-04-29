@@ -6,7 +6,7 @@
 /********************************************************************************************************************************************************/
 
 // Constuctor
-DisplayManager::DisplayManager() : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 100000UL, 100000UL)
+DisplayManager::DisplayManager() : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET, 400000UL, 400000UL)  // 100000UL
 {
   pages[PRESETS] = new PresetPage(&display);
   pages[TEMPO] = new TempoPage(&display);

@@ -81,7 +81,8 @@ void setup() {
 
   // Begin TWI
   Wire.begin();     
-  Wire.setClock(100000UL);
+  // Wire.setClock(100000UL);
+  Wire.setClock(400000UL);
   Wire.setWireTimeout(1500);    // When I2C bus locks, loop() does not lock
 
   // Disable Mega pull-up resistors
