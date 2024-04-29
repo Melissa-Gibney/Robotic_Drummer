@@ -110,6 +110,7 @@ void setup() {
   // Init sequence using DUMMY sequence
   drumManager.checkSequence(readFlag);
   readFlag = T1;
+
 }
 
 

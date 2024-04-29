@@ -24,6 +24,33 @@ void DisplayManager::init()
   display.clearDisplay();
   display.display();
 
+  // "Loading" Screen
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(20, 15);
+  display.println(F("Welcome to the"));
+  display.setTextSize(1);
+  display.setCursor(15, 25);
+  display.println(F("Beat Buddy 3000!"));
+  display.display();
+  delay(3000);
+
+  display.clearDisplay();
+  display.drawCircle(64, 32, 28, SSD1306_WHITE);
+  display.drawLine(36, 32, 31, 55, SSD1306_WHITE);
+  display.drawLine(92, 32, 97, 55, SSD1306_WHITE);
+  display.fillCircle(31, 55, 2, SSD1306_WHITE);
+  display.fillCircle(97, 55, 2, SSD1306_WHITE);
+  display.drawRect(45, 26, 39, 16, SSD1306_WHITE);
+  display.drawLine(64, 26, 64, 20, SSD1306_WHITE);
+  display.drawLine(60, 20, 68, 20, SSD1306_WHITE);
+  display.drawLine(54, 32, 57, 32, SSD1306_WHITE);
+  display.drawLine(71, 32, 74, 32, SSD1306_WHITE);
+  display.drawLine(62, 37, 66, 37, SSD1306_WHITE);
+  display.display();
+  delay(3000);
+
   pages[page]->drawPage();
 }
 
@@ -255,7 +282,7 @@ void PresetPage::drawPage()
   display->setCursor(5,0);
   display->setTextSize(2);
   display->setTextColor(SSD1306_WHITE);
-  display->println(F("PRESETS!!!\n"));
+  display->println(F("Presets!!!\n"));
 
   display->setTextSize(1);  
 
