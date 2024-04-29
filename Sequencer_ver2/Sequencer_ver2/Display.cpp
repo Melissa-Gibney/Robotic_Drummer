@@ -157,13 +157,20 @@ void PresetPage::rotaryPress()
   selectedPreset = preset;
   drawPage();
   
+  // Flash Selected Preset on Display
+  preset = -1;
+  drawPage();
+  preset = selectedPreset;
+  drawPage();
+  
   // Send presets to TINYs- Check sequence should then pick up on the changes
   if (selectedPreset == 0){
-    //Dummy Preset 1
-    int data = 0b10101010;
-    int dataSnare = 0b01010101;
-    int dataTom = 0b01010101;
-    int dataHiHat = 0b01010101;
+
+    //Preset 1
+    int data = 0b00000011;
+    int dataSnare = 0b00001100;
+    int dataTom = 0b00110000;
+    int dataHiHat = 0b11000000;
 
     Wire.beginTransmission(TINY1);
     Wire.write(data);
@@ -178,11 +185,11 @@ void PresetPage::rotaryPress()
   }
 
   if (selectedPreset == 1){
-    //Dummy Preset 2
-    int data = 0b00111100;
-    int dataSnare = 0b11001101;
-    int dataTom = 0b11011101;
-    int dataHiHat = 0b10010011;
+    //Preset 2
+    int data = 0b00010001;
+    int dataSnare = 0b01000100;
+    int dataTom = 0b10101010;
+    int dataHiHat = 0b10111011;
 
     Wire.beginTransmission(TINY1);
     Wire.write(data);
@@ -197,11 +204,11 @@ void PresetPage::rotaryPress()
   }
 
   if (selectedPreset == 2){
-    //Dummy Preset 3
-    int data = 0b10001000;
-    int dataSnare = 0b01000100;
-    int dataTom = 0b00100010;
-    int dataHiHat = 0b00010001;
+    //Preset 3
+    int data = 0b01010101;
+    int dataSnare = 0b10101010;
+    int dataTom = 0b00110111;
+    int dataHiHat = 0b11111111;
 
     Wire.beginTransmission(TINY1);
     Wire.write(data);
@@ -215,11 +222,11 @@ void PresetPage::rotaryPress()
   }
 
   if (selectedPreset == 3){
-    //Dummy Preset 4
-    int data = 0b000000000;
-    int dataSnare = 0b000000000;
-    int dataTom = 0b000000000;
-    int dataHiHat = 0b000000000;
+    //Preset 4
+    int data = 0b01010001;
+    int dataSnare = 0b10101010;
+    int dataTom = 0b01010100;
+    int dataHiHat = 0b01101100;
 
     Wire.beginTransmission(TINY1);
     Wire.write(data);
@@ -239,7 +246,9 @@ void PresetPage::drawPage()
 {  
   int y1 = 25;
   int y2 = 28;
-  char buf[10] = {'\0'};
+  char buf[15] = {'\0'};
+  char preset_names[4][15]{"Drum Roll", "Basic Beat", "Rock Beat", "Funky Beat"};
+  int preset_endpixel[4]{64,70,64,70};
 
   // Header
   display->clearDisplay();
@@ -256,7 +265,7 @@ void PresetPage::drawPage()
     if (preset == i)
     {
       // Padding
-      display->drawLine(10, y1-1, 58, y1-1, SSD1306_WHITE); // pad row of pixels above inverted text
+      display->drawLine(10, y1-1, preset_endpixel[i], y1-1, SSD1306_WHITE); // pad row of pixels above inverted text
       display->drawLine(10, y1-1, 10, y1+7, SSD1306_WHITE); // pad column on pixels
       
       // Highlighted text
@@ -268,7 +277,8 @@ void PresetPage::drawPage()
     // Print preset names
     display->setCursor(11, y1);
     
-    sprintf(buf, "Preset %d", i+1);
+    //sprintf(buf, "Preset %d", i+1);
+    sprintf(buf, "%s", preset_names[i]);
     display->println(buf);
 
     // Circle for selection
