@@ -1,4 +1,4 @@
-// updated 4/24/24
+// updated 5/1/24
 
 #include "Display.h"
 #include <Wire.h>
@@ -189,82 +189,59 @@ void PresetPage::rotaryPress()
   drawPage();
   preset = selectedPreset;
   drawPage();
+
+  int data;
+  int dataSnare;
+  int dataTom;
+  int dataHiHat;
   
   // Send presets to TINYs- Check sequence should then pick up on the changes
   if (selectedPreset == 0){
-
     //Preset 1
-    int data = 0b00000011;
-    int dataSnare = 0b00001100;
-    int dataTom = 0b00110000;
-    int dataHiHat = 0b11000000;
-
-    Wire.beginTransmission(TINY1);
-    Wire.write(data);
-    Wire.write(dataSnare);
-    Wire.endTransmission();
-
-    Wire.beginTransmission(TINY2);
-    Wire.write(dataTom);
-    Wire.write(dataHiHat);
-    Wire.endTransmission();
+    data = 0b11000000;
+    dataSnare = 0b00110000;
+    dataTom = 0b00001100;
+    dataHiHat = 0b00000011;
 
   }
 
   if (selectedPreset == 1){
     //Preset 2
-    int data = 0b00010001;
-    int dataSnare = 0b01000100;
-    int dataTom = 0b10101010;
-    int dataHiHat = 0b10111011;
-
-    Wire.beginTransmission(TINY1);
-    Wire.write(data);
-    Wire.write(dataSnare);
-    Wire.endTransmission();
-
-    Wire.beginTransmission(TINY2);
-    Wire.write(dataTom);
-    Wire.write(dataHiHat);
-    Wire.endTransmission();
+    data = 0b10001000;
+    dataSnare = 0b00100010;
+    dataTom = 0b01010101;
+    dataHiHat = 0b11011101;
 
   }
 
   if (selectedPreset == 2){
     //Preset 3
-    int data = 0b01010101;
-    int dataSnare = 0b10101010;
-    int dataTom = 0b00110111;
-    int dataHiHat = 0b11111111;
+    data = 0b10101010;
+    dataSnare = 0b01010101;
+    dataTom = 0b11101100;
+    dataHiHat = 0b11111111;
 
-    Wire.beginTransmission(TINY1);
-    Wire.write(data);
-    Wire.write(dataSnare);
-    Wire.endTransmission();
-
-    Wire.beginTransmission(TINY2);
-    Wire.write(dataTom);
-    Wire.write(dataHiHat);
-    Wire.endTransmission();
   }
 
   if (selectedPreset == 3){
     //Preset 4
-    int data = 0b01010001;
-    int dataSnare = 0b10101010;
-    int dataTom = 0b01010100;
-    int dataHiHat = 0b01101100;
+    int data = 0b10001010;
+    int dataSnare = 0b01010101;
+    int dataTom = 0b00101010;
+    int dataHiHat = 0b00110110;
 
-    Wire.beginTransmission(TINY1);
-    Wire.write(data);
-    Wire.write(dataSnare);
-    Wire.endTransmission();
-
-    Wire.beginTransmission(TINY2);
-    Wire.write(dataTom);
-    Wire.write(dataHiHat);
-    Wire.endTransmission();
   }
+    
+  Wire.beginTransmission(TINY2);
+  Wire.write(dataSnare);
+  Wire.write(data);
+  Wire.endTransmission();
+
+  Wire.beginTransmission(TINY1);
+  Wire.write(dataHiHat);
+  Wire.write(dataTom);
+  Wire.endTransmission();
+
 }
 
 

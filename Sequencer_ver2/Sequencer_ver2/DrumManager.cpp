@@ -1,4 +1,4 @@
-// modified: 4/25/24
+// modified: 5/1/24
 
 #include "util.h"
 #include "DrumManager.h"
@@ -50,19 +50,16 @@ void DrumManager::loop()
 
 void DrumManager::masterReset()
 {
-  Wire.beginTransmission(TINY1);
-  Wire.write(0b00000000);
-  Wire.write(0b00000000);
-  Wire.endTransmission();
-
   Wire.beginTransmission(TINY2);
   Wire.write(0b00000000);
   Wire.write(0b00000000);
   Wire.endTransmission();
 
+  Wire.beginTransmission(TINY1);
+  Wire.write(0b00000000);
+  Wire.write(0b00000000);
+  Wire.endTransmission();
 
-  // ****** TODO!!! ******
-  // Anything else we want to include on the reset button?? Reset tempo and velocity too??
 }
 
 void DrumManager::toggleStartStop()
@@ -73,11 +70,11 @@ void DrumManager::toggleStartStop()
 
 void DrumManager::setVelocityMode(int v)
 {
-  Wire.beginTransmission(TINY1);
+  Wire.beginTransmission(TINY2);
   Wire.write(v);
   Wire.endTransmission();
 
-  Wire.beginTransmission(TINY2);
+  Wire.beginTransmission(TINY1);
   Wire.write(v);
   Wire.endTransmission();
 }
@@ -90,33 +87,33 @@ void DrumManager::clearDrum(DrumID id)
   {
     case KICK:
       data = snare.getBinSequence();
-      Wire.beginTransmission(TINY1);
-      Wire.write(0b00000000);
+      Wire.beginTransmission(TINY2);
       Wire.write(data);
+      Wire.write(0b00000000);
       Wire.endTransmission();
       break;
 
     case SNARE:
       data = kick.getBinSequence();
+      Wire.beginTransmission(TINY2);
+      Wire.write(0b00000000);
+      Wire.write(data);
+      Wire.endTransmission();
+      break;
+
+    case TOM:
+      data = hihat.getBinSequence();
       Wire.beginTransmission(TINY1);
       Wire.write(data);
       Wire.write(0b00000000);
       Wire.endTransmission();
       break;
 
-    case TOM:
-      data = hihat.getBinSequence();
-      Wire.beginTransmission(TINY2);
-      Wire.write(0b00000000);
-      Wire.write(data);
-      Wire.endTransmission();
-      break;
-
     case HIHAT:
       data = tom.getBinSequence();
-      Wire.beginTransmission(TINY2);
-      Wire.write(data);
+      Wire.beginTransmission(TINY1);
       Wire.write(0b00000000);
+      Wire.write(data);
       Wire.endTransmission();
       break;
   }
@@ -155,41 +152,41 @@ void DrumManager::checkSequence(int flag)
   int data1 = 0, data2 = 0, data3 = 0, data4 = 0;
 
 
-  Wire.requestFrom(TINY1, 3);
+  Wire.requestFrom(TINY2, 3);
 
   data1 = Wire.read();
   data2 = Wire.read();
   lastT1 = Wire.read();
 
   // Kick
-  for (int i = 0; i < WIN_LEN; i++)
-    newKickSeq[i] = (data1 & (1<<i)) ? 1 : 0;
+  for (int i = (WIN_LEN - 1); i >= 0; i--)
+    newKickSeq[i] = (data2 & (1<<i)) ? 1 : 0;
 
   kick.updateSequence(newKickSeq);
 
   // Snare
-  for (int i = 0; i < WIN_LEN; i++)
-    newSnareSeq[i] = (data2 & (1<<i)) ? 1 : 0;
+  for (int i = (WIN_LEN - 1); i >= 0; i--)
+    newSnareSeq[i] = (data1 & (1<<i)) ? 1 : 0;
   
   snare.updateSequence(newSnareSeq);
 
   delay(1);
   
-  Wire.requestFrom(TINY2, 3);
+  Wire.requestFrom(TINY1, 3);
 
   data3 = Wire.read();
   data4 = Wire.read();
   lastT2 = Wire.read();
 
   //Tom
-  for (int i = 0; i < WIN_LEN; i++)
-    newTomSeq[i] = (data3 & (1<<i)) ? 1 : 0;
+  for (int i = (WIN_LEN - 1); i >= 0; i--)
+    newTomSeq[i] = (data4 & (1<<i)) ? 1 : 0;
 
   tom.updateSequence(newTomSeq);
 
   // HiHat
-  for (int i = 0; i < WIN_LEN; i++)
-    newHiHatSeq[i] = (data4 & (1<<i)) ? 1 : 0;
+  for (int i = (WIN_LEN - 1); i >= 0; i--)
+    newHiHatSeq[i] = (data3 & (1<<i)) ? 1 : 0;
 
   hihat.updateSequence(newHiHatSeq);
 
@@ -214,10 +211,10 @@ void DrumManager::checkSequence(int flag)
 
 void DrumManager::flash(int level)
 {
-  int data1 = kick.getBinSequence();
-  int data2 = snare.getBinSequence();
-  int data3 = tom.getBinSequence();
-  int data4 = hihat.getBinSequence();
+  int data2 = kick.getBinSequence();
+  int data1 = snare.getBinSequence();
+  int data4 = tom.getBinSequence();
+  int data3 = hihat.getBinSequence();
 
 
   int col, row;
@@ -250,19 +247,19 @@ void DrumManager::flash(int level)
     data4 = (data4 & flashMask) | flash;
 
 
-  Wire.beginTransmission(TINY1);
+  Wire.beginTransmission(TINY2);
   Wire.write(data1);
   Wire.write(data2);
   Wire.endTransmission();
   delay(1);
-  Wire.beginTransmission(TINY2);
+  Wire.beginTransmission(TINY1);
   Wire.write(data3);
   Wire.write(data4);
   Wire.endTransmission();
 }
 
 
-
+/* What needs to change here if anything??? */
 void DrumManager::setStepVelocity(int v)
 {
   if(((flashingStep[0] != 0) && (flashingStep[0] != 1)) || ((flashingStep[1] < 1) || (flashingStep[1] > 16)))
@@ -291,13 +288,13 @@ int DrumManager::getStepVelocity()
 void DrumManager::resetVelocity()
 {
   for(int i = 0; i < N_DRUMS; i++)
-    for(int j = 0; j < WIN_LEN; j++)
+    for(int j = (WIN_LEN - 1); j >= 0; j--)
       velocities[i][j] = VELOCITY_DEFAULT;
 }
 
 
 void DrumManager::resetVelocity(DrumID drum)
 {
-  for(int i = 0; i < WIN_LEN; i++)
+  for(int i = (WIN_LEN - 1); i >= 0; i--)
     velocities[drum][i] = VELOCITY_DEFAULT;
 }
