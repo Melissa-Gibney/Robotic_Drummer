@@ -225,10 +225,10 @@ void PresetPage::rotaryPress()
 
   if (selectedPreset == 3){
     //Preset 4
-    int data = 0b10001010;
-    int dataSnare = 0b01010101;
-    int dataTom = 0b00101010;
-    int dataHiHat = 0b00110110;
+    data = 0b10001010;
+    dataSnare = 0b01010101;
+    dataTom = 0b00101010;
+    dataHiHat = 0b00110110;
 
   }
     

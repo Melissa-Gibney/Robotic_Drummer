@@ -104,9 +104,6 @@ void setup() {
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
 
-  pinMode(10, OUTPUT);    // DEBUG
-  digitalWrite(10, LOW);
-
   // Init sequence using DUMMY sequence
   drumManager.checkSequence(readFlag);
   readFlag = T1;

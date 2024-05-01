@@ -109,9 +109,9 @@ void Drum::loop()
 int Drum::getBinSequence()
 {
   int bin_sequence = 0;
-  for(int i = 0; i < 8; i++)
+  for(int i = 0; i < WIN_LEN; i++)
   {
-    bin_sequence = bin_sequence | (sequence[i] << i);
+    bin_sequence = bin_sequence | (sequence[WIN_LEN-1-i] << i);
   }
   return bin_sequence;
 }
