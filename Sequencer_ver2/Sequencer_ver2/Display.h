@@ -1,4 +1,4 @@
-// updated 4/29/24
+// updated 5/2/24
 
 #ifndef DISPLAY_H
 #define DISPLAY_H
@@ -83,13 +83,15 @@ class PresetPage : public Page
     PresetPage(Adafruit_SSD1306 * d) : Page(d) {}
 
     void setVal(int){}
-    int getVal() {}
+    int getVal() { return selectedPreset; }
 
     void drawPage();
 
     void rotaryCW();
     void rotaryCCW();
     void rotaryPress();
+
+    //int getPreset(){ return selectedPreset; } // get the selected preset for setting preset velocities in drum manager
 
 };
 
@@ -113,6 +115,7 @@ class DisplayManager
     void setTempo(int bpm);
     void setVel(int v);
     int getVel() { return pages[VELOCITY]->getVal(); }
+    int getPreset() { return pages[PRESETS]->getVal(); }
 
     void movePage(int dir);
     void rotaryCW();

@@ -19,6 +19,7 @@
 #define OLED_RESET    -1    // share Arduino reset pin
 
 enum DrumID {KICK, SNARE, TOM, HIHAT};
+enum Alt {T1, T2, DUMMY};   // TINY query flags
 
 #define TEMPO_MIN         10    // BPM
 #define TEMPO_MAX         200   // BPM

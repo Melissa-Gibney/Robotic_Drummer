@@ -1,4 +1,4 @@
-// modified: 5/1/24
+// modified: 5/2/24
 
 /* UTIL LIBRARIES */
 #include "util.h"
@@ -37,6 +37,9 @@ long unsigned int tic = 0, toc = 0;
 elapsedMillis flashTimer = 0;
 bool flash = true;  // high or low
 int velocityMode = 0; // is velocity mode on or off
+
+// TINY Query Flag
+Alt readFlag = DUMMY;
 
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
@@ -99,7 +102,7 @@ void setup() {
     digitalWrite(LED_TEMPO_PINS[i], LOW);
   }
 
-  // Init sequence using DUMMY sequence
+  // // Init sequence using DUMMY sequence
   drumManager.checkSequence(readFlag);
   readFlag = T1;
 
@@ -295,6 +298,11 @@ void updateDisplay()
   if(rotary1.justPressed())
   {
     dispManager.rotaryPress(); // call function for current page 
+
+    if(dispManager.getPage() == 0) // if on preset page when encoder pressed tell drum manager to set preset velocities 
+    {
+      drumManager.set_vel_preset(dispManager.getPreset());
+    }
 
     if(velocityMode) // if velocity mode is on (currently on velocity page) set the current step's velocity to the default
       drumManager.setStepVelocity(VELOCITY_DEFAULT);

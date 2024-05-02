@@ -1,4 +1,4 @@
-// updated 5/1/24
+// updated 5/2/24
 
 #include "Display.h"
 #include <Wire.h>
@@ -225,8 +225,8 @@ void PresetPage::rotaryPress()
 
   if (selectedPreset == 3){
     //Preset 4
-    data = 0b10001010;
-    dataSnare = 0b01010101;
+    data = 0b10010100;
+    dataSnare = 0b01001011;
     dataTom = 0b00101010;
     dataHiHat = 0b00110110;
 

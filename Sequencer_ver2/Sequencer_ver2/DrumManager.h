@@ -1,4 +1,4 @@
-// modified: 5/1/24
+// modified: 5/2/24
 
 #ifndef DRUMMANAGER_H
 #define DRUMMANAGER_H
@@ -48,7 +48,7 @@ class DrumManager
     void muteDrum(DrumID id);
 
     // Select Preset
-    void set_preset(int npreset);
+    void set_vel_preset(int npreset);
 
     void flash(int level);
 

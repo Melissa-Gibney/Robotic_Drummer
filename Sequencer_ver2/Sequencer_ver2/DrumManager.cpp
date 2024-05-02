@@ -1,4 +1,4 @@
-// modified: 5/1/24
+// modified: 5/2/24
 
 #include "util.h"
 #include "DrumManager.h"
@@ -304,3 +304,60 @@ void DrumManager::resetVelocity(DrumID drum)
   for(int i = 0; i < WIN_LEN; i++)
     velocities[drum][i] = VELOCITY_DEFAULT;
 }
+
+void DrumManager::set_vel_preset(int npreset)
+{
+  // Preset Velocity Arrays
+  int preset1_velocities[N_DRUMS][WIN_LEN] = {{127,20,60,60,60,60,60,60},
+                                              {60,60,127,20,60,60,60,60},
+                                              {60,60,60,60,127,20,60,60},
+                                              {60,60,60,60,60,60,127,20}};
+
+  int preset2_velocities[N_DRUMS][WIN_LEN] = {{90,60,60,60,90,60,60,60},
+                                              {60,60,90,60,60,60,90,60},
+                                              {60,30,60,30,60,30,60,30},
+                                              {65,65,60,65,65,65,60,65}};
+
+  int preset3_velocities[N_DRUMS][WIN_LEN] = {{102,60,50,60,102,60,50,60},
+                                              {60,82,60,41,60,82,60,41},
+                                              {70,85,70,60,70,85,60,60},
+                                              {120,100,80,60,50,30,20,10}};
+
+  int preset4_velocities[N_DRUMS][WIN_LEN] = {{40,60,60,70,60,70,60,60},
+                                              {60,50,60,60,50,60,100,100},
+                                              {60,60,120,60,20,60,120,60},
+                                              {60,60,90,90,60,40,40,60}};
+
+  switch(npreset) // Assign based off selected preset
+  {
+    case 0:
+      // Assign Velocities to Manager Velocity Array
+      for(int i = 0; i < N_DRUMS; i++){
+        for(int j = 0; j < WIN_LEN; j++){
+          velocities[i][j] = preset1_velocities[i][j]; }}
+      break;
+    case 1:
+      // Assign Velocities to Manager Velocity Array
+      for(int i = 0; i < N_DRUMS; i++){
+        for(int j = 0; j < WIN_LEN; j++){
+          velocities[i][j] = preset2_velocities[i][j]; }}
+      break;
+    case 2:
+      // Assign Velocities to Manager Velocity Array
+      for(int i = 0; i < N_DRUMS; i++){
+        for(int j = 0; j < WIN_LEN; j++){
+          velocities[i][j] = preset3_velocities[i][j]; }}
+      break;
+    case 3:
+      // Assign Velocities to Manager Velocity Array
+      for(int i = 0; i < N_DRUMS; i++){
+        for(int j = 0; j < WIN_LEN; j++){
+          velocities[i][j] = preset4_velocities[i][j]; }}
+      break;
+  }
+
+}
+
+
+
+
