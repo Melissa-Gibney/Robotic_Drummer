@@ -22,9 +22,6 @@ DisplayManager dispManager;
 // Declare Drums
 DrumManager drumManager(SOL_PIN_KICK, MUTE_KICK_LED, SOL_PIN_SNARE, MUTE_SNARE_LED, SOL_PIN_TOM, MUTE_TOM_LED, SOL_PIN_HIHAT, MUTE_HIHAT_LED);
 
-// TINY Query Flag
-Alt readFlag = DUMMY;
-
 //Declare Tempo and Timing Vars
 elapsedMillis msBeatCount;
 int tempoChanged = 0;
@@ -34,12 +31,12 @@ int pause_timer;
 int tempo; // The tempo in bpm
 int curBeatIndex = 0; // The current beat in the sequence
 
-long unsigned int msPerBeat;
+long unsigned int msPerBeat; // beat converted to ms
 long unsigned int tic = 0, toc = 0;
 
 elapsedMillis flashTimer = 0;
 bool flash = true;  // high or low
-int velocityMode = 0;
+int velocityMode = 0; // is velocity mode on or off
 
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
@@ -77,11 +74,9 @@ void setTempo(int);
 /********************************************************************* SETUP ******************************************************************************************/
 
 void setup() {
-  Serial.begin(9600);   // for debug
 
   // Begin TWI
   Wire.begin();     
-  // Wire.setClock(100000UL);
   Wire.setClock(400000UL);
   Wire.setWireTimeout(1500);    // When I2C bus locks, loop() does not lock
 
@@ -93,8 +88,8 @@ void setup() {
   dispManager.init();
 
   // Init tempo
-  // setTempo(TEMPO_DEFAULT);
-  setTempo(20); //DEBUG
+  setTempo(TEMPO_DEFAULT);
+  // Init velocity
   drumManager.resetVelocity();
 
   // Set Pin Modes for LED Tempo Pins
@@ -191,7 +186,6 @@ void loop() {
   }
 
   toc = millis();
-  // Serial.println(toc-tic);
 }
   
 
@@ -278,10 +272,10 @@ void updateDisplay()
   if (button1.justPressed())
   {
     dispManager.movePage(1);  // increment page
-    if(dispManager.getPage() == 2)
+    if(dispManager.getPage() == 2) // if display is on the velocity page turn velocity mode on
       velocityMode = 1;
     else
-      velocityMode = 0;
+      velocityMode = 0; // if the display is on a different page turn velocity mode off
     
     drumManager.setVelocityMode(velocityMode);
   }
@@ -300,29 +294,29 @@ void updateDisplay()
   // Display rotary encoder
   if(rotary1.justPressed())
   {
-    dispManager.rotaryPress();
+    dispManager.rotaryPress(); // call function for current page 
 
-    if(velocityMode)
+    if(velocityMode) // if velocity mode is on (currently on velocity page) set the current step's velocity to the default
       drumManager.setStepVelocity(VELOCITY_DEFAULT);
   }
 
   if(rotary1.rotated() == 1)  // CW
   {
-    dispManager.rotaryCW();
+    dispManager.rotaryCW(); // call function for current page 
 
-    if(velocityMode)
-      drumManager.setStepVelocity(drumManager.getStepVelocity()+1);
+    if(velocityMode) // if velocity mode is on (currently on velocity page) add one to the current step's velocity
+      drumManager.setStepVelocity(drumManager.getStepVelocity()+1); 
   }
 
   else if(rotary1.rotated() == 2) // CCW
   {
     dispManager.rotaryCCW();
 
-    if(velocityMode)
+    if(velocityMode) // if velocity mode is on (currently on velocity page) subtract one to the current step's velocity
       drumManager.setStepVelocity(drumManager.getStepVelocity()-1);
   }
 
-  if(velocityMode && (drumManager.getStepVelocity() != dispManager.getVel()))
+  if(velocityMode && (drumManager.getStepVelocity() != dispManager.getVel())) // if the current velocity doesn't match the displayed one fix it
     dispManager.setVel(drumManager.getStepVelocity());
 }
 

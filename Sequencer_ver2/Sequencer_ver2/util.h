@@ -18,12 +18,11 @@
 #define SCREEN_HEIGHT 64    // pixels 
 #define OLED_RESET    -1    // share Arduino reset pin
 
-enum Alt {T1, T2, DUMMY};   // TINY query flags
 enum DrumID {KICK, SNARE, TOM, HIHAT};
 
 #define TEMPO_MIN         10    // BPM
 #define TEMPO_MAX         200   // BPM
-#define TEMPO_DEFAULT     120   // BPM
+#define TEMPO_DEFAULT     80   // BPM
 
 #define VELOCITY_MIN      0  
 #define VELOCITY_MAX      127

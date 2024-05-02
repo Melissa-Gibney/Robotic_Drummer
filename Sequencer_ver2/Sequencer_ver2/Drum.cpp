@@ -31,7 +31,6 @@ void Drum::setVel(int midiVel)
   velocity = 63 + ((midiVel*192) / 127);
   pullTime = pullTimes[velocity-63];
 
-  velocity = 200; // DEBUG
 }
 
 
@@ -53,23 +52,11 @@ void Drum::resetSequence()
     sequence[i] = 0;
 }
 
-// void Drum::resetVelocity()
-// {
-//   for (int i = 0; i < WIN_LEN; i++)
-//     velocity[i] = VELOCITY_DEFAULT;
-// }
-
 void Drum::updateSequence(int *newSequence)
 {
   for (int i = 0; i < WIN_LEN; i++)
     sequence[i] = newSequence[i];
 }
-
-// void Drum::updateVelocity(int *newVelocity)
-// {
-//   for (int i = 0; i < WIN_LEN; i++)
-//     velocity[i] = newVelocity[i];
-// }
 
 void Drum::play()
 {

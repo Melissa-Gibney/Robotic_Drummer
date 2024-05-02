@@ -95,6 +95,7 @@ void DrumManager::clearDrum(DrumID id)
       Wire.write(data);
       Wire.write(0b00000000);
       Wire.endTransmission();
+      kick.resetSequence();
       break;
 
     case SNARE:
@@ -103,6 +104,7 @@ void DrumManager::clearDrum(DrumID id)
       Wire.write(0b00000000);
       Wire.write(data);
       Wire.endTransmission();
+      snare.resetSequence();
       break;
 
     case TOM:
@@ -111,6 +113,7 @@ void DrumManager::clearDrum(DrumID id)
       Wire.write(data);
       Wire.write(0b00000000);
       Wire.endTransmission();
+      tom.resetSequence();
       break;
 
     case HIHAT:
@@ -119,6 +122,7 @@ void DrumManager::clearDrum(DrumID id)
       Wire.write(0b00000000);
       Wire.write(data);
       Wire.endTransmission();
+      hihat.resetSequence();
       break;
   }
 }
