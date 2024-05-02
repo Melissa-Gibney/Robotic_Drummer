@@ -116,8 +116,13 @@ void VelocityPage::rotaryCW()
   if(velocity < VELOCITY_MAX)
   {
     velocity++;
-    drawPage();
+    
   }
+  if (velocity > VELOCITY_MAX)
+    {
+      velocity = VELOCITY_MAX;
+    }
+    drawPage();
 }
 
 
@@ -127,8 +132,13 @@ void VelocityPage::rotaryCCW()
   if(velocity > VELOCITY_MIN)
   {
     velocity--;
-    drawPage();
+   
   }
+    if (velocity < VELOCITY_MIN)
+    {
+      velocity = VELOCITY_MIN;
+    }
+    drawPage();
 }
 
 

@@ -41,6 +41,9 @@ int velocityMode = 0; // is velocity mode on or off
 // TINY Query Flag
 Alt readFlag = DUMMY;
 
+int newVelocity;
+int newTempo;
+
 /********************************************************************* CONTROLS INIT **********************************************************************************/
 
 // Rotary Encoder
@@ -313,7 +316,12 @@ void updateDisplay()
     dispManager.rotaryCW(); // call function for current page 
 
     if(velocityMode) // if velocity mode is on (currently on velocity page) add one to the current step's velocity
-      drumManager.setStepVelocity(drumManager.getStepVelocity()+1); 
+      newVelocity = drumManager.getStepVelocity() + 1;
+      if (newVelocity > VELOCITY_MAX)
+      {
+        newVelocity = VELOCITY_MAX;
+      }
+      drumManager.setStepVelocity(newVelocity); 
   }
 
   else if(rotary1.rotated() == 2) // CCW
@@ -321,7 +329,12 @@ void updateDisplay()
     dispManager.rotaryCCW();
 
     if(velocityMode) // if velocity mode is on (currently on velocity page) subtract one to the current step's velocity
-      drumManager.setStepVelocity(drumManager.getStepVelocity()-1);
+      newVelocity = drumManager.getStepVelocity() - 1;
+      if (newVelocity < VELOCITY_MIN)
+      {
+        newVelocity = VELOCITY_MIN;
+      }
+      drumManager.setStepVelocity(newVelocity); 
   }
 
   if(velocityMode && (drumManager.getStepVelocity() != dispManager.getVel())) // if the current velocity doesn't match the displayed one fix it
@@ -332,20 +345,32 @@ void updateDisplay()
 
 void checkTempoChange()
 {
-  if(rotary2.rotated() == 1)  // increment
+  if(rotary2.rotated() == 1 && (tempo < TEMPO_MAX))  // increment
   {
     velocityMode = 0;
     tempoChanged++;
     timeSinceTempoChange = 0;
-    dispManager.setTempo(tempo+tempoChanged);
+    newTempo = tempoChanged + tempo;
+    if((newTempo) > TEMPO_MAX)
+    {
+      newTempo = TEMPO_MAX;
+    }
+    //dispManager.setTempo(tempo+tempoChanged);
+    dispManager.setTempo(newTempo);
     drumManager.setVelocityMode(velocityMode);
   }  
-  else if(rotary2.rotated() == 2) // decrement
+  else if(rotary2.rotated() == 2 && (tempo > TEMPO_MIN)) // decrement
   {
     velocityMode = 0;
     tempoChanged--;
     timeSinceTempoChange = 0;
-    dispManager.setTempo(tempo+tempoChanged);
+    newTempo = tempoChanged + tempo;
+    if((newTempo) < TEMPO_MIN)
+    {
+      newTempo = TEMPO_MIN;
+    }
+    //dispManager.setTempo(tempo+tempoChanged);
+    dispManager.setTempo(newTempo);
     drumManager.setVelocityMode(velocityMode);
   }
   if(rotary2.justPressed()) // reset
