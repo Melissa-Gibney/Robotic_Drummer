@@ -97,7 +97,7 @@ void TempoPage::drawPage()
   // Header
   display->setTextSize(2);
   display->setTextColor(SSD1306_WHITE);
-  display->println(F("Tempo!!!\n"));
+  display->println(F("Tempo\n"));
 
   // Print tempo
   display->setTextSize(1);
@@ -159,7 +159,7 @@ void VelocityPage::drawPage()
   // Header
   display->setTextSize(2);
   display->setTextColor(SSD1306_WHITE);
-  display->println(F("Velocity!\n"));
+  display->println(F("Velocity\n"));
 
   // Print velocity
   display->setTextSize(1);
@@ -266,10 +266,10 @@ void PresetPage::drawPage()
 
   // Header
   display->clearDisplay();
-  display->setCursor(5,0);
+  display->setCursor(10,0);
   display->setTextSize(2);
   display->setTextColor(SSD1306_WHITE);
-  display->println(F("Presets!!!\n"));
+  display->println(F("Presets\n"));
 
   display->setTextSize(1);  
 
