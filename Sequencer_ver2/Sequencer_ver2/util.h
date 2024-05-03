@@ -67,7 +67,8 @@ enum Alt {T1, T2, DUMMY};   // TINY query flags
 #define MASTER_RESET  53    // master reset all drums
 #define START_STOP    52    // start/stop Sequence
 
-const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
+//const int LED_TEMPO_PINS[] = {2, 3, 4, 5, 6, 7, 8, 9};    // WIN_LEN steps
+const int LED_TEMPO_PINS[] = {9, 8, 7, 6, 5, 4, 3, 2};    // WIN_LEN steps
 
 
 // I2C addresses
