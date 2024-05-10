@@ -1,3 +1,5 @@
+// Util Header File
+// Includes Macros, Button Class, Rotary Encoder Class
 // updated 4/25/24
 
 #ifndef UTIL_H

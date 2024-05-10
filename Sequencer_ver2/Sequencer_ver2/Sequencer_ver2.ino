@@ -262,7 +262,7 @@ void checkButtons()
 
 void setTempo(int t)
 {
-  if((t <= TEMPO_MAX) && (t >= TEMPO_MIN))
+  if((t <= TEMPO_MAX) && (t >= TEMPO_MIN)) // if tempo is within the tempo range calculate the ms per beat and set that as the tempo
   {
     tempo = t;
     msPerBeat = 15000 / tempo;
@@ -272,8 +272,7 @@ void setTempo(int t)
 }
 
 
-
-void updateDisplay()
+void updateDisplay() // Display stuff for the loop above
 {
   if (button1.justPressed())
   {
@@ -355,7 +354,6 @@ void checkTempoChange()
     {
       newTempo = TEMPO_MAX;
     }
-    //dispManager.setTempo(tempo+tempoChanged);
     dispManager.setTempo(newTempo);
     drumManager.setVelocityMode(velocityMode);
   }  
@@ -369,7 +367,6 @@ void checkTempoChange()
     {
       newTempo = TEMPO_MIN;
     }
-    //dispManager.setTempo(tempo+tempoChanged);
     dispManager.setTempo(newTempo);
     drumManager.setVelocityMode(velocityMode);
   }
@@ -384,8 +381,7 @@ void checkTempoChange()
 }
 
 
-
-void updateControlStates()
+void updateControlStates() // runs the loop function for eahc of the button and encoder objects
 {
   rotary1.loop();
   rotary2.loop();

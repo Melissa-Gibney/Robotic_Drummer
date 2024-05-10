@@ -1,3 +1,4 @@
+// Display Manager and other Display Classes
 // updated 5/2/24
 
 #include "Display.h"
@@ -63,7 +64,7 @@ void DisplayManager::setTempo(int bpm)
   page = TEMPO;
 }
 
-
+// Change the velocity for the current step
 void DisplayManager::setVel(int v)
 { 
   pages[VELOCITY]->setVal(v); 
@@ -291,7 +292,6 @@ void PresetPage::drawPage()
     // Print preset names
     display->setCursor(11, y1);
     
-    //sprintf(buf, "Preset %d", i+1);
     sprintf(buf, "%s", preset_names[i]);
     display->println(buf);
 

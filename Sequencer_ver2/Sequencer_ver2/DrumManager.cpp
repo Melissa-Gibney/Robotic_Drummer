@@ -1,3 +1,4 @@
+// Drum Manager Class CPP File
 // modified: 5/2/24
 
 #include "util.h"
@@ -20,18 +21,20 @@ void DrumManager::setTempo(int ms)
 // Play current beat
 void DrumManager::play(int beat)
 {
+  // Set the velocities for the upcoming beat
   kick.setVel(velocities[KICK][beat]);
   snare.setVel(velocities[SNARE][beat]);
   tom.setVel(velocities[TOM][beat]);
   hihat.setVel(velocities[HIHAT][beat]);
 
+  // extend solenoids
   kick.startBeat(beat);
   snare.startBeat(beat);
   tom.startBeat(beat);
   hihat.startBeat(beat);
 }
 
-void DrumManager::endBeat()
+void DrumManager::endBeat() // retract solenoids
 {
   kick.stop();
   snare.stop();
@@ -48,6 +51,7 @@ void DrumManager::loop()
   hihat.loop();
 }
 
+// Set ALL sequences to 0, send 0s to the Tinys to turn off buttons
 void DrumManager::masterReset()
 {
   Wire.beginTransmission(TINY2);
@@ -62,12 +66,13 @@ void DrumManager::masterReset()
 
 }
 
+// Called when play/pause button is pressed to update the on/off "state" of Drum Manager
 void DrumManager::toggleStartStop()
 {
   startStop = !startStop;
 }
 
-
+// Turn Velocity Mode on/off
 void DrumManager::setVelocityMode(int v)
 {
   Wire.beginTransmission(TINY2);
@@ -83,15 +88,16 @@ void DrumManager::setVelocityMode(int v)
   flashingStep[1] = 1;
 }
 
-void DrumManager::clearDrum(DrumID id)
+// Clear the sequence of a single drum when one of the clear buttons is pressed
+void DrumManager::clearDrum(DrumID id) 
 {
   int data;
 
   switch(id)
   {
     case KICK:
-      data = snare.getBinSequence();
-      Wire.beginTransmission(TINY2);
+      // We need to use the saved sequence for the other drum on the same TINY since you always need to send the TINYs 2 bytes
+      data = snare.getBinSequence(); 
       Wire.write(data);
       Wire.write(0b00000000);
       Wire.endTransmission();
@@ -127,7 +133,7 @@ void DrumManager::clearDrum(DrumID id)
   }
 }
 
-
+// Turn the mute flag on for a drum which stops the solenoid from actuating
 void DrumManager::muteDrum(DrumID id)
 {
   switch(id)
@@ -159,8 +165,7 @@ void DrumManager::checkSequence(int flag)
 
   int data1 = 0, data2 = 0, data3 = 0, data4 = 0;
 
-
-  Wire.requestFrom(TINY2, 3);
+  Wire.requestFrom(TINY2, 3); // Grab Data from Tiny
 
   data1 = Wire.read();    // snare
   data2 = Wire.read();    // kick
@@ -168,13 +173,13 @@ void DrumManager::checkSequence(int flag)
 
   // Kick
   for (int i = (WIN_LEN - 1); i >= 0; i--)
-    newKickSeq[WIN_LEN-1-i] = (data2 & (1<<i)) ? 1 : 0;
+    newKickSeq[WIN_LEN-1-i] = (data2 & (1<<i)) ? 1 : 0; // Convert the binary number to an array to be saved in the drum's sequence
 
   kick.updateSequence(newKickSeq);
 
   // Snare
   for (int i = (WIN_LEN - 1); i >= 0; i--)
-    newSnareSeq[WIN_LEN-1-i] = (data1 & (1<<i)) ? 1 : 0;
+    newSnareSeq[WIN_LEN-1-i] = (data1 & (1<<i)) ? 1 : 0; // Convert the binary number to an array to be saved in the drum's sequence
   
   snare.updateSequence(newSnareSeq);
 
@@ -188,13 +193,13 @@ void DrumManager::checkSequence(int flag)
 
   //Tom
   for (int i = (WIN_LEN - 1); i >= 0; i--)
-    newTomSeq[WIN_LEN-1-i] = (data4 & (1<<i)) ? 1 : 0;
+    newTomSeq[WIN_LEN-1-i] = (data4 & (1<<i)) ? 1 : 0; // Convert the binary number to an array to be saved in the drum's sequence
 
   tom.updateSequence(newTomSeq);
 
   // HiHat
   for (int i = (WIN_LEN - 1); i >= 0; i--)
-    newHiHatSeq[WIN_LEN-1-i] = (data3 & (1<<i)) ? 1 : 0;
+    newHiHatSeq[WIN_LEN-1-i] = (data3 & (1<<i)) ? 1 : 0; // Convert the binary number to an array to be saved in the drum's sequence
 
   hihat.updateSequence(newHiHatSeq);
 
@@ -304,6 +309,7 @@ void DrumManager::resetVelocity(DrumID drum)
   for(int i = 0; i < WIN_LEN; i++)
     velocities[drum][i] = VELOCITY_DEFAULT;
 }
+
 
 void DrumManager::set_vel_preset(int npreset)
 {

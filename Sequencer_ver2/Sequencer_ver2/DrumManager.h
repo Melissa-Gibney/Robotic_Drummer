@@ -1,3 +1,4 @@
+// Drum Manager Class Header File
 // modified: 5/2/24
 
 #ifndef DRUMMANAGER_H
@@ -8,7 +9,7 @@
 class DrumManager
 {
   private:
-    Drum kick, snare, tom, hihat;
+    Drum kick, snare, tom, hihat; // 4 Instances of Drum Class, 1 for each port
 
     int lastT1 = -1, lastT2 = -1, lastT1Prev = -1, lastT2Prev = -1;
     int flashingStep[2] = {0,0};
@@ -41,14 +42,11 @@ class DrumManager
 
     bool isStopped() { return !startStop; }
 
-    //Clear Drums
-    void clearDrum(DrumID id);
+    void clearDrum(DrumID id); //Clear Drums
 
-    // Mute Drums
-    void muteDrum(DrumID id);
+    void muteDrum(DrumID id);  // Mute Drums
 
-    // Select Preset
-    void set_vel_preset(int npreset);
+    void set_vel_preset(int npreset); // Run when selecting preset (for assigning velocities)
 
     void flash(int level);
 

@@ -1,3 +1,4 @@
+// Drum Class CPP File
 // modified: 4/25/24
 
 #include "Drum.h"
@@ -18,14 +19,12 @@ Drum::Drum(int pin, int ledPin)
 
   // Init sequences
   resetSequence();
-  // resetVelocity();
 }
-
 
 
 void Drum::setVel(int midiVel)
 {
-  if((midiVel < VELOCITY_MIN) || midiVel > VELOCITY_MAX)
+  if((midiVel < VELOCITY_MIN) || midiVel > VELOCITY_MAX) // If velocity is outside of the range don't save it!
     return;
 
   velocity = 63 + ((midiVel*192) / 127);
@@ -36,23 +35,23 @@ void Drum::setVel(int midiVel)
 
 void Drum::toggleMute()
 {
-  muted = !muted;
+  muted = !muted; // save mute state
 
   if(muted)
-    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(LED_PIN, HIGH); // if mute is turning on, turn on mute LED
   else
-    digitalWrite(LED_PIN, LOW);
+    digitalWrite(LED_PIN, LOW); // if mute is turning off, turn off mute LED
 }
 
 
 
-void Drum::resetSequence()
+void Drum::resetSequence() // set the Drum's sequence to 0 within the Drum Class
 {
   for (int i = 0; i < WIN_LEN; i++)
     sequence[i] = 0;
 }
 
-void Drum::updateSequence(int *newSequence)
+void Drum::updateSequence(int *newSequence) // Save a new sequence to be the Drum's sequence
 {
   for (int i = 0; i < WIN_LEN; i++)
     sequence[i] = newSequence[i];
@@ -66,9 +65,6 @@ void Drum::play()
   if (sequence[beat] && (!muted))
     analogWrite(PIN, velocity);
 
-  // else
-  //   analogWrite(PIN, 0);
-
 }
 
 void Drum::stop()
@@ -81,7 +77,7 @@ void Drum::stop()
 void Drum::loop()
 {
   // Extend
-  if ((!on) && (waitTimer >= beatDur-pullTime-HOLD_TIME))
+  if ((!on) && (waitTimer >= beatDur-pullTime-HOLD_TIME)) // Extend after the wait timer is reached!
   {
     waitTimer = 0;
     play();
@@ -93,7 +89,7 @@ void Drum::loop()
 
 }
 
-int Drum::getBinSequence()
+int Drum::getBinSequence() // convert a drum's sequence to binary bytes to be sent over I2C to the ATTinys
 {
   int bin_sequence = 0;
   for(int i = 0; i < WIN_LEN; i++)
