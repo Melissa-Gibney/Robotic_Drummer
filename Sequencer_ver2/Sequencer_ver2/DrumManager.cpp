@@ -75,6 +75,7 @@ void DrumManager::toggleStartStop()
 // Turn Velocity Mode on/off
 void DrumManager::setVelocityMode(int v)
 {
+  // Update velocity mode on both TINYs
   Wire.beginTransmission(TINY2);
   Wire.write(v);
   Wire.endTransmission();
@@ -204,6 +205,7 @@ void DrumManager::checkSequence(int flag)
   hihat.updateSequence(newHiHatSeq);
 
 
+  // Determine the button most recently pressed on the sequencer matrix, store in "flashingStep"
   if((lastT1 != lastT1Prev) && (lastT1 > 0) && (lastT1 < 17))
   {
     flashingStep[0] = 0;
@@ -222,7 +224,8 @@ void DrumManager::checkSequence(int flag)
 }
 
 
-void DrumManager::flash(int level)    // changed data numbers & tiny1/tiny2
+// Update sequencer lights to flash the selected step
+void DrumManager::flash(int level)   
 {
   int data2 = kick.getBinSequence();
   int data1 = snare.getBinSequence();
@@ -244,8 +247,9 @@ void DrumManager::flash(int level)    // changed data numbers & tiny1/tiny2
 
 
   int flashMask = ~(1<<col);
-  int flash = level<<col;
+  int flash = level<<col;     // toggles between 0 and 1
 
+  // Flash the correct step
   if((flashingStep[0]==1) && (row==0))      // row 1
     data2 = (data2 & flashMask) | flash;
 
@@ -258,7 +262,7 @@ void DrumManager::flash(int level)    // changed data numbers & tiny1/tiny2
   else if((flashingStep[0]==0) && (row==1)) // row 4
     data3 = (data3 & flashMask) | flash;
 
-
+  // Write to TINYs
   Wire.beginTransmission(TINY2);
   Wire.write(data1);
   Wire.write(data2);
@@ -271,7 +275,8 @@ void DrumManager::flash(int level)    // changed data numbers & tiny1/tiny2
 }
 
 
-void DrumManager::setStepVelocity(int v)  // no changes
+// Store current velocity in the correct index of "velocities"
+void DrumManager::setStepVelocity(int v)  
 {
   if(((flashingStep[0] != 0) && (flashingStep[0] != 1)) || ((flashingStep[1] < 1) || (flashingStep[1] > 16)))
     return;
@@ -283,6 +288,7 @@ void DrumManager::setStepVelocity(int v)  // no changes
   velocities[2*tiny + row][col] = v;
 }
 
+// Retrieve velocity of selected step
 int DrumManager::getStepVelocity()  // no changes
 {
   if(((flashingStep[0] != 0) && (flashingStep[0] != 1)) || ((flashingStep[1] < 1) || (flashingStep[1] > 16)))
